@@ -1,0 +1,20 @@
+<dialog class="modal" [open]="open() && !backdropClicked()">
+  <div class="modal-box overflow-visible" style="width: unset">
+    @if (loading()) {
+      <div
+        class="flex flex-col items-center justify-center"
+        [ngStyle]="{ width: contentWidth(), height: contentHeight() }"
+      >
+        <span class="loading loading-spinner loading-xl"></span>
+      </div>
+    } @else {
+      <div [ngStyle]="{ width: contentWidth(), height: contentHeight() }">
+        <ng-content #modalContent />
+      </div>
+    }
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button [disabled]="loading()" (click)="onClose()"></button>
+  </form>
+</dialog>

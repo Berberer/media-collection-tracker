@@ -1,0 +1,19 @@
+hr {
+  border-top: 1px solid color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}
+
+#volume-fields {
+  max-height: 0;
+  overflow-y: hidden;
+  transition:
+    max-height 0.2s ease-out,
+    overflow-y 0.2s ease-out allow-discrete;
+}
+
+#volume-fields.expanded {
+  max-height: 100vh;
+  overflow-y: visible;
+  transition:
+    max-height 0.2s ease-in,
+    overflow-y 0.2s ease-in allow-discrete;
+}

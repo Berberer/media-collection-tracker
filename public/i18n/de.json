@@ -1,0 +1,226 @@
+{
+  "components": {
+    "core": {
+      "nav-bar": {
+        "series-nav": {
+          "title": "Serien",
+          "incomplete-section": "Unvollständig",
+          "orphans-section": "Verwaist",
+          "completed-section": "Abgeschlossen"
+        },
+        "tags-nav": {
+          "title": "Tags",
+          "series-section": "Serien Tags",
+          "volume-section": "Ausgaben Tags"
+        },
+        "volumes-nav": {
+          "title": "Ausgaben",
+          "dashboard-section": "Tracking Dashboard",
+          "missing-section": "Fehlend",
+          "collected-section": "Gesammelt"
+        },
+        "create-buttons": {
+          "create-series": "Serie erstellen",
+          "create-volume": "Ausgabe erstellen"
+        }
+      },
+      "media-type-badge": {
+        "BOOK": "Buch",
+        "GAME": "Videospiel",
+        "MOVIE": "Film",
+        "SHOW": "Serie"
+      }
+    },
+    "series": {
+      "series-card": {
+        "properties": {
+          "orphaned": "Verwaist",
+          "completed": "Vervollständigt",
+          "single-volume": "Einzelne Ausgabe"
+        },
+        "buttons": {
+          "add-volume": "Ausgabe hinzufügen",
+          "mark-completed": "Markieren als vervollständigt"
+        }
+      },
+      "series-cards-gallery": {
+        "all-media-types-filter": "Alle"
+      },
+      "series-form": {
+        "header": "Serien Informationen",
+        "name": {
+          "label": "Name"
+        },
+        "single-volume": {
+          "label": "Einzelne Ausgabe"
+        },
+        "completed": {
+          "label": "Vervollständigt"
+        },
+        "media-type": {
+          "label": "Medien-Typ"
+        },
+        "series-tags": {
+          "label": "Serien Tags"
+        },
+        "shopping-link": {
+          "label": "Shopping Link"
+        },
+        "release-date": {
+          "label": "Veröffentlichungsdatum"
+        },
+        "in-delivery": {
+          "label": "In Zustellung"
+        },
+        "purchase-date": {
+          "label": "Kaufdatum"
+        },
+        "volume-tags": {
+          "label": "Ausgaben Tags"
+        }
+      }
+    },
+    "tags": {
+      "tag-creation-form": {
+        "header": {
+          "series": "Serien Tag",
+          "volume": "Ausgaben Tag"
+        }
+      }
+    },
+    "volumes": {
+      "volume-form": {
+        "header": "Ausgaben Informationen",
+        "series": {
+          "label": "Serie"
+        },
+        "sequence-number": {
+          "label": "Ausgaben Nummer"
+        },
+        "shopping-link": {
+          "label": "Shopping Link"
+        },
+        "release-date": {
+          "label": "Veröffentlichungsdatum"
+        },
+        "in-delivery": {
+          "label": "In Zustellung"
+        },
+        "purchase-date": {
+          "label": "Kaufdatum"
+        },
+        "volume-tags": {
+          "label": "Ausgaben Tags"
+        }
+      },
+      "volumes-table": {
+        "header": {
+          "series-name": "Serie",
+          "sequence-number": "Ausgaben Nummer",
+          "release-date": "Veröffentlichungsdatum",
+          "purchase-date": "Kaufdatum",
+          "volume-tags": "Ausgaben Tags",
+          "actions": "Aktionen",
+          "reset-sort-tooltip": "Sortierung zurücksetzen",
+          "reset-filters-tooltip": "Filter zurücksetzen"
+        },
+        "mark-volume-bought-tooltip": "Ausgabe als gekauft markieren",
+        "mark-volume-delivered-tooltip": "Ausgabe als geliefert markieren"
+      }
+    }
+  },
+  "pages": {
+    "series": {
+      "incomplete": {
+        "no-series-message": "Keine unvollständigen Serien vorhanden",
+        "no-series-for-filter-message": "Keine unvollständigen Serien für den ausgewählten Medien-Typ",
+        "delete-series-prompt": "Sind Sie sicher, dass Sie diese Serie löschen möchten?"
+      },
+      "orphaned": {
+        "no-series-message": "Keine verwaisten Serien vorhanden",
+        "no-series-for-filter-message": "Keine verwaisten Serien für den ausgewählten Medien-Typ",
+        "mark-completed-prompt": "Sind Sie sicher, dass Sie diese Serie als abgeschlossen markieren möchten?",
+        "delete-series-prompt": "Sind Sie sicher, dass Sie diese Serie löschen möchten?"
+      },
+      "completed": {
+        "no-series-message": "Keine vervollständigten Serien vorhanden",
+        "no-series-for-filter-message": "Keine vervollständigten Serien für den ausgewählten Medien-Typ",
+        "delete-series-prompt": "Sind Sie sicher, dass Sie diese Serie löschen möchten?"
+      }
+    },
+    "tags": {
+      "series": {
+        "add-tag-tooltip": "Serien Tag hinzufügen",
+        "delete-tag-prompt": "Sind Sie sicher, dass Sie diesen Serien Tag löschen möchten?"
+      },
+      "volume": {
+        "add-tag-tooltip": "Ausgaben Tag hinzufügen",
+        "delete-tag-prompt": "Sind Sie sicher, dass Sie diesen Ausgaben Tag löschen möchten?"
+      }
+    },
+    "volumes": {
+      "tracking-dashboard": {
+        "headers": {
+          "in-delivery": "Wird Geliefert",
+          "released": "Bereits veröffentlicht",
+          "upcoming": "Bevorstehende Veröffentlichungen"
+        },
+        "no-volumes-messages": {
+          "in-delivery": "Keine Ausgaben in Zustellung",
+          "released": "Keine bereits veröffentlichten Ausgaben",
+          "upcoming": "Keine Ausgaben werden im ausgewählter Zeitraum veröffentlicht"
+        },
+        "upcoming-timeframe-tabs": {
+          "7-days": "Nächste 7 Tage",
+          "30-days": "Nächste 30 Tage",
+          "90-days": "Nächste 90 Tage",
+          "all": "Alle"
+        },
+        "delete-volume-prompt": "Sind Sie sicher, dass Sie diese Ausgabe löschen möchten?",
+        "mark-delivered-prompt": "Sind Sie sicher, dass Sie diese Ausgabe als geliefert markieren möchten?"
+      },
+      "missing": {
+        "no-volumes-message": "Keine fehlenden Ausgaben vorhanden",
+        "delete-volume-prompt": "Sind Sie sicher, dass Sie diese Ausgabe löschen möchten?",
+        "mark-volume-bought-dialog": {
+          "title": "Ausgabe als gekauft markieren",
+          "direct-purchase": "Direkter Kauf (im Geschäft)",
+          "delivery-purchase": "Lieferung (online bestellt)",
+          "purchase-date": "Kaufdatum"
+        }
+      },
+      "collected": {
+        "no-volumes-message": "Keine gesammelten Ausgaben vorhanden",
+        "delete-volume-prompt": "Sind Sie sicher, dass Sie diese Ausgabe löschen möchten?"
+      }
+    }
+  },
+  "common": {
+    "buttons": {
+      "save": "Speichern",
+      "add": "Hinzufügen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "yes": "Ja",
+      "no": "Nein",
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen"
+    }
+  },
+  "titles": {
+    "series": {
+      "incomplete": "{{applicationName}} – Unvollständige Serien",
+      "orphans": "{{applicationName}} – Verwaiste Serien",
+      "completed": "{{applicationName}} – Vervollständigte Serien"
+    },
+    "tags": {
+      "series": "{{applicationName}} – Serien Tags",
+      "volume": "{{applicationName}} – Ausgaben Tags"
+    },
+    "volumes": {
+      "tracking-dashboard": "{{applicationName}} – Ausgaben Tracking Dashboard",
+      "missing": "{{applicationName}} – Fehlende Ausgaben",
+      "collected": "{{applicationName}} – Gesammelte Ausgaben"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TagAssignmentComponent } from '../../tags/tag-assignment/tag-assignment.component';
+import { TagBadgeComponent } from '../../tags/tag-badge/tag-badge.component';
+import { SortButtonComponent, SortDirection } from '../../core/sort-button/sort-button.component';
+import {
+  heroArrowPathSolid,
+  heroPencilSolid,
+  heroShoppingCartSolid,
+  heroTrashSolid,
+  heroArrowRightEndOnRectangleSolid,
+  heroFunnelSolid,
+  heroXMarkSolid,
+} from '@ng-icons/heroicons/solid';
+import { VolumeModel } from '../../../../features/volumes/model/volume.model';
+import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
+import { SortableColumn, VolumesTableDataService } from './services/volumes-table-data.service';
+import { SeriesBadgeComponent } from '../../series/series-badge/series-badge.component';
+
+export enum VolumeViewMode {
+  IN_DELIVERY = 'IN_DELIVERY',
+  NOT_BOUGHT = 'NOT_BOUGHT',
+  COLLECTED = 'COLLECTED',
+}
+
+@Component({
+  selector: 'app-volumes-table',
+  templateUrl: './volumes-table.component.html',
+  styleUrl: './volumes-table.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    NgIcon,
+    SeriesBadgeComponent,
+    TagAssignmentComponent,
+    TagBadgeComponent,
+    SortButtonComponent,
+  ],
+  providers: [
+    VolumesTableDataService,
+    provideIcons({
+      heroArrowPathSolid,
+      heroShoppingCartSolid,
+      heroArrowRightEndOnRectangleSolid,
+      heroPencilSolid,
+      heroTrashSolid,
+      heroFunnelSolid,
+      heroXMarkSolid,
+    }),
+  ],
+})
+export class VolumesTableComponent {
+  private readonly dataService = inject(VolumesTableDataService);
+
+  readonly volumes = input.required<readonly VolumeModel[]>();
+  readonly volumeTags = input.required<readonly VolumeTagModel[]>();
+  readonly defaultSortColumn = input<SortableColumn | null>(null);
+  readonly defaultSortDirection = input<SortDirection | null>(null);
+  readonly viewMode = input.required<VolumeViewMode>();
+
+  readonly volumeTagAdded = output<{
+    volume: VolumeModel;
+    tag: VolumeTagModel;
+  }>();
+  readonly volumeTagRemoved = output<{
+    volume: VolumeModel;
+    tag: VolumeTagModel;
+  }>();
+  readonly volumeMarkedAsBought = output<VolumeModel>();
+  readonly volumeMarkedAsDelivered = output<VolumeModel>();
+  readonly volumeEdited = output<VolumeModel>();
+  readonly volumeDeleted = output<VolumeModel>();
+
+  readonly SortableColumn = SortableColumn;
+  readonly sortDirections = this.dataService.sortDirections;
+  readonly sortingApplied = this.dataService.sortingApplied;
+  readonly filteredSeriesNames = this.dataService.filteredSeriesNames;
+  readonly filteredTagIds = this.dataService.filteredTagIds;
+  readonly filterApplied = this.dataService.filterApplied;
+  readonly availableSeriesNames = this.dataService.availableSeriesNames;
+  readonly availableTags = this.dataService.availableTags;
+  readonly filteredAndSortedVolumes = this.dataService.filteredAndSortedVolumes;
+
+  readonly updateSort = this.dataService.updateSort.bind(this.dataService);
+  readonly toggleSeriesFilter = this.dataService.toggleSeriesFilter.bind(this.dataService);
+  readonly toggleTagFilter = this.dataService.toggleTagFilter.bind(this.dataService);
+  readonly resetFilters = this.dataService.resetFilters.bind(this.dataService);
+  readonly resetSort = this.dataService.resetSort.bind(this.dataService);
+
+  readonly VolumeViewMode = VolumeViewMode;
+
+  constructor() {
+    effect(() => {
+      this.dataService.initialize(
+        this.volumes(),
+        this.volumeTags(),
+        this.defaultSortColumn(),
+        this.defaultSortDirection(),
+      );
+    });
+  }
+
+  onVolumeTagAdded(volume: VolumeModel, tag: VolumeTagModel): void {
+    this.volumeTagAdded.emit({ volume, tag });
+  }
+
+  onVolumeTagRemoved(volume: VolumeModel, tag: VolumeTagModel): void {
+    this.volumeTagRemoved.emit({ volume, tag });
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "bracketSameLine": false,
+  "endOfLine": "auto",
+  "htmlWhitespaceSensitivity": "css",
+  "overrides": [
+    {
+      "files": "*.yaml",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ],
+  "singleAttributePerLine": true,
+  "singleQuote": true
+}

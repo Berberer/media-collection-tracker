@@ -1,0 +1,7 @@
+<app-tag-assignment
+  [selectedTags]="value()"
+  [allTags]="allTags()"
+  [dropdownPlacement]="dropdownPlacement()"
+  (tagAdded)="onTagAdded($event)"
+  (tagRemoved)="onTagRemoved($event)"
+></app-tag-assignment>

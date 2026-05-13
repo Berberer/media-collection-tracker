@@ -1,0 +1,63 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-row flex-wrap gap-4 items-center">
+    @for (s of series(); track s.id) {
+      <app-series-card
+        [series]="s"
+        [viewMode]="seriesViewMode()"
+        (addVolume)="addVolume.emit(s)"
+        (editSeries)="editSeries.emit(s)"
+        (markCompleted)="markCompleted.emit(s)"
+        (deleteSeries)="deleteSeries.emit(s)"
+      ></app-series-card>
+    } @empty {
+      @if (!loading()) {
+        <p class="mx-auto mt-4 text-gray-400 italic">
+          {{ selectedMediaType() === null ? noSeriesMessage() : noSeriesForFilterTypeMessage() }}
+        </p>
+      }
+    }
+  </div>
+
+  <div role="tablist" class="tabs tabs-box mx-auto">
+    <a
+      role="tab"
+      class="tab"
+      [ngClass]="{ 'tab-active': selectedMediaType() === SeriesMediaType.BOOK }"
+      (click)="onMediaTypeFilterChange(SeriesMediaType.BOOK)"
+    >
+      <app-media-type-badge [mediaType]="SeriesMediaType.BOOK"></app-media-type-badge>
+    </a>
+    <a
+      role="tab"
+      class="tab"
+      [ngClass]="{ 'tab-active': selectedMediaType() === SeriesMediaType.GAME }"
+      (click)="onMediaTypeFilterChange(SeriesMediaType.GAME)"
+    >
+      <app-media-type-badge [mediaType]="SeriesMediaType.GAME"></app-media-type-badge>
+    </a>
+    <a
+      role="tab"
+      class="tab"
+      [ngClass]="{ 'tab-active': selectedMediaType() === SeriesMediaType.MOVIE }"
+      (click)="onMediaTypeFilterChange(SeriesMediaType.MOVIE)"
+    >
+      <app-media-type-badge [mediaType]="SeriesMediaType.MOVIE"></app-media-type-badge>
+    </a>
+    <a
+      role="tab"
+      class="tab"
+      [ngClass]="{ 'tab-active': selectedMediaType() === SeriesMediaType.SHOW }"
+      (click)="onMediaTypeFilterChange(SeriesMediaType.SHOW)"
+    >
+      <app-media-type-badge [mediaType]="SeriesMediaType.SHOW"></app-media-type-badge>
+    </a>
+    <a
+      role="tab"
+      class="tab"
+      [ngClass]="{ 'tab-active': selectedMediaType() === null }"
+      (click)="onMediaTypeFilterChange(null)"
+    >
+      {{ 'components.series.series-cards-gallery.all-media-types-filter' | translate }}
+    </a>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+@if (loadingSeriesTags()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+
+<div class="flex flex-col h-full">
+  <div class="flex flex-row flex-wrap gap-4 items-center">
+    @if (seriesTags$ | async; as seriesTags) {
+      @for (seriesTag of seriesTags; track seriesTag.id) {
+        <app-tag-badge
+          [tag]="seriesTag"
+          [showRemoveButton]="true"
+          (removed)="onDeleteSeriesTag(seriesTag)"
+        ></app-tag-badge>
+      }
+    }
+
+    @if (!loadingSeriesTags()) {
+      <div class="tooltip tooltip-bottom">
+        <div class="tooltip-content">
+          {{ 'pages.tags.series.add-tag-tooltip' | translate }}
+        </div>
+        <button type="button" class="btn btn-neutral" (click)="onCreateSeriesTag()">
+          {{ 'common.buttons.add' | translate }}
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<app-modal-dialog
+  [open]="showSeriesTagFormModal()"
+  [loading]="savingSeriesTag()"
+  (closed)="onCloseSeriesTagModal()"
+>
+  <app-tag-creation-form
+    [tagType]="tagType"
+    (saved)="onSaveSeriesTag($event)"
+  ></app-tag-creation-form>
+</app-modal-dialog>
+
+<app-confirmation-prompt
+  [open]="showDeleteSeriesTagConfirmation()"
+  [loading]="deletingSeriesTag()"
+  [prompt]="'pages.tags.series.delete-tag-prompt' | translate"
+  (confirmed)="onConfirmedDeleteSeriesTag()"
+  (cancelled)="onCancelledDeleteSeriesTag()"
+></app-confirmation-prompt>

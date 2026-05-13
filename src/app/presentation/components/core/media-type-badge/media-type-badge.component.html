@@ -1,0 +1,22 @@
+@switch (mediaType()) {
+  @case (SeriesMediaType.BOOK) {
+    <div class="badge border-orange-300 bg-orange-300 font-semibold">
+      {{ 'components.core.media-type-badge.BOOK' | translate }}
+    </div>
+  }
+  @case (SeriesMediaType.GAME) {
+    <div class="badge border-purple-500 bg-purple-500 font-semibold">
+      {{ 'components.core.media-type-badge.GAME' | translate }}
+    </div>
+  }
+  @case (SeriesMediaType.MOVIE) {
+    <div class="badge border-red-500 bg-red-500 font-semibold">
+      {{ 'components.core.media-type-badge.MOVIE' | translate }}
+    </div>
+  }
+  @case (SeriesMediaType.SHOW) {
+    <div class="badge border-green-500 bg-green-500 font-semibold">
+      {{ 'components.core.media-type-badge.SHOW' | translate }}
+    </div>
+  }
+}

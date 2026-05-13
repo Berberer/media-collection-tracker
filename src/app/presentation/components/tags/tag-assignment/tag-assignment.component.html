@@ -1,0 +1,23 @@
+<div class="flex flex-row flex-wrap gap-x-4 items-center">
+  @for (tag of selectedTags(); track tag.id) {
+    <app-tag-badge
+      [tag]="tag"
+      [showRemoveButton]="!readonly()"
+      (removed)="onTagRemoved(tag)"
+    ></app-tag-badge>
+  }
+  @if (availableTags().length > 0 && !readonly()) {
+    <div [ngClass]="'dropdown dropdown-' + dropdownPlacement()">
+      <div tabindex="0" role="button" class="btn btn-square btn-soft btn-neutral text-xl">
+        <ng-icon name="heroPlusSolid"></ng-icon>
+      </div>
+      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm">
+        @for (tag of availableTags(); track tag.id) {
+          <li (click)="onTagAdded(tag)">
+            <app-tag-badge [tag]="tag"></app-tag-badge>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

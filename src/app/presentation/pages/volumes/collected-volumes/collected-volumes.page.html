@@ -1,0 +1,62 @@
+@if (loadingVolumeTags() || loadingCollectedVolumes()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+
+<div class="flex flex-col h-full gap-2">
+  @if (!loadingVolumeTags() && !loadingCollectedVolumes()) {
+    @for (series of sortedSeries(); track series.id) {
+      <div class="collapse collapse-arrow bg-base-100 border border-base-300">
+        <input type="checkbox" />
+        <div class="collapse-title font-semibold text-lg flex flex-row items-center gap-4">
+          <div class="avatar avatar-placeholder">
+            <div
+              class="w-12 h-12 rounded-full"
+              [ngStyle]="{
+                'background-color': series.backgroundColorHex,
+                color: series.textColorHex,
+              }"
+            >
+              <span class="text-lg">{{ series.abbreviation }}</span>
+            </div>
+          </div>
+
+          <div class="grow">
+            {{ series.name }}
+          </div>
+
+          <app-media-type-badge [mediaType]="series.mediaType"></app-media-type-badge>
+        </div>
+        <div class="collapse-content">
+          <div class="pb-4">
+            <app-volumes-table
+              [volumes]="collectedVolumes().get(series) ?? []"
+              [volumeTags]="(volumeTags$ | async) ?? []"
+              [defaultSortColumn]="SortableColumn.SEQUENCE_NUMBER"
+              [defaultSortDirection]="SortDirection.ASC"
+              [viewMode]="volumeViewMode"
+              (volumeTagAdded)="onVolumeTagAdded($event)"
+              (volumeTagRemoved)="onVolumeTagRemoved($event)"
+              (volumeDeleted)="onDeleteVolume($event)"
+            ></app-volumes-table>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="flex flex-row justify-center">
+        <p class="mx-auto mt-4 text-gray-400 italic">
+          {{ 'pages.volumes.collected.no-volumes-message' | translate }}
+        </p>
+      </div>
+    }
+  }
+</div>
+
+<app-confirmation-prompt
+  [open]="showDeleteVolumeConfirmation()"
+  [loading]="deletingVolume()"
+  [prompt]="'pages.volumes.collected.delete-volume-prompt' | translate"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
+></app-confirmation-prompt>

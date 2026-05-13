@@ -1,0 +1,9 @@
+div.dropdown.disabled {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
+  border-width: 0;
+
+  div.btn-disabled {
+    background-color: unset;
+  }
+}

@@ -1,0 +1,13 @@
+<form (ngSubmit)="onSave()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">
+      {{ 'components.tags.tag-creation-form.header.' + tagType().toLowerCase() | translate }}
+    </legend>
+
+    <input type="text" class="input" [formField]="tagForm.label" />
+
+    <button class="btn btn-neutral mt-4" [disabled]="!(tagForm().dirty() && tagForm().valid())">
+      {{ 'common.buttons.save' | translate }}
+    </button>
+  </fieldset>
+</form>

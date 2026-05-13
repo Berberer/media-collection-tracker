@@ -1,0 +1,49 @@
+@if (loadingVolumeTags()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+
+<div class="flex flex-col h-full">
+  <div class="flex flex-row flex-wrap gap-4 items-center">
+    @if (volumeTags$ | async; as volumeTags) {
+      @for (volumeTag of volumeTags; track volumeTag.id) {
+        <app-tag-badge
+          [tag]="volumeTag"
+          [showRemoveButton]="true"
+          (removed)="onDeleteVolumeTag(volumeTag)"
+        ></app-tag-badge>
+      }
+    }
+
+    @if (!loadingVolumeTags()) {
+      <div class="tooltip tooltip-bottom">
+        <div class="tooltip-content">
+          {{ 'pages.tags.volume.add-tag-tooltip' | translate }}
+        </div>
+        <button type="button" class="btn btn-neutral" (click)="onCreateVolumeTag()">
+          {{ 'common.buttons.add' | translate }}
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<app-modal-dialog
+  [open]="showVolumeTagFormModal()"
+  [loading]="savingVolumeTag()"
+  (closed)="onCloseVolumeTagModal()"
+>
+  <app-tag-creation-form
+    [tagType]="tagType"
+    (saved)="onSaveVolumeTag($event)"
+  ></app-tag-creation-form>
+</app-modal-dialog>
+
+<app-confirmation-prompt
+  [open]="showDeleteVolumeTagConfirmation()"
+  [loading]="deletingVolumeTag()"
+  [prompt]="'pages.tags.volume.delete-tag-prompt' | translate"
+  (confirmed)="onConfirmedDeleteVolumeTag()"
+  (cancelled)="onCancelledDeleteVolumeTag()"
+></app-confirmation-prompt>

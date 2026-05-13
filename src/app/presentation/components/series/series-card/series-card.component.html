@@ -1,0 +1,95 @@
+<div class="card card-side bg-base-100 shadow-sm min-w-96">
+  <figure class="p-2">
+    <div class="avatar avatar-placeholder">
+      <div
+        class="w-24 h-24 rounded-full"
+        [ngStyle]="{
+          'background-color': series().backgroundColorHex,
+          color: series().textColorHex,
+        }"
+      >
+        <span class="text-3xl">{{ series().abbreviation }}</span>
+      </div>
+    </div>
+  </figure>
+  <div class="card-body">
+    <div class="card-title justify-between">
+      <h2 class="text-black">{{ series().name }}</h2>
+
+      <app-media-type-badge [mediaType]="series().mediaType"></app-media-type-badge>
+    </div>
+
+    <div class="flex flex-row gap-2 pl-4">
+      @if (series().singleVolume) {
+        <div class="badge bg-indigo-400">
+          {{ 'components.series.series-card.properties.single-volume' | translate }}
+        </div>
+      }
+
+      @switch (viewMode()) {
+        @case (SeriesViewMode.ORPHANED) {
+          <div class="badge bg-gray-500">
+            {{ 'components.series.series-card.properties.orphaned' | translate }}
+          </div>
+        }
+        @case (SeriesViewMode.COMPLETED) {
+          <div class="badge bg-blue-300">
+            {{ 'components.series.series-card.properties.completed' | translate }}
+          </div>
+        }
+      }
+
+      @for (seriesTag of series().seriesTags; track seriesTag.id) {
+        <app-tag-badge [tag]="seriesTag"></app-tag-badge>
+      }
+    </div>
+
+    @if (!readonly()) {
+      <div class="card-actions justify-end">
+        @if (loading()) {
+          <span class="loading loading-spinner"></span>
+        } @else {
+          @if (viewMode() !== SeriesViewMode.COMPLETED) {
+            <div class="tooltip tooltip-bottom">
+              <div class="tooltip-content">
+                {{ 'components.series.series-card.buttons.add-volume' | translate }}
+              </div>
+              <button class="btn btn-md btn-neutral text-xl" (click)="addVolume.emit()">
+                <ng-icon name="heroPlusSolid"></ng-icon>
+              </button>
+            </div>
+          }
+
+          <div class="tooltip tooltip-bottom">
+            <div class="tooltip-content">
+              {{ 'common.buttons.edit' | translate }}
+            </div>
+            <button class="btn btn-md btn-neutral text-xl" (click)="editSeries.emit()">
+              <ng-icon name="heroPencilSolid"></ng-icon>
+            </button>
+          </div>
+
+          @if (viewMode() === SeriesViewMode.ORPHANED) {
+            <div class="tooltip tooltip-bottom">
+              <div class="tooltip-content">
+                {{ 'components.series.series-card.buttons.mark-completed' | translate }}
+              </div>
+              <button class="btn btn-md btn-neutral text-xl" (click)="markCompleted.emit()">
+                <ng-icon name="heroCheckSolid"></ng-icon>
+              </button>
+            </div>
+          }
+
+          <div class="tooltip tooltip-bottom">
+            <div class="tooltip-content">
+              {{ 'common.buttons.delete' | translate }}
+            </div>
+            <button class="btn btn-md btn-neutral text-xl" (click)="deleteSeries.emit()">
+              <ng-icon name="heroTrashSolid"></ng-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,30 @@
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { NgClass, NgStyle } from '@angular/common';
+import { SeriesModel } from '../../../../features/series/model/series.model';
+import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
+
+@Component({
+  selector: 'app-series-badge',
+  templateUrl: './series-badge.component.html',
+  styleUrl: './series-badge.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgStyle, SeriesCardComponent, NgClass],
+})
+export class SeriesBadgeComponent {
+  readonly series = input.required<SeriesModel>();
+  readonly tooltipPlacement = input<'top' | 'bottom' | 'left' | 'right'>('bottom');
+  readonly viewMode = input<SeriesViewMode>();
+
+  protected readonly resolvedViewMode = computed(() => {
+    const providedMode = this.viewMode();
+    if (providedMode) {
+      return providedMode;
+    }
+
+    if (this.series().completed) {
+      return SeriesViewMode.COMPLETED;
+    }
+
+    return SeriesViewMode.INCOMPLETE;
+  });
+}

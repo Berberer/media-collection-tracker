@@ -1,0 +1,53 @@
+<app-modal-dialog [open]="open()" [loading]="loading()" (closed)="onCancel()">
+  <form (ngSubmit)="onConfirm()">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border px-4">
+      <legend class="fieldset-legend">
+        {{ 'pages.volumes.missing.mark-volume-bought-dialog.title' | translate }}
+      </legend>
+
+      <div class="flex flex-col gap-y-4">
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <input
+              type="radio"
+              class="radio radio-neutral"
+              [formField]="purchaseMethodForm.purchaseMethod"
+              value="direct"
+            />
+            <span class="label-text">{{
+              'pages.volumes.missing.mark-volume-bought-dialog.direct-purchase' | translate
+            }}</span>
+          </label>
+          <label class="label cursor-pointer">
+            <input
+              type="radio"
+              class="radio radio-neutral"
+              [formField]="purchaseMethodForm.purchaseMethod"
+              value="delivery"
+            />
+            <span class="label-text">{{
+              'pages.volumes.missing.mark-volume-bought-dialog.delivery-purchase' | translate
+            }}</span>
+          </label>
+        </div>
+
+        <div>
+          <label class="label">
+            <span class="label-text">{{
+              'pages.volumes.missing.mark-volume-bought-dialog.purchase-date' | translate
+            }}</span>
+          </label>
+          <input
+            type="date"
+            class="input input-bordered w-full"
+            [formField]="purchaseMethodForm.purchaseDate"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-neutral mb-4">
+          {{ 'common.buttons.confirm' | translate }}
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</app-modal-dialog>

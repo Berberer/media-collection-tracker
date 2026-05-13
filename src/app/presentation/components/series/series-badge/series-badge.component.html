@@ -1,0 +1,18 @@
+<div class="tooltip max-w-none" [ngClass]="'tooltip-' + tooltipPlacement()">
+  <div class="tooltip-content p-0 bg-transparent border-none max-w-none">
+    <app-series-card
+      [series]="series()"
+      [viewMode]="resolvedViewMode()"
+      [readonly]="true"
+    ></app-series-card>
+  </div>
+  <span
+    class="badge cursor-default"
+    [ngStyle]="{
+      'background-color': series().backgroundColorHex,
+      'border-color': series().backgroundColorHex,
+      color: series().textColorHex,
+    }"
+    >{{ series().name }}</span
+  >
+</div>

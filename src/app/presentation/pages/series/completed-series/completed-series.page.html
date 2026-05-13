@@ -1,0 +1,42 @@
+@if (loadingSeries()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+<div class="flex flex-col h-full">
+  <app-series-cards-gallery
+    [series]="(completedSeries$ | async) ?? []"
+    [seriesViewMode]="seriesViewMode"
+    (editSeries)="onEditSeries($event)"
+    (deleteSeries)="onDeleteSeries($event)"
+    (mediaTypeFilterChange)="onMediaTypeFilterChange($event)"
+    [loading]="loadingSeries()"
+    [noSeriesMessage]="'pages.series.completed.no-series-message' | translate"
+    [noSeriesForFilterTypeMessage]="
+      'pages.series.completed.no-series-for-filter-message' | translate
+    "
+  ></app-series-cards-gallery>
+</div>
+
+<app-modal-dialog
+  [open]="showSeriesFormModal() && seriesModel() !== null"
+  [loading]="loadingSeriesTags() || savingSeries()"
+  (closed)="onCloseSeriesModal()"
+>
+  @if (seriesModel() !== null) {
+    <app-series-form
+      [series]="seriesModel()!"
+      [allSeriesTags]="(seriesTags$ | async) ?? []"
+      [allVolumeTags]="(volumeTags$ | async) ?? []"
+      (saved)="onSaveSeries($event)"
+    ></app-series-form>
+  }
+</app-modal-dialog>
+
+<app-confirmation-prompt
+  [open]="showDeleteSeriesConfirmation()"
+  [loading]="deletingSeries()"
+  [prompt]="'pages.series.completed.delete-series-prompt' | translate"
+  (confirmed)="onConfirmedDeleteSeries()"
+  (cancelled)="onCancelledDeleteSeries()"
+></app-confirmation-prompt>

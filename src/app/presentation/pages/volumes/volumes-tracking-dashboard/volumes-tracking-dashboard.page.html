@@ -1,0 +1,174 @@
+@if (loadingVolumeTags()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+
+<div class="flex flex-col gap-y-16 h-full">
+  @if (!loadingVolumeTags()) {
+    @if (loadingInDeliveryVolumes()) {
+      <div class="flex flex-row justify-center">
+        <span class="loading loading-spinner loading-lg"></span>
+      </div>
+    } @else if (inDeliveryVolumes$ | async; as inDeliveryVolumes) {
+      <div class="flex flex-col gap-2">
+        <h1 class="text-l font-bold text-center">
+          {{ 'pages.volumes.tracking-dashboard.headers.in-delivery' | translate }}
+        </h1>
+        @if (inDeliveryVolumes !== null && inDeliveryVolumes.length > 0) {
+          <app-volumes-table
+            [volumes]="inDeliveryVolumes"
+            [volumeTags]="(volumeTags$ | async) ?? []"
+            [defaultSortColumn]="SortableColumn.PURCHASE_DATE"
+            [defaultSortDirection]="SortDirection.ASC"
+            [viewMode]="VolumeViewMode.IN_DELIVERY"
+            (volumeTagAdded)="onVolumeTagAdded($event)"
+            (volumeTagRemoved)="onVolumeTagRemoved($event)"
+            (volumeMarkedAsDelivered)="onVolumeMarkedAsDelivered($event)"
+            (volumeEdited)="onVolumeEdited($event)"
+            (volumeDeleted)="onDeleteVolume($event)"
+          ></app-volumes-table>
+        } @else {
+          <div class="flex flex-row justify-center">
+            <p class="mx-auto mt-4 text-gray-400 italic">
+              {{ 'pages.volumes.tracking-dashboard.no-volumes-messages.in-delivery' | translate }}
+            </p>
+          </div>
+        }
+      </div>
+    }
+
+    @if (loadingReleasedVolumes()) {
+      <div class="flex flex-row justify-center">
+        <span class="loading loading-spinner loading-lg"></span>
+      </div>
+    } @else if (releasedVolumes$ | async; as releasedVolumes) {
+      <div class="flex flex-col gap-2">
+        <h1 class="text-l font-bold text-center">
+          {{ 'pages.volumes.tracking-dashboard.headers.released' | translate }}
+        </h1>
+        @if (releasedVolumes !== null && releasedVolumes.length > 0) {
+          <app-volumes-table
+            [volumes]="releasedVolumes"
+            [volumeTags]="(volumeTags$ | async) ?? []"
+            [defaultSortColumn]="SortableColumn.RELEASE_DATE"
+            [defaultSortDirection]="SortDirection.ASC"
+            [viewMode]="VolumeViewMode.NOT_BOUGHT"
+            (volumeTagAdded)="onVolumeTagAdded($event)"
+            (volumeTagRemoved)="onVolumeTagRemoved($event)"
+            (volumeEdited)="onVolumeEdited($event)"
+            (volumeDeleted)="onDeleteVolume($event)"
+          ></app-volumes-table>
+        } @else {
+          <div class="flex flex-row justify-center">
+            <p class="mx-auto mt-4 text-gray-400 italic">
+              {{ 'pages.volumes.tracking-dashboard.no-volumes-messages.released' | translate }}
+            </p>
+          </div>
+        }
+      </div>
+    }
+
+    @if (loadingUpcomingVolumes()) {
+      <div class="flex flex-row justify-center">
+        <span class="loading loading-spinner loading-lg"></span>
+      </div>
+    } @else if (upcomingVolumes$ | async; as upcomingVolumes) {
+      <div class="flex flex-col gap-2">
+        <h1 class="text-l font-bold text-center">
+          {{ 'pages.volumes.tracking-dashboard.headers.upcoming' | translate }}
+        </h1>
+        @if (upcomingVolumes !== null && upcomingVolumes.length > 0) {
+          <app-volumes-table
+            [volumes]="upcomingVolumes"
+            [volumeTags]="(volumeTags$ | async) ?? []"
+            [defaultSortColumn]="SortableColumn.RELEASE_DATE"
+            [defaultSortDirection]="SortDirection.ASC"
+            [viewMode]="VolumeViewMode.NOT_BOUGHT"
+            (volumeTagAdded)="onVolumeTagAdded($event)"
+            (volumeTagRemoved)="onVolumeTagRemoved($event)"
+            (volumeEdited)="onVolumeEdited($event)"
+            (volumeDeleted)="onDeleteVolume($event)"
+          ></app-volumes-table>
+        } @else {
+          <div class="flex flex-row justify-center">
+            <p class="mx-auto mt-4 text-gray-400 italic">
+              {{ 'pages.volumes.tracking-dashboard.no-volumes-messages.upcoming' | translate }}
+            </p>
+          </div>
+        }
+        <div class="tabs tabs-box mx-auto" role="tablist">
+          <input
+            type="radio"
+            class="tab"
+            name="upcoming_timeframe_tabs"
+            [aria-label]="
+              'pages.volumes.tracking-dashboard.upcoming-timeframe-tabs.7-days' | translate
+            "
+            [checked]="selectedUpcomingTimeframe() === 7"
+            (change)="onUpcomingTimeframeChange(7)"
+          />
+          <input
+            type="radio"
+            class="tab"
+            name="upcoming_timeframe_tabs"
+            [aria-label]="
+              'pages.volumes.tracking-dashboard.upcoming-timeframe-tabs.30-days' | translate
+            "
+            [checked]="selectedUpcomingTimeframe() === 30"
+            (change)="onUpcomingTimeframeChange(30)"
+          />
+          <input
+            type="radio"
+            class="tab"
+            name="upcoming_timeframe_tabs"
+            [aria-label]="
+              'pages.volumes.tracking-dashboard.upcoming-timeframe-tabs.90-days' | translate
+            "
+            [checked]="selectedUpcomingTimeframe() === 90"
+            (change)="onUpcomingTimeframeChange(90)"
+          />
+          <input
+            type="radio"
+            class="tab"
+            name="upcoming_timeframe_tabs"
+            [aria-label]="
+              'pages.volumes.tracking-dashboard.upcoming-timeframe-tabs.all' | translate
+            "
+            [checked]="selectedUpcomingTimeframe() === null"
+            (change)="onUpcomingTimeframeChange(null)"
+          />
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<app-confirmation-prompt
+  [open]="showDeleteVolumeConfirmation()"
+  [loading]="deletingVolume()"
+  [prompt]="'pages.volumes.tracking-dashboard.delete-volume-prompt' | translate"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
+></app-confirmation-prompt>
+
+<app-confirmation-prompt
+  [open]="showMarkAsDeliveredConfirmation()"
+  [loading]="savingVolume()"
+  [prompt]="'pages.volumes.tracking-dashboard.mark-delivered-prompt' | translate"
+  (confirmed)="confirmMarkAsDelivered()"
+  (cancelled)="cancelMarkAsDelivered()"
+></app-confirmation-prompt>
+
+<app-modal-dialog
+  [open]="showVolumeFormDialog() && volumeToUpdate() !== undefined"
+  [loading]="savingVolume()"
+  (closed)="onCancelledEditVolume()"
+>
+  <app-volume-form
+    [volume]="volumeToUpdate()!"
+    [allSeries]="allSeriesForAddingVolume()!"
+    [allVolumeTags]="(volumeTags$ | async) ?? []"
+    (saved)="onVolumeSaved($event)"
+  ></app-volume-form>
+</app-modal-dialog>

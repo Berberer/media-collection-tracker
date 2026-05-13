@@ -1,0 +1,37 @@
+<div
+  class="dropdown dropdown-bottom dropdown-end w-full input cursor-default"
+  [ngClass]="{ disabled: disabled() || readonly() }"
+>
+  <div
+    tabindex="0"
+    role="button"
+    class="w-full min-h-4 flex flex-row"
+    (focus)="onOpenDropdown()"
+    [ngClass]="{ 'btn-disabled': disabled() || readonly() }"
+  >
+    @if (value()) {
+      <ng-container
+        *ngTemplateOutlet="itemTemplate(); context: { $implicit: value() }"
+      ></ng-container>
+    }
+    <span class="ml-auto">⌄</span>
+  </div>
+
+  <ul tabindex="-1" class="dropdown-content menu w-full z-1 rounded-box p-2 bg-base-100 shadow-sm">
+    @if (searchable()) {
+      <li class="mb-2">
+        <input #searchInput type="text" class="input input-sm w-full" [(ngModel)]="searchQuery" />
+      </li>
+    }
+
+    @if (itemTracker()) {
+      @for (item of filteredItems(); track itemTracker()(item)) {
+        <li (click)="onSelectItem(item)">
+          <ng-container
+            *ngTemplateOutlet="itemTemplate(); context: { $implicit: item }"
+          ></ng-container>
+        </li>
+      }
+    }
+  </ul>
+</div>

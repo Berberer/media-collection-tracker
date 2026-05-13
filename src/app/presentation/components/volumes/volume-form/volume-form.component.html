@@ -1,0 +1,86 @@
+<form (ngSubmit)="onSave()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border px-4">
+    <legend class="fieldset-legend">
+      {{ 'components.volumes.volume-form.header' | translate }}
+    </legend>
+
+    <div class="flex flex-col gap-y-4">
+      <div class="z-20">
+        <label class="label">{{ 'components.volumes.volume-form.series.label' | translate }}</label>
+        <app-dropdown-control
+          [formField]="volumeForm.series"
+          [searchable]="true"
+          [items]="allSeries()"
+          [itemLabelMapper]="(series) => series?.name ?? ''"
+        >
+          <ng-template let-series>
+            <p>{{ series.name }}</p>
+          </ng-template>
+        </app-dropdown-control>
+      </div>
+
+      <div>
+        <label class="label">{{
+          'components.volumes.volume-form.sequence-number.label' | translate
+        }}</label>
+        <input
+          type="number"
+          class="input"
+          [ngClass]="{ 'input-error': !volumeForm.sequenceNumber().valid() }"
+          [formField]="volumeForm.sequenceNumber"
+        />
+      </div>
+
+      <div>
+        <label class="label">{{
+          'components.volumes.volume-form.shopping-link.label' | translate
+        }}</label>
+        <input
+          type="url"
+          class="input"
+          [ngClass]="{ 'input-error': !volumeForm.shoppingLink().valid() }"
+          placeholder="https://"
+          [formField]="volumeForm.shoppingLink"
+        />
+      </div>
+
+      <div>
+        <label class="label">{{
+          'components.volumes.volume-form.release-date.label' | translate
+        }}</label>
+        <input type="date" class="input" [formField]="volumeForm.releaseDate" />
+      </div>
+
+      <label class="label">
+        <input type="checkbox" class="toggle" [formField]="volumeForm.inDelivery" />
+        {{ 'components.volumes.volume-form.in-delivery.label' | translate }}
+      </label>
+
+      <div>
+        <label class="label">{{
+          'components.volumes.volume-form.purchase-date.label' | translate
+        }}</label>
+        <input
+          type="date"
+          class="input"
+          [ngClass]="{ 'input-error': !volumeForm.purchaseDate().valid() }"
+          [formField]="volumeForm.purchaseDate"
+        />
+      </div>
+
+      <div class="z-10">
+        <label class="label">{{
+          'components.volumes.volume-form.volume-tags.label' | translate
+        }}</label>
+        <app-tag-assignment-form-control
+          [formField]="volumeForm.volumeTags"
+          [allTags]="allVolumeTags()"
+        ></app-tag-assignment-form-control>
+      </div>
+
+      <button class="btn btn-neutral mb-4" [disabled]="!volumeForm().valid()">
+        {{ 'common.buttons.save' | translate }}
+      </button>
+    </div>
+  </fieldset>
+</form>

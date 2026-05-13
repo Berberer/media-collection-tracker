@@ -1,0 +1,86 @@
+<div class="navbar bg-base-300 shadow-sm gap-x-4">
+  <div class="flex-none">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost text-xl">
+        <ng-icon name="heroBars3Solid"></ng-icon>
+      </div>
+
+      <ul
+        tabindex="-1"
+        class="menu dropdown-content bg-base-300 rounded-box z-1 mt-3 p-2 shadow"
+        onclick="document.activeElement.blur()"
+      >
+        <li>
+          <h2 class="menu-title">{{ 'components.core.nav-bar.volumes-nav.title' | translate }}</h2>
+          <ul>
+            <li>
+              <a routerLink="/volumes/tracking-dashboard">{{
+                'components.core.nav-bar.volumes-nav.dashboard-section' | translate
+              }}</a>
+            </li>
+            <li>
+              <a routerLink="/volumes/missing">{{
+                'components.core.nav-bar.volumes-nav.missing-section' | translate
+              }}</a>
+            </li>
+            <li>
+              <a routerLink="/volumes/collected">{{
+                'components.core.nav-bar.volumes-nav.collected-section' | translate
+              }}</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2 class="menu-title">{{ 'components.core.nav-bar.series-nav.title' | translate }}</h2>
+          <ul>
+            <li>
+              <a routerLink="/series/incomplete">{{
+                'components.core.nav-bar.series-nav.incomplete-section' | translate
+              }}</a>
+            </li>
+            <li>
+              <a routerLink="/series/orphans">{{
+                'components.core.nav-bar.series-nav.orphans-section' | translate
+              }}</a>
+            </li>
+            <li>
+              <a routerLink="/series/completed">{{
+                'components.core.nav-bar.series-nav.completed-section' | translate
+              }}</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2 class="menu-title">{{ 'components.core.nav-bar.tags-nav.title' | translate }}</h2>
+          <ul>
+            <li>
+              <a routerLink="/tags/series">{{
+                'components.core.nav-bar.tags-nav.series-section' | translate
+              }}</a>
+            </li>
+            <li>
+              <a routerLink="/tags/volume">{{
+                'components.core.nav-bar.tags-nav.volume-section' | translate
+              }}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex-1">
+    <a class="text-xl">{{ currentTitle }}</a>
+  </div>
+
+  <div class="flex-none">
+    <div class="flex flex-row gap-4">
+      <button class="btn btn-md btn-neutral" (click)="createSeries.emit()">
+        {{ 'components.core.nav-bar.create-buttons.create-series' | translate }}
+      </button>
+      <button class="btn btn-md btn-neutral" (click)="createVolume.emit()">
+        {{ 'components.core.nav-bar.create-buttons.create-volume' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

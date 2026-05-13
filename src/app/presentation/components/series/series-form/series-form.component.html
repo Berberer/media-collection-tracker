@@ -1,0 +1,114 @@
+<form (ngSubmit)="onSave()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border px-4">
+    <legend class="fieldset-legend">
+      {{ 'components.series.series-form.header' | translate }}
+    </legend>
+
+    <div class="flex flex-col gap-y-4">
+      <div>
+        <label class="label">{{ 'components.series.series-form.name.label' | translate }}</label>
+        <input type="text" class="input" [formField]="seriesForm.name" />
+      </div>
+
+      <label class="label">
+        <input type="checkbox" class="toggle" [formField]="seriesForm.singleVolume" />
+        {{ 'components.series.series-form.single-volume.label' | translate }}
+      </label>
+
+      <label class="label">
+        <input type="checkbox" class="toggle" [formField]="seriesForm.completed" />
+        {{ 'components.series.series-form.completed.label' | translate }}
+      </label>
+
+      <div class="z-20">
+        <label class="label">{{
+          'components.series.series-form.media-type.label' | translate
+        }}</label>
+        <app-dropdown-control
+          [formField]="seriesForm.mediaType"
+          [searchable]="true"
+          [items]="mediaTypeValues"
+          [itemLabelMapper]="(mediaType) => mediaType"
+        >
+          <ng-template let-mediaType>
+            <app-media-type-badge [mediaType]="mediaType"></app-media-type-badge>
+          </ng-template>
+        </app-dropdown-control>
+      </div>
+
+      <div class="z-10">
+        <label class="label">{{
+          'components.series.series-form.series-tags.label' | translate
+        }}</label>
+        <app-tag-assignment-form-control
+          [formField]="seriesForm.seriesTags"
+          [allTags]="allSeriesTags()"
+        ></app-tag-assignment-form-control>
+      </div>
+
+      <div
+        id="volume-fields"
+        class="flex flex-col gap-y-4"
+        [ngClass]="{ expanded: showVolumeFields() }"
+      >
+        <hr />
+
+        <div>
+          <label class="label">{{
+            'components.series.series-form.shopping-link.label' | translate
+          }}</label>
+          <input
+            type="url"
+            class="input"
+            [ngClass]="{ 'input-error': !seriesForm.volumeShoppingLink().valid() }"
+            placeholder="https://"
+            [formField]="seriesForm.volumeShoppingLink"
+          />
+        </div>
+
+        <div>
+          <label class="label">{{
+            'components.series.series-form.release-date.label' | translate
+          }}</label>
+          <input type="date" class="input" [formField]="seriesForm.volumeReleaseDate" />
+        </div>
+
+        @if (!seriesFormData().completed) {
+          <label class="label">
+            <input type="checkbox" class="toggle" [formField]="seriesForm.volumeInDelivery" />
+            {{ 'components.series.series-form.in-delivery.label' | translate }}
+          </label>
+        }
+
+        <div>
+          <label class="label">{{
+            'components.series.series-form.purchase-date.label' | translate
+          }}</label>
+          <input
+            type="date"
+            class="input"
+            [ngClass]="{ 'input-error': !seriesForm.volumePurchaseDate().valid() }"
+            [formField]="seriesForm.volumePurchaseDate"
+          />
+        </div>
+
+        <div>
+          <label class="label">{{
+            'components.series.series-form.volume-tags.label' | translate
+          }}</label>
+          <app-tag-assignment-form-control
+            [formField]="seriesForm.volumeTags"
+            [allTags]="allVolumeTags()"
+          ></app-tag-assignment-form-control>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-neutral mb-4"
+        [disabled]="!(seriesForm().dirty() && seriesForm().valid())"
+      >
+        {{ 'common.buttons.save' | translate }}
+      </button>
+    </div>
+  </fieldset>
+</form>

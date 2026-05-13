@@ -1,0 +1,61 @@
+@if (loadingVolumeTags() || loadingMissingVolumes()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+
+<div class="flex flex-col h-full">
+  @if (!loadingVolumeTags() && !loadingMissingVolumes()) {
+    @if (missingVolumes$ | async; as missingVolumes) {
+      @if (missingVolumes === null || missingVolumes.length === 0) {
+        <div class="flex flex-row justify-center">
+          <p class="mx-auto mt-4 text-gray-400 italic">
+            {{ 'pages.volumes.missing.no-volumes-message' | translate }}
+          </p>
+        </div>
+      } @else {
+        <app-volumes-table
+          class="h-full"
+          [volumes]="missingVolumes"
+          [volumeTags]="(volumeTags$ | async) ?? []"
+          [defaultSortColumn]="SortableColumn.RELEASE_DATE"
+          [defaultSortDirection]="SortDirection.ASC"
+          [viewMode]="volumeViewMode"
+          (volumeTagAdded)="onVolumeTagAdded($event)"
+          (volumeTagRemoved)="onVolumeTagRemoved($event)"
+          (volumeMarkedAsBought)="onMarkVolumeAsBought($event)"
+          (volumeEdited)="onVolumeEdited($event)"
+          (volumeDeleted)="onDeleteVolume($event)"
+        ></app-volumes-table>
+      }
+    }
+  }
+</div>
+
+<app-confirmation-prompt
+  [open]="showDeleteVolumeConfirmation()"
+  [loading]="deletingVolume()"
+  [prompt]="'pages.volumes.missing.delete-volume-prompt' | translate"
+  (confirmed)="onConfirmedDeleteVolume()"
+  (cancelled)="onCancelledDeleteVolume()"
+></app-confirmation-prompt>
+
+<app-purchase-method-dialog
+  [open]="showPurchaseMethodDialog()"
+  [loading]="savingVolume()"
+  (confirmed)="onConfirmedMarkVolumeAsBought($event)"
+  (cancelled)="onCancelledMarkVolumeAsBought()"
+></app-purchase-method-dialog>
+
+<app-modal-dialog
+  [open]="showVolumeFormDialog() && volumeToUpdate() !== undefined"
+  [loading]="savingVolume()"
+  (closed)="onCancelledEditVolume()"
+>
+  <app-volume-form
+    [volume]="volumeToUpdate()!"
+    [allSeries]="allSeriesForAddingVolume()!"
+    [allVolumeTags]="(volumeTags$ | async) ?? []"
+    (saved)="onVolumeSaved($event)"
+  ></app-volume-form>
+</app-modal-dialog>

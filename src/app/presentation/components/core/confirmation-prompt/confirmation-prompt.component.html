@@ -1,0 +1,13 @@
+<app-modal-dialog [open]="open()" [loading]="loading()" (closed)="cancelled.emit()">
+  <div class="p-3 flex flex-col gap-3">
+    <h2>{{ prompt() }}</h2>
+    <div class="flex flex-row gap-5">
+      <button type="button" class="btn btn-soft btn-primary" (click)="confirmed.emit()">
+        {{ 'common.buttons.yes' | translate }}
+      </button>
+      <button type="button" class="btn btn-soft btn-neutral" (click)="cancelled.emit()">
+        {{ 'common.buttons.no' | translate }}
+      </button>
+    </div>
+  </div>
+</app-modal-dialog>

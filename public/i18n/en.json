@@ -1,0 +1,226 @@
+{
+  "components": {
+    "core": {
+      "nav-bar": {
+        "series-nav": {
+          "title": "Series",
+          "incomplete-section": "Incomplete",
+          "orphans-section": "Orphans",
+          "completed-section": "Completed"
+        },
+        "tags-nav": {
+          "title": "Tags",
+          "series-section": "Series Tags",
+          "volume-section": "Volume Tags"
+        },
+        "volumes-nav": {
+          "title": "Volumes",
+          "dashboard-section": "Tracking Dashboard",
+          "missing-section": "Missing",
+          "collected-section": "Collected"
+        },
+        "create-buttons": {
+          "create-series": "Create Series",
+          "create-volume": "Create Volume"
+        }
+      },
+      "media-type-badge": {
+        "BOOK": "Book",
+        "GAME": "Game",
+        "MOVIE": "Movie",
+        "SHOW": "Show"
+      }
+    },
+    "series": {
+      "series-card": {
+        "properties": {
+          "orphaned": "Orphaned",
+          "completed": "Completed",
+          "single-volume": "Single volume"
+        },
+        "buttons": {
+          "add-volume": "Add volume",
+          "mark-completed": "Mark completed"
+        }
+      },
+      "series-cards-gallery": {
+        "all-media-types-filter": "All"
+      },
+      "series-form": {
+        "header": "Series Data",
+        "name": {
+          "label": "Name"
+        },
+        "single-volume": {
+          "label": "Single volume"
+        },
+        "completed": {
+          "label": "Completed"
+        },
+        "media-type": {
+          "label": "Media type"
+        },
+        "series-tags": {
+          "label": "Series tags"
+        },
+        "shopping-link": {
+          "label": "Shopping link"
+        },
+        "release-date": {
+          "label": "Release date"
+        },
+        "in-delivery": {
+          "label": "In delivery"
+        },
+        "purchase-date": {
+          "label": "Purchase date"
+        },
+        "volume-tags": {
+          "label": "Volume tags"
+        }
+      }
+    },
+    "tags": {
+      "tag-creation-form": {
+        "header": {
+          "series": "Series tag",
+          "volume": "Volume tag"
+        }
+      }
+    },
+    "volumes": {
+      "volume-form": {
+        "header": "Volume Data",
+        "series": {
+          "label": "Series"
+        },
+        "sequence-number": {
+          "label": "Sequence number"
+        },
+        "shopping-link": {
+          "label": "Shopping link"
+        },
+        "release-date": {
+          "label": "Release date"
+        },
+        "in-delivery": {
+          "label": "In delivery"
+        },
+        "purchase-date": {
+          "label": "Purchase date"
+        },
+        "volume-tags": {
+          "label": "Volume tags"
+        }
+      },
+      "volumes-table": {
+        "header": {
+          "series-name": "Series",
+          "sequence-number": "Volume Number",
+          "release-date": "Release Date",
+          "purchase-date": "Purchase Date",
+          "volume-tags": "Volume Tags",
+          "actions": "Actions",
+          "reset-sort-tooltip": "Reset sort order",
+          "reset-filters-tooltip": "Reset filters"
+        },
+        "mark-volume-bought-tooltip": "Mark volume as bought",
+        "mark-volume-delivered-tooltip": "Mark volume as delivered"
+      }
+    }
+  },
+  "pages": {
+    "series": {
+      "incomplete": {
+        "no-series-message": "No incomplete series",
+        "no-series-for-filter-message": "No incomplete series for the selected media type",
+        "delete-series-prompt": "Are you sure you want to delete this series?"
+      },
+      "orphaned": {
+        "no-series-message": "No orphaned series",
+        "no-series-for-filter-message": "No orphaned series for the selected media type",
+        "mark-completed-prompt": "Are you sure you want to mark this series as completed?",
+        "delete-series-prompt": "Are you sure you want to delete this series?"
+      },
+      "completed": {
+        "no-series-message": "No completed series",
+        "no-series-for-filter-message": "No completed series for the selected media type",
+        "delete-series-prompt": "Are you sure you want to delete this series?"
+      }
+    },
+    "tags": {
+      "series": {
+        "add-tag-tooltip": "Add a new series tag",
+        "delete-tag-prompt": "Are you sure you want to delete this series tag?"
+      },
+      "volume": {
+        "add-tag-tooltip": "Add a new volume tag",
+        "delete-tag-prompt": "Are you sure you want to delete this volume tag?"
+      }
+    },
+    "volumes": {
+      "tracking-dashboard": {
+        "headers": {
+          "in-delivery": "In Delivery",
+          "released": "Released",
+          "upcoming": "Upcoming"
+        },
+        "no-volumes-messages": {
+          "in-delivery": "No volumes in delivery",
+          "released": "No volumes released",
+          "upcoming": "No upcoming volumes in selected timeframe"
+        },
+        "upcoming-timeframe-tabs": {
+          "7-days": "Next 7 Days",
+          "30-days": "Next 30 Days",
+          "90-days": "Next 90 Days",
+          "all": "All"
+        },
+        "delete-volume-prompt": "Are you sure you want to delete this volume?",
+        "mark-delivered-prompt": "Are you sure you want to mark this volume as delivered?"
+      },
+      "missing": {
+        "no-volumes-message": "No missing volumes",
+        "delete-volume-prompt": "Are you sure you want to delete this volume?",
+        "mark-volume-bought-dialog": {
+          "title": "Mark Volume as Bought",
+          "direct-purchase": "Direct purchase (in store)",
+          "delivery-purchase": "Delivery (ordered online)",
+          "purchase-date": "Purchase date"
+        }
+      },
+      "collected": {
+        "no-volumes-message": "No collected volumes",
+        "delete-volume-prompt": "Are you sure you want to delete this volume?"
+      }
+    }
+  },
+  "common": {
+    "buttons": {
+      "save": "Save",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "yes": "Yes",
+      "no": "No",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
+  },
+  "titles": {
+    "series": {
+      "incomplete": "{{applicationName}} – Incomplete Series",
+      "orphans": "{{applicationName}} – Orphaned Series",
+      "completed": "{{applicationName}} – Completed Series"
+    },
+    "tags": {
+      "series": "{{applicationName}} – Series Tags",
+      "volume": "{{applicationName}} – Volume Tags"
+    },
+    "volumes": {
+      "tracking-dashboard": "{{applicationName}} – Volumes Tracking Dashboard",
+      "missing": "{{applicationName}} – Missing Volumes",
+      "collected": "{{applicationName}} – Collected Volumes"
+    }
+  }
+}

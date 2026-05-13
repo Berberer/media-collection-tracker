@@ -1,0 +1,25 @@
+<div class="join">
+  <span
+    [ngClass]="{
+      'join-item badge font-normal': true,
+      'rounded-lg': !showRemoveButton(),
+      'rounded-l-lg': showRemoveButton(),
+    }"
+    [ngStyle]="{
+      'background-color': tag().backgroundColorHex,
+      'border-color': tag().backgroundColorHex,
+      color: tag().textColorHex,
+    }"
+  >
+    {{ tag().label }}
+  </span>
+  @if (showRemoveButton()) {
+    <button
+      type="button"
+      class="join-item btn btn-xs btn-outline rounded-r-lg"
+      (click)="removed.emit()"
+    >
+      <ng-icon name="heroXMarkSolid"></ng-icon>
+    </button>
+  }
+</div>

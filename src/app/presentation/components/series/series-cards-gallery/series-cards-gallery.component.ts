@@ -1,0 +1,36 @@
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SeriesModel } from '../../../../features/series/model/series.model';
+import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
+import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MediaTypeBadgeComponent } from '../../core/media-type-badge/media-type-badge.component';
+
+@Component({
+  selector: 'app-series-cards-gallery',
+  templateUrl: './series-cards-gallery.component.html',
+  styleUrl: './series-cards-gallery.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, SeriesCardComponent, TranslatePipe, MediaTypeBadgeComponent],
+})
+export class SeriesCardsGalleryComponent {
+  readonly series = input.required<readonly SeriesModel[]>();
+  readonly seriesViewMode = input.required<SeriesViewMode>();
+  readonly loading = input.required<boolean>();
+  readonly noSeriesMessage = input.required<string>();
+  readonly noSeriesForFilterTypeMessage = input.required<string>();
+
+  readonly addVolume = output<SeriesModel>();
+  readonly editSeries = output<SeriesModel>();
+  readonly markCompleted = output<SeriesModel>();
+  readonly deleteSeries = output<SeriesModel>();
+  readonly mediaTypeFilterChange = output<SeriesMediaTypes.SeriesMediaType | null>();
+
+  readonly SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
+  readonly selectedMediaType = signal<SeriesMediaTypes.SeriesMediaType | null>(null);
+
+  onMediaTypeFilterChange(mediaType: SeriesMediaTypes.SeriesMediaType | null): void {
+    this.selectedMediaType.set(mediaType);
+    this.mediaTypeFilterChange.emit(mediaType);
+  }
+}

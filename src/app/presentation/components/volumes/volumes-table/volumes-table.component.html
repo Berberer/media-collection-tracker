@@ -1,0 +1,240 @@
+<div class="h-full">
+  <table class="table table-zebra" style="width: 100%">
+    <thead>
+      <tr>
+        @if (viewMode() !== VolumeViewMode.COLLECTED) {
+          <th class="col-series-name">
+            <div class="flex flex-row items-center justify-center gap-2">
+              {{ 'components.volumes.volumes-table.header.series-name' | translate }}
+              <div class="dropdown dropdown-bottom dropdown-end">
+                <div
+                  tabindex="0"
+                  role="button"
+                  class="btn btn-ghost btn-xs"
+                  [class.btn-active]="filteredSeriesNames().size > 0"
+                >
+                  <ng-icon name="heroFunnelSolid"></ng-icon>
+                </div>
+                <ul
+                  tabindex="-1"
+                  class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto"
+                >
+                  @for (name of availableSeriesNames(); track name) {
+                    <li>
+                      <label class="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          class="checkbox checkbox-xs"
+                          [checked]="filteredSeriesNames().has(name)"
+                          (change)="toggleSeriesFilter(name)"
+                        />
+                        <span class="truncate">{{ name }}</span>
+                      </label>
+                    </li>
+                  }
+                </ul>
+              </div>
+              <app-sort-button
+                [direction]="sortDirections()[SortableColumn.SERIES_NAME]"
+                (sortToggled)="updateSort(SortableColumn.SERIES_NAME, $event)"
+              ></app-sort-button>
+            </div>
+          </th>
+        }
+        <th class="col-sequence-number">
+          <div class="flex flex-row items-center justify-center gap-2">
+            {{ 'components.volumes.volumes-table.header.sequence-number' | translate }}
+            <app-sort-button
+              [direction]="sortDirections()[SortableColumn.SEQUENCE_NUMBER]"
+              (sortToggled)="updateSort(SortableColumn.SEQUENCE_NUMBER, $event)"
+            ></app-sort-button>
+          </div>
+        </th>
+        <th class="col-release-date">
+          <div class="flex flex-row items-center justify-center gap-2">
+            {{ 'components.volumes.volumes-table.header.release-date' | translate }}
+            <app-sort-button
+              [direction]="sortDirections()[SortableColumn.RELEASE_DATE]"
+              (sortToggled)="updateSort(SortableColumn.RELEASE_DATE, $event)"
+            ></app-sort-button>
+          </div>
+        </th>
+        @if (viewMode() === VolumeViewMode.COLLECTED || viewMode() === VolumeViewMode.IN_DELIVERY) {
+          <th class="col-purchase-date">
+            <div class="flex flex-row items-center justify-center gap-2">
+              {{ 'components.volumes.volumes-table.header.purchase-date' | translate }}
+              <app-sort-button
+                [direction]="sortDirections()[SortableColumn.PURCHASE_DATE]"
+                (sortToggled)="updateSort(SortableColumn.PURCHASE_DATE, $event)"
+              ></app-sort-button>
+            </div>
+          </th>
+        }
+        <th class="col-volume-tags">
+          <div class="flex flex-row items-center justify-center gap-2">
+            {{ 'components.volumes.volumes-table.header.volume-tags' | translate }}
+            <div class="dropdown dropdown-bottom dropdown-end text-left">
+              <div
+                tabindex="0"
+                role="button"
+                class="btn btn-ghost btn-xs"
+                [class.btn-active]="filteredTagIds().size > 0"
+              >
+                <ng-icon name="heroFunnelSolid"></ng-icon>
+              </div>
+              <ul
+                tabindex="-1"
+                class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto"
+              >
+                @for (tag of availableTags(); track tag.id) {
+                  <li>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        class="checkbox checkbox-xs"
+                        [checked]="filteredTagIds().has(tag.id)"
+                        (change)="toggleTagFilter(tag.id)"
+                      />
+                      <app-tag-badge [tag]="tag"></app-tag-badge>
+                    </label>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </th>
+        <th class="col-actions">
+          <div class="flex flex-row items-center justify-center gap-2">
+            {{ 'components.volumes.volumes-table.header.actions' | translate }}
+            <div class="tooltip tooltip-left">
+              <div class="tooltip-content">
+                {{ 'components.volumes.volumes-table.header.reset-sort-tooltip' | translate }}
+              </div>
+              <button
+                class="btn btn-ghost btn-xs"
+                [disabled]="!sortingApplied()"
+                (click)="resetSort()"
+              >
+                <ng-icon name="heroArrowPathSolid"></ng-icon>
+              </button>
+            </div>
+            <div class="tooltip tooltip-left">
+              <div class="tooltip-content">
+                {{ 'components.volumes.volumes-table.header.reset-filters-tooltip' | translate }}
+              </div>
+              <button
+                class="btn btn-ghost btn-xs"
+                [disabled]="!filterApplied()"
+                (click)="resetFilters()"
+              >
+                <ng-icon name="heroXMarkSolid"></ng-icon>
+              </button>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (volume of filteredAndSortedVolumes(); track volume.id) {
+        <tr>
+          @if (viewMode() !== VolumeViewMode.COLLECTED) {
+            <td style="text-align: left">
+              <app-series-badge
+                [series]="volume.series"
+                [tooltipPlacement]="'right'"
+              ></app-series-badge>
+            </td>
+          }
+
+          <td style="text-align: center">
+            @if (volume.shoppingLink) {
+              <a
+                href="{{ volume.shoppingLink }}"
+                target="_blank"
+                style="text-decoration: underline"
+              >
+                {{ volume.sequenceNumber }}
+              </a>
+            } @else {
+              {{ volume.sequenceNumber }}
+            }
+          </td>
+
+          <td style="text-align: center">{{ volume.releaseDate | date }}</td>
+
+          @if (
+            viewMode() === VolumeViewMode.COLLECTED || viewMode() === VolumeViewMode.IN_DELIVERY
+          ) {
+            <td style="text-align: center">{{ volume.purchaseDate | date }}</td>
+          }
+
+          <td>
+            <div class="flex flex-row justify-end">
+              <app-tag-assignment
+                [selectedTags]="volume.volumeTags"
+                [allTags]="volumeTags()"
+                [readonly]="viewMode() === VolumeViewMode.COLLECTED"
+                [dropdownPlacement]="'end'"
+                (tagAdded)="onVolumeTagAdded(volume, $event)"
+                (tagRemoved)="onVolumeTagRemoved(volume, $event)"
+              ></app-tag-assignment>
+            </div>
+          </td>
+
+          <td>
+            <div class="flex flex-row flex-wrap justify-center gap-4">
+              @if (viewMode() === VolumeViewMode.NOT_BOUGHT) {
+                <div class="tooltip tooltip-bottom">
+                  <div class="tooltip-content">
+                    {{ 'components.volumes.volumes-table.mark-volume-bought-tooltip' | translate }}
+                  </div>
+                  <button
+                    class="btn btn-md btn-neutral text-xl"
+                    (click)="volumeMarkedAsBought.emit(volume)"
+                  >
+                    <ng-icon name="heroShoppingCartSolid"></ng-icon>
+                  </button>
+                </div>
+              }
+
+              @if (viewMode() === VolumeViewMode.IN_DELIVERY) {
+                <div class="tooltip tooltip-bottom">
+                  <div class="tooltip-content">
+                    {{
+                      'components.volumes.volumes-table.mark-volume-delivered-tooltip' | translate
+                    }}
+                  </div>
+                  <button
+                    class="btn btn-md btn-neutral text-xl"
+                    (click)="volumeMarkedAsDelivered.emit(volume)"
+                  >
+                    <ng-icon name="heroArrowRightEndOnRectangleSolid"></ng-icon>
+                  </button>
+                </div>
+              }
+
+              <div class="tooltip tooltip-bottom">
+                <div class="tooltip-content">
+                  {{ 'common.buttons.edit' | translate }}
+                </div>
+                <button class="btn btn-md btn-neutral text-xl" (click)="volumeEdited.emit(volume)">
+                  <ng-icon name="heroPencilSolid"></ng-icon>
+                </button>
+              </div>
+
+              <div class="tooltip tooltip-bottom">
+                <div class="tooltip-content">
+                  {{ 'common.buttons.delete' | translate }}
+                </div>
+                <button class="btn btn-md btn-neutral text-xl" (click)="volumeDeleted.emit(volume)">
+                  <ng-icon name="heroTrashSolid"></ng-icon>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

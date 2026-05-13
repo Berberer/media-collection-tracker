@@ -1,0 +1,67 @@
+@if (loadingSeries()) {
+  <div class="flex flex-row justify-center">
+    <span class="loading loading-spinner loading-xl"></span>
+  </div>
+}
+<div class="flex flex-col h-full">
+  <app-series-cards-gallery
+    [series]="(orphanedSeries$ | async) ?? []"
+    [seriesViewMode]="seriesViewMode"
+    (addVolume)="onAddVolume($event)"
+    (editSeries)="onEditSeries($event)"
+    (markCompleted)="onMarkSeriesCompleted($event)"
+    (deleteSeries)="onDeleteSeries($event)"
+    (mediaTypeFilterChange)="onMediaTypeFilterChange($event)"
+    [loading]="loadingSeries()"
+    [noSeriesMessage]="'pages.series.orphaned.no-series-message' | translate"
+    [noSeriesForFilterTypeMessage]="
+      'pages.series.orphaned.no-series-for-filter-message' | translate
+    "
+  ></app-series-cards-gallery>
+</div>
+
+<app-modal-dialog
+  [open]="showSeriesFormModal() && seriesModel() !== null"
+  [loading]="loadingSeriesTags() || savingSeries()"
+  (closed)="onCloseSeriesModal()"
+>
+  @if (seriesModel() !== null) {
+    <app-series-form
+      [series]="seriesModel()!"
+      [allSeriesTags]="(seriesTags$ | async) ?? []"
+      [allVolumeTags]="(volumeTags$ | async) ?? []"
+      (saved)="onSaveSeries($event)"
+    ></app-series-form>
+  }
+</app-modal-dialog>
+
+<app-modal-dialog
+  [open]="showVolumeFormModal() && volumeModel() !== null"
+  [loading]="loadingVolumeTags() || savingVolume()"
+  (closed)="onCloseVolumeModal()"
+>
+  @if (volumeModel() !== null) {
+    <app-volume-form
+      [volume]="volumeModel()!"
+      [allSeries]="allSeriesForAddingVolume()!"
+      [allVolumeTags]="(volumeTags$ | async) ?? []"
+      (saved)="onSaveVolume($event)"
+    ></app-volume-form>
+  }
+</app-modal-dialog>
+
+<app-confirmation-prompt
+  [open]="showMarkSeriesCompletedConfirmation()"
+  [loading]="savingSeries()"
+  [prompt]="'pages.series.orphaned.mark-completed-prompt' | translate"
+  (confirmed)="onConfirmedMarkSeriesCompleted()"
+  (cancelled)="onCancelledMarkSeriesCompleted()"
+></app-confirmation-prompt>
+
+<app-confirmation-prompt
+  [open]="showDeleteSeriesConfirmation()"
+  [loading]="deletingSeries()"
+  [prompt]="'pages.series.orphaned.delete-series-prompt' | translate"
+  (confirmed)="onConfirmedDeleteSeries()"
+  (cancelled)="onCancelledDeleteSeries()"
+></app-confirmation-prompt>

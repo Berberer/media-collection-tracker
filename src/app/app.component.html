@@ -1,0 +1,41 @@
+<div class="flex flex-col h-screen">
+  <app-nav-bar
+    class="flex-none"
+    (createSeries)="onCreateSeries()"
+    (createVolume)="onCreateVolume()"
+  ></app-nav-bar>
+
+  <div class="flex-1 overflow-y-auto px-2 pt-2 pb-10">
+    <router-outlet />
+  </div>
+</div>
+
+<app-modal-dialog
+  [open]="showSeriesCreationForm() && seriesCreationData() !== null"
+  [loading]="loadingSeriesTags() || loadingVolumeTags() || savingVolume()"
+  (closed)="onCancelCreateSeries()"
+>
+  @if (seriesCreationData() !== null) {
+    <app-series-form
+      [series]="seriesCreationData()!"
+      [allSeriesTags]="(seriesTags$ | async) ?? []"
+      [allVolumeTags]="(volumeTags$ | async) ?? []"
+      (saved)="onSaveSeries($event)"
+    ></app-series-form>
+  }
+</app-modal-dialog>
+
+<app-modal-dialog
+  [open]="showVolumeCreationForm() && volumeCreationData() !== null"
+  [loading]="loadingSeries() || loadingVolumeTags() || savingVolume()"
+  (closed)="onCancelCreateVolume()"
+>
+  @if (volumeCreationData() !== null) {
+    <app-volume-form
+      [volume]="volumeCreationData()!"
+      [allSeries]="(series$ | async) ?? []"
+      [allVolumeTags]="(volumeTags$ | async) ?? []"
+      (saved)="onSaveVolume($event)"
+    ></app-volume-form>
+  }
+</app-modal-dialog>
