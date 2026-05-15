@@ -1,0 +1,3 @@
+div.grid {
+  grid-template-columns: repeat(auto-fill, minmax(calc(var(--spacing) * 104), 1fr));
+}

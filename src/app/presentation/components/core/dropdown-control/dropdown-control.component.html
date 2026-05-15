@@ -17,9 +17,12 @@
     <span class="ml-auto">⌄</span>
   </div>
 
-  <ul tabindex="-1" class="dropdown-content menu w-full z-1 rounded-box p-2 bg-base-100 shadow-sm">
+  <ul
+    tabindex="-1"
+    class="dropdown-content menu w-full z-1 rounded-box bg-base-100 shadow-sm max-h-64 pt-0 pb-2 px-2 overflow-y-auto flex-nowrap"
+  >
     @if (searchable()) {
-      <li class="mb-2">
+      <li class="sticky top-0 py-2 z-10 bg-base-100">
         <input #searchInput type="text" class="input input-sm w-full" [(ngModel)]="searchQuery" />
       </li>
     }

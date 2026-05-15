@@ -17,18 +17,20 @@
                 </div>
                 <ul
                   tabindex="-1"
-                  class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto"
+                  class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto overflow-x-hidden flex-nowrap"
                 >
                   @for (name of availableSeriesNames(); track name) {
-                    <li>
-                      <label class="flex items-center gap-2 cursor-pointer">
+                    <li class="w-full">
+                      <label class="w-full flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
                           class="checkbox checkbox-xs"
                           [checked]="filteredSeriesNames().has(name)"
                           (change)="toggleSeriesFilter(name)"
                         />
-                        <span class="truncate">{{ name }}</span>
+                        <span class="w-full overflow-hidden text-ellipsis whitespace-nowrap">{{
+                          name
+                        }}</span>
                       </label>
                     </li>
                   }
@@ -84,7 +86,7 @@
               </div>
               <ul
                 tabindex="-1"
-                class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto"
+                class="dropdown-content menu bg-base-100 rounded-box z-10 p-2 shadow-sm w-52 max-h-64 overflow-y-auto flex-nowrap"
               >
                 @for (tag of availableTags(); track tag.id) {
                   <li>

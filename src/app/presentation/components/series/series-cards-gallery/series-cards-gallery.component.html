@@ -1,22 +1,24 @@
 <div class="flex flex-col gap-4">
-  <div class="flex flex-row flex-wrap gap-4 items-center">
-    @for (s of series(); track s.id) {
-      <app-series-card
-        [series]="s"
-        [viewMode]="seriesViewMode()"
-        (addVolume)="addVolume.emit(s)"
-        (editSeries)="editSeries.emit(s)"
-        (markCompleted)="markCompleted.emit(s)"
-        (deleteSeries)="deleteSeries.emit(s)"
-      ></app-series-card>
-    } @empty {
-      @if (!loading()) {
-        <p class="mx-auto mt-4 text-gray-400 italic">
-          {{ selectedMediaType() === null ? noSeriesMessage() : noSeriesForFilterTypeMessage() }}
-        </p>
+  @if (series().length > 0) {
+    <div class="grid grid-flow-dense gap-4 items-center">
+      @for (s of series(); track s.id) {
+        <app-series-card
+          [series]="s"
+          [viewMode]="seriesViewMode()"
+          (addVolume)="addVolume.emit(s)"
+          (editSeries)="editSeries.emit(s)"
+          (markCompleted)="markCompleted.emit(s)"
+          (deleteSeries)="deleteSeries.emit(s)"
+        ></app-series-card>
       }
+    </div>
+  } @else {
+    @if (!loading()) {
+      <p class="mx-auto mt-4 text-gray-400 italic">
+        {{ selectedMediaType() === null ? noSeriesMessage() : noSeriesForFilterTypeMessage() }}
+      </p>
     }
-  </div>
+  }
 
   <div role="tablist" class="tabs tabs-box mx-auto">
     <a
