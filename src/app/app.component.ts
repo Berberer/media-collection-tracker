@@ -7,8 +7,9 @@ import {
   signal,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavBarComponent } from './presentation/components/core/nav-bar/nav-bar.component';
 import { AsyncPipe } from '@angular/common';
+import { environment } from '../environments/environment';
+import { NavBarComponent } from './presentation/components/core/nav-bar/nav-bar.component';
 import { ModalDialogComponent } from './presentation/components/core/modal-dialog/modal-dialog.component';
 import { SeriesFormComponent } from './presentation/components/series/series-form/series-form.component';
 import { VolumeFormComponent } from './presentation/components/volumes/volume-form/volume-form.component';
@@ -20,6 +21,8 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroCodeBracketSolid } from '@ng-icons/heroicons/solid';
 import { TagsStateSelectors } from './features/tags/state/tags.state.selectors';
 import { SeriesStateSelectors } from './features/series/state/series.state.selectors';
 import { CreateSeriesModel } from './features/series/model/create.series.model';
@@ -43,7 +46,9 @@ import { SeriesMediaTypes } from './features/series/model/media-type.model';
     ModalDialogComponent,
     SeriesFormComponent,
     VolumeFormComponent,
+    NgIcon,
   ],
+  providers: [provideIcons({ heroCodeBracketSolid })],
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
@@ -67,6 +72,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   readonly seriesCreationData = signal<CreateSeriesModel | null>(null);
   readonly volumeCreationData = signal<Partial<CreateVolumeModel> | null>(null);
+
+  get appTitle(): string {
+    return environment.appTitle;
+  }
+
+  get version(): string {
+    return environment.version;
+  }
 
   ngOnInit(): void {
     this.setUpGetSeriesActionHandlers();

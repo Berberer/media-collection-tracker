@@ -8,6 +8,20 @@
   <div class="flex-1 overflow-y-auto px-2 pt-2 pb-10">
     <router-outlet />
   </div>
+
+  <footer
+    class="footer sm:footer-horizontal text-base-content items-center p-4 flex flex-row justify-around"
+  >
+    <aside>
+      <p>{{ appTitle }} v{{ version }}</p>
+    </aside>
+
+    <nav>
+      <a href="https://github.com/Berberer/media-collection-tracker" target="_blank">
+        <ng-icon name="heroCodeBracketSolid"></ng-icon> GitHub
+      </a>
+    </nav>
+  </footer>
 </div>
 
 <app-modal-dialog

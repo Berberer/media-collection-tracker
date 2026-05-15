@@ -4,6 +4,7 @@ import { NgxsConfig } from '@ngxs/store';
 export interface Environment {
   production: boolean;
   appTitle: string;
+  version: string;
   backendUrl?: string;
   imports: ModuleWithProviders<object>[];
   ngxsConfig: Partial<NgxsConfig>;
