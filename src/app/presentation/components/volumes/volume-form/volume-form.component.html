@@ -4,7 +4,7 @@
       {{ 'components.volumes.volume-form.header' | translate }}
     </legend>
 
-    <div class="flex flex-col gap-y-4">
+    <div id="form-fields-column" class="flex flex-col gap-y-4">
       <div class="z-20">
         <label class="label">{{ 'components.volumes.volume-form.series.label' | translate }}</label>
         <app-dropdown-control
@@ -14,7 +14,7 @@
           [itemLabelMapper]="(series) => series?.name ?? ''"
         >
           <ng-template let-series>
-            <p>{{ series.name }}</p>
+            <span class="w-full overflow-hidden text-ellipsis">{{ series.name }}</span>
           </ng-template>
         </app-dropdown-control>
       </div>
@@ -26,7 +26,7 @@
         <input
           type="number"
           class="input"
-          [ngClass]="{ 'input-error': !volumeForm.sequenceNumber().valid() }"
+          [ngClass]="{ 'input-error': volumeForm.sequenceNumber().invalid() }"
           [formField]="volumeForm.sequenceNumber"
         />
       </div>
@@ -38,7 +38,7 @@
         <input
           type="url"
           class="input"
-          [ngClass]="{ 'input-error': !volumeForm.shoppingLink().valid() }"
+          [ngClass]="{ 'input-error': volumeForm.shoppingLink().invalid() }"
           placeholder="https://"
           [formField]="volumeForm.shoppingLink"
         />
@@ -63,7 +63,7 @@
         <input
           type="date"
           class="input"
-          [ngClass]="{ 'input-error': !volumeForm.purchaseDate().valid() }"
+          [ngClass]="{ 'input-error': volumeForm.purchaseDate().invalid() }"
           [formField]="volumeForm.purchaseDate"
         />
       </div>

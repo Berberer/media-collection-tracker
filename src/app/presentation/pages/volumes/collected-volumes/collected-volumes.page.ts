@@ -11,7 +11,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, NgStyle } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionCompleted, ofActionDispatched, Store } from '@ngxs/store';
+import {
+  Actions,
+  ofActionCompleted,
+  ofActionDispatched,
+  ofActionSuccessful,
+  Store,
+} from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { VolumeModel } from '../../../../features/volumes/model/volume.model';
@@ -29,6 +35,10 @@ import { MediaTypeBadgeComponent } from '../../../components/core/media-type-bad
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
 import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
 import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
+import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
+import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
+import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
 
 @Component({
   selector: 'app-collected-volumes-page',
@@ -42,6 +52,8 @@ import { SortDirection } from '../../../components/core/sort-button/sort-button.
     NgStyle,
     MediaTypeBadgeComponent,
     ConfirmationPromptComponent,
+    ModalDialogComponent,
+    VolumeFormComponent,
   ],
 })
 export class CollectedVolumesPage implements OnInit, OnDestroy {
@@ -67,12 +79,17 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
     return Array.from(this.collectedVolumes().keys()).sort((a, b) => a.name.localeCompare(b.name));
   });
 
+  readonly volumeToDelete = signal<VolumeModel | null>(null);
+  readonly volumeToUpdate = signal<UpdateVolumeModel | null>(null);
+  readonly allSeriesForAddingVolume = signal<readonly SeriesModel[] | null>(null);
+
   readonly loadingCollectedVolumes = signal(false);
   readonly loadingVolumeTags = signal(false);
   readonly deletingVolume = signal(false);
+  readonly savingVolume = signal(false);
 
   readonly showDeleteVolumeConfirmation = signal(false);
-  readonly volumeToDelete = signal<VolumeModel | null>(null);
+  readonly showVolumeFormDialog = signal(false);
 
   readonly volumeViewMode = VolumeViewMode.COLLECTED;
 
@@ -87,6 +104,7 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
     this.setUpGetCollectedVolumesActionHandlers();
     this.setUpGetVolumeTagsActionHandlers();
     this.setUpDeleteVolumeActionHandlers();
+    this.setUpUpdateVolumeActionHandlers();
 
     this.store.dispatch([Volumes.GetCollected, VolumeTags.GetAll]);
   }
@@ -137,6 +155,23 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
       });
   }
 
+  private setUpUpdateVolumeActionHandlers(): void {
+    this.actions$
+      .pipe(ofActionDispatched(Volumes.Update), takeUntil(this.ngUnsubscribe))
+      .subscribe(() => this.savingVolume.set(true));
+
+    this.actions$
+      .pipe(ofActionCompleted(Volumes.Update), takeUntil(this.ngUnsubscribe))
+      .subscribe(() => this.savingVolume.set(false));
+
+    this.actions$
+      .pipe(ofActionSuccessful(Volumes.Update), takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        this.showVolumeFormDialog.set(false);
+        this.volumeToUpdate.set(null);
+      });
+  }
+
   onVolumeTagAdded({ volume, tag }: { volume: VolumeModel; tag: VolumeTagModel }): void {
     this.store.dispatch(
       new Volumes.Update({
@@ -170,5 +205,23 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
   cancelDelete(): void {
     this.showDeleteVolumeConfirmation.set(false);
     this.volumeToDelete.set(null);
+  }
+
+  onVolumeEdited(volume: VolumeModel): void {
+    this.volumeToUpdate.set(new UpdateVolumeModel(volume));
+    this.allSeriesForAddingVolume.set([volume.series]);
+    this.showVolumeFormDialog.set(true);
+  }
+
+  onVolumeSaved(savedVolume: CreateVolumeModel | UpdateVolumeModel): void {
+    if (savedVolume instanceof UpdateVolumeModel) {
+      this.store.dispatch(new Volumes.Update(savedVolume));
+    }
+  }
+
+  onCancelledEditVolume(): void {
+    this.showVolumeFormDialog.set(false);
+    this.volumeToUpdate.set(null);
+    this.allSeriesForAddingVolume.set(null);
   }
 }

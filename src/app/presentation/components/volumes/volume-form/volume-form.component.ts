@@ -66,16 +66,12 @@ export class VolumeFormComponent {
   readonly volumeForm = form(this.volumeFormData, (schemaPath) => {
     required(schemaPath.series);
     required(schemaPath.sequenceNumber);
+    required(schemaPath.purchaseDate, {
+      when: (context) => context.valueOf(schemaPath.inDelivery),
+    });
 
     min(schemaPath.sequenceNumber, 1);
     validate(schemaPath.shoppingLink, VolumeFormComponent.validateShoppingLinkUrl);
-    validate(schemaPath.purchaseDate, ({ value }) => {
-      if (this.volumeFormData().inDelivery && !value()) {
-        return { kind: 'requiredField' };
-      }
-
-      return null;
-    });
 
     disabled(schemaPath.series, () => this.lastValidVolume()?.series !== undefined);
     disabled(schemaPath.sequenceNumber, () => this.lastValidVolume() instanceof UpdateVolumeModel);

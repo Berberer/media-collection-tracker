@@ -38,6 +38,7 @@
               [viewMode]="volumeViewMode"
               (volumeTagAdded)="onVolumeTagAdded($event)"
               (volumeTagRemoved)="onVolumeTagRemoved($event)"
+              (volumeEdited)="onVolumeEdited($event)"
               (volumeDeleted)="onDeleteVolume($event)"
             ></app-volumes-table>
           </div>
@@ -60,3 +61,16 @@
   (confirmed)="confirmDelete()"
   (cancelled)="cancelDelete()"
 ></app-confirmation-prompt>
+
+<app-modal-dialog
+  [open]="showVolumeFormDialog() && volumeToUpdate() !== undefined"
+  [loading]="savingVolume()"
+  (closed)="onCancelledEditVolume()"
+>
+  <app-volume-form
+    [volume]="volumeToUpdate()!"
+    [allSeries]="allSeriesForAddingVolume()!"
+    [allVolumeTags]="(volumeTags$ | async) ?? []"
+    (saved)="onVolumeSaved($event)"
+  ></app-volume-form>
+</app-modal-dialog>

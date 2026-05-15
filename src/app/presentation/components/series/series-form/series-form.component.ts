@@ -78,22 +78,15 @@ export class SeriesFormComponent {
     required(schemaPath.mediaType);
 
     // Volume fields validation (only for creation mode with singleVolume)
-    if (this.showVolumeFields()) {
-      if (this.seriesFormData().completed) {
-        required(schemaPath.volumePurchaseDate);
-      }
-
-      validate(schemaPath.volumeShoppingLink, SeriesFormComponent.validateShoppingLinkUrl);
-      validate(schemaPath.volumePurchaseDate, ({ value }) => {
-        if (
-          (this.seriesFormData().completed || this.seriesFormData().volumeInDelivery) &&
-          !value()
-        ) {
-          return { kind: 'requiredField' };
-        }
-        return null;
-      });
-    }
+    required(schemaPath.volumePurchaseDate, {
+      when: (context) =>
+        this.showVolumeFields() &&
+        (context.valueOf(schemaPath.completed) || context.valueOf(schemaPath.volumeInDelivery)),
+    });
+    validate(
+      schemaPath.volumeShoppingLink,
+      ({ value }) => !this.showVolumeFields || SeriesFormComponent.validateShoppingLinkUrl(value),
+    );
   });
 
   readonly mediaTypeValues = [
@@ -164,11 +157,7 @@ export class SeriesFormComponent {
     }
   }
 
-  private static validateShoppingLinkUrl({
-    value,
-  }: {
-    value: () => string | null;
-  }): { kind: string } | null {
+  private static validateShoppingLinkUrl(value: () => string | null): { kind: string } | null {
     const shoppingLinkInput = value()?.trim();
 
     if (!shoppingLinkInput) {

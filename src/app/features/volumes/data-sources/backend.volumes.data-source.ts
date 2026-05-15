@@ -133,8 +133,8 @@ export class BackendVolumesDataSource implements VolumesDataSource {
       {
         ...model,
         series: model.series.id,
-        release_date: model.release_date?.toISOString(),
-        purchase_date: model.purchase_date?.toISOString(),
+        release_date: model.release_date?.toISOString() ?? '',
+        purchase_date: model.purchase_date?.toISOString() ?? '',
         tags: model.volume_tags.map((tag) => tag.id),
       },
       { expand: 'series,tags,series.tags' },
@@ -162,8 +162,8 @@ export class BackendVolumesDataSource implements VolumesDataSource {
       {
         ...model,
         series: model.series.id,
-        release_date: model.release_date?.toISOString(),
-        purchase_date: model.purchase_date?.toISOString(),
+        release_date: model.release_date?.toISOString() ?? '',
+        purchase_date: model.purchase_date?.toISOString() ?? '',
         tags: model.volume_tags.map((tag) => tag.id),
       },
       { expand: 'series,tags,series.tags' },
