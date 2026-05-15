@@ -5,9 +5,6 @@ name: Docker
 # separate terms of service, privacy policy, and support
 # documentation.
 
-permissions:
-  packages: write
-
 on:
   push:
     # Publish semver tags as releases.
@@ -17,7 +14,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-
 
 jobs:
   build:
@@ -76,6 +72,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

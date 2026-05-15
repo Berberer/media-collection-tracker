@@ -1,6 +1,6 @@
 {
   "name": "media-collection-tracker",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "scripts": {
     "ng": "ng",
     "start": "npm run typegen && ( pocketbase serve & ng serve )",
