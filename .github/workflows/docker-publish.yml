@@ -5,6 +5,9 @@ name: Docker
 # separate terms of service, privacy policy, and support
 # documentation.
 
+permissions:
+  packages: write
+
 on:
   push:
     # Publish semver tags as releases.
