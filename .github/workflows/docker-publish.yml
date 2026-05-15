@@ -8,7 +8,7 @@ name: Docker
 on:
   push:
     # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    tags: ['v*.*.*']
 
 env:
   REGISTRY: ghcr.io
@@ -17,7 +17,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
