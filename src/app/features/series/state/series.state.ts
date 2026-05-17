@@ -9,7 +9,6 @@ import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
 import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
 import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
-import { CreateVolumeUseCase } from '../../volumes/use-cases/create.volume.use-case';
 import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
 import { SeriesModel } from '../model/series.model';
 import { CreateVolumeModel } from '../../volumes/model/create.volume.model';
@@ -27,7 +26,6 @@ export class SeriesState {
   private readonly getCompletedSeriesUseCase = inject(GetCompletedSeriesUseCase);
   private readonly createSeriesUseCase = inject(CreateSeriesUseCase);
   private readonly updateSeriesUseCase = inject(UpdateSeriesUseCase);
-  private readonly createVolumeUseCase = inject(CreateVolumeUseCase);
   private readonly deleteSeriesUseCase = inject(DeleteSeriesUseCase);
 
   @Action(Series.GetAll)
@@ -38,31 +36,22 @@ export class SeriesState {
   }
 
   @Action(Series.GetIncomplete)
-  async getIncompleteSeries(
-    ctx: StateContext<SeriesStateModel>,
-    { mediaType }: Series.GetIncomplete,
-  ): Promise<void> {
-    const series = await this.getIncompleteSeriesUseCase.execute(mediaType);
+  async getIncompleteSeries(ctx: StateContext<SeriesStateModel>): Promise<void> {
+    const series = await this.getIncompleteSeriesUseCase.execute();
 
     ctx.patchState({ incompleteSeries: [...series] });
   }
 
   @Action(Series.GetOrphaned)
-  async getOrphanedSeries(
-    ctx: StateContext<SeriesStateModel>,
-    { mediaType }: Series.GetOrphaned,
-  ): Promise<void> {
-    const series = await this.getOrphanedSeriesUseCase.execute(mediaType);
+  async getOrphanedSeries(ctx: StateContext<SeriesStateModel>): Promise<void> {
+    const series = await this.getOrphanedSeriesUseCase.execute();
 
     ctx.patchState({ orphanedSeries: [...series] });
   }
 
   @Action(Series.GetCompleted)
-  async getCompletedSeries(
-    ctx: StateContext<SeriesStateModel>,
-    { mediaType }: Series.GetCompleted,
-  ): Promise<void> {
-    const series = await this.getCompletedSeriesUseCase.execute(mediaType);
+  async getCompletedSeries(ctx: StateContext<SeriesStateModel>): Promise<void> {
+    const series = await this.getCompletedSeriesUseCase.execute();
 
     ctx.patchState({ completedSeries: [...series] });
   }
@@ -75,47 +64,30 @@ export class SeriesState {
     const createdSeries = await this.createSeriesUseCase.execute(createModel);
 
     if (createdSeries) {
-      const isCompleted = createModel.completed;
-      const isIncomplete = !createModel.completed && createModel.volumeModel !== null;
-      const isOrphaned = !createModel.completed && createModel.volumeModel === null;
-
       ctx.setState(
         patch({
           series: append([createdSeries]),
-          ...(isCompleted && { completedSeries: append([createdSeries]) }),
-          ...(isIncomplete && { incompleteSeries: append([createdSeries]) }),
-          ...(isOrphaned && { orphanedSeries: append([createdSeries]) }),
+          ...(createModel.completed && { completedSeries: append([createdSeries]) }),
+          ...(!createModel.completed && { incompleteSeries: append([createdSeries]) }),
+          ...(!createModel.completed && { orphanedSeries: append([createdSeries]) }),
         }),
       );
 
       // If the series has volume data, create the volume
       if (createModel.volumeModel) {
-        const createdVolume = await this.createVolumeUseCase.execute(
-          new CreateVolumeModel({
-            series: createdSeries,
-            sequenceNumber: createModel.volumeModel.sequenceNumber,
-            shoppingLink: createModel.volumeModel.shoppingLink,
-            releaseDate: createModel.volumeModel.releaseDate,
-            inDelivery: createModel.volumeModel.inDelivery,
-            purchaseDate: createModel.volumeModel.purchaseDate,
-            volumeTags: createModel.volumeModel.volumeTags,
-          }),
-        );
-
-        const sequenceNumberUpdater: StateOperator<SeriesModel[]> = updateItem(
-          (item) => item.id === createdSeries.id,
-          (seriesModel) =>
-            new SeriesModel({
-              ...seriesModel,
-              highestVolumeNumber: createdVolume.sequenceNumber,
+        ctx.dispatch(
+          new Series.AddVolumeToSeries(
+            createdSeries,
+            new CreateVolumeModel({
+              series: createdSeries,
+              sequenceNumber: createModel.volumeModel.sequenceNumber,
+              shoppingLink: createModel.volumeModel.shoppingLink,
+              releaseDate: createModel.volumeModel.releaseDate,
+              inDelivery: createModel.volumeModel.inDelivery,
+              purchaseDate: createModel.volumeModel.purchaseDate,
+              volumeTags: createModel.volumeModel.volumeTags,
             }),
-        );
-
-        ctx.setState(
-          patch({
-            series: sequenceNumberUpdater,
-            incompleteSeries: sequenceNumberUpdater,
-          }),
+          ),
         );
       }
     }
@@ -157,33 +129,26 @@ export class SeriesState {
   }
 
   @Action(Series.AddVolumeToSeries)
-  async addVolumeToSeries(
+  addVolumeToSeries(
     ctx: StateContext<SeriesStateModel>,
     { series, createVolumeModel }: Series.AddVolumeToSeries,
-  ): Promise<void> {
-    const createdVolume = await this.createVolumeUseCase.execute({
-      series,
-      ...createVolumeModel,
-    });
-
-    if (createdVolume) {
-      const sequenceNumberUpdater: StateOperator<SeriesModel[]> = updateItem(
-        (item) => item.id === series.id,
-        (seriesModel) =>
-          new SeriesModel({
-            ...seriesModel,
-            highestVolumeNumber: createdVolume.sequenceNumber,
-          }),
-      );
-
-      ctx.setState(
-        patch({
-          series: sequenceNumberUpdater,
-          incompleteSeries: sequenceNumberUpdater,
-          orphanedSeries: removeItem((item) => item.id === series.id),
+  ): void {
+    const sequenceNumberUpdater: StateOperator<SeriesModel[]> = updateItem(
+      (item) => item.id === series.id,
+      (seriesModel) =>
+        new SeriesModel({
+          ...seriesModel,
+          highestVolumeNumber: createVolumeModel.sequenceNumber,
         }),
-      );
-    }
+    );
+
+    ctx.setState(
+      patch({
+        series: sequenceNumberUpdater,
+        incompleteSeries: sequenceNumberUpdater,
+        orphanedSeries: removeItem((item) => item.id === series.id),
+      }),
+    );
   }
 
   @Action(Series.Delete)

@@ -2,7 +2,6 @@ import { CreateSeriesModel } from '../model/create.series.model';
 import { UpdateSeriesModel } from '../model/update.series.model';
 import { SeriesModel } from '../model/series.model';
 import { CreateSeriesVolumeModel } from '../model/create.series-volume.model';
-import { SeriesMediaTypes } from '../model/media-type.model';
 
 const ACTION_SCOPE = '[Series]';
 
@@ -13,17 +12,14 @@ export namespace Series {
 
   export class GetIncomplete {
     static readonly type = `${ACTION_SCOPE} Get Incomplete`;
-    constructor(readonly mediaType?: SeriesMediaTypes.SeriesMediaType) {}
   }
 
   export class GetOrphaned {
     static readonly type = `${ACTION_SCOPE} Get Orphaned`;
-    constructor(readonly mediaType?: SeriesMediaTypes.SeriesMediaType) {}
   }
 
   export class GetCompleted {
     static readonly type = `${ACTION_SCOPE} Get Completed`;
-    constructor(readonly mediaType?: SeriesMediaTypes.SeriesMediaType) {}
   }
 
   export class Create {

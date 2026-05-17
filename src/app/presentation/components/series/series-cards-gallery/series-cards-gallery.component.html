@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-4">
-  @if (series().length > 0) {
+  @if (filteredSeries().length > 0) {
     <div class="grid grid-flow-dense gap-4 items-center">
-      @for (s of series(); track s.id) {
+      @for (s of filteredSeries(); track s.id) {
         <app-series-card
           [series]="s"
           [viewMode]="seriesViewMode()"

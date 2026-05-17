@@ -73,14 +73,14 @@
       <div class="flex flex-row justify-center">
         <span class="loading loading-spinner loading-lg"></span>
       </div>
-    } @else if (upcomingVolumes$ | async; as upcomingVolumes) {
+    } @else {
       <div class="flex flex-col gap-2">
         <h1 class="text-l font-bold text-center">
           {{ 'pages.volumes.tracking-dashboard.headers.upcoming' | translate }}
         </h1>
-        @if (upcomingVolumes !== null && upcomingVolumes.length > 0) {
+        @if (filteredUpcomingVolumes() !== null && filteredUpcomingVolumes().length > 0) {
           <app-volumes-table
-            [volumes]="upcomingVolumes"
+            [volumes]="filteredUpcomingVolumes()"
             [volumeTags]="(volumeTags$ | async) ?? []"
             [defaultSortColumn]="SortableColumn.RELEASE_DATE"
             [defaultSortDirection]="SortDirection.ASC"

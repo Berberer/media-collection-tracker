@@ -22,7 +22,6 @@ import { SeriesStateSelectors } from '../../../../features/series/state/series.s
 import { Series } from '../../../../features/series/state/series.state.actions';
 import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
-import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
 import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
 import { SeriesFormComponent } from '../../../components/series/series-form/series-form.component';
 import { SeriesTags, VolumeTags } from '../../../../features/tags/state/tags.state.actions';
@@ -71,7 +70,6 @@ export class CompletedSeriesPage implements OnInit, OnDestroy {
   readonly showSeriesFormModal = signal(false);
 
   readonly showDeleteSeriesConfirmation = signal(false);
-  readonly selectedMediaType = signal<SeriesMediaTypes.SeriesMediaType | null>(null);
 
   constructor() {
     this.translate
@@ -203,14 +201,5 @@ export class CompletedSeriesPage implements OnInit, OnDestroy {
   onCancelledDeleteSeries(): void {
     this.showDeleteSeriesConfirmation.set(false);
     this.seriesModel.set(null);
-  }
-
-  onMediaTypeFilterChange(mediaType: SeriesMediaTypes.SeriesMediaType | null): void {
-    this.selectedMediaType.set(mediaType);
-    if (mediaType !== null) {
-      this.store.dispatch(new Series.GetCompleted(mediaType));
-    } else {
-      this.store.dispatch(new Series.GetCompleted());
-    }
   }
 }

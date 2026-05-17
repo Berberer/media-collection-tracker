@@ -12,6 +12,8 @@ import { UpdateVolumeUseCase } from '../use-cases/update.volume.use-case';
 import { append, patch, removeItem } from '@ngxs/store/operators';
 import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
 import { VolumeStatusUtils } from '../utils/volume-status.utils';
+import { Series } from '../../series/state/series.state.actions';
+import { VolumeModel } from '../model/volume.model';
 
 @State<VolumesStateModel>({ name: 'volumes', defaults: defaultVolumesState })
 @Injectable({ providedIn: 'root' })
@@ -54,11 +56,8 @@ export class VolumesState {
   }
 
   @Action(Volumes.GetUpcoming)
-  async getUpcomingVolumes(
-    ctx: StateContext<VolumesStateModel>,
-    { maxReleaseDate }: Volumes.GetUpcoming,
-  ): Promise<void> {
-    const upcomingVolumes = await this.getUpcomingVolumesUseCase.execute(maxReleaseDate);
+  async getUpcomingVolumes(ctx: StateContext<VolumesStateModel>): Promise<void> {
+    const upcomingVolumes = await this.getUpcomingVolumesUseCase.execute();
 
     ctx.patchState({ upcomingVolumes: [...upcomingVolumes] });
   }
@@ -71,35 +70,7 @@ export class VolumesState {
     const createdVolume = await this.createVolumeUseCase.execute(createModel);
 
     if (createdVolume) {
-      if (VolumeStatusUtils.shouldBeInMissingVolumes(createdVolume)) {
-        ctx.setState(
-          patch({
-            missingVolumes: append([createdVolume]),
-          }),
-        );
-      } else if (VolumeStatusUtils.shouldBeInInDeliveryVolumes(createdVolume)) {
-        ctx.setState(
-          patch({
-            inDeliveryVolumes: append([createdVolume]),
-          }),
-        );
-      } else if (VolumeStatusUtils.shouldBeInReleasedVolumes(createdVolume)) {
-        ctx.setState(
-          patch({
-            releasedVolumes: append([createdVolume]),
-          }),
-        );
-      } else if (VolumeStatusUtils.shouldBeInUpcomingVolumes(createdVolume)) {
-        ctx.setState(
-          patch({
-            upcomingVolumes: append([createdVolume]),
-          }),
-        );
-      } else if (VolumeStatusUtils.shouldBeInCollectedVolumes(createdVolume)) {
-        const collectedVolumes = await this.getCollectedVolumesUseCase.execute();
-
-        ctx.patchState({ collectedVolumes: new Map(collectedVolumes) });
-      }
+      await this.updateStateAfterVolumeCreation(ctx, createdVolume);
     }
   }
 
@@ -141,6 +112,58 @@ export class VolumesState {
           releasedVolumes: removeItem((item) => item.id === id),
           upcomingVolumes: removeItem((item) => item.id === id),
           collectedVolumes,
+        }),
+      );
+    }
+  }
+
+  @Action(Series.AddVolumeToSeries)
+  async createVolumeForSeries(
+    ctx: StateContext<VolumesStateModel>,
+    { series, createVolumeModel }: Series.AddVolumeToSeries,
+  ): Promise<void> {
+    const createdVolume = await this.createVolumeUseCase.execute({
+      series,
+      ...createVolumeModel,
+    });
+
+    if (createdVolume) {
+      await this.updateStateAfterVolumeCreation(ctx, createdVolume);
+    }
+  }
+
+  private async updateStateAfterVolumeCreation(
+    ctx: StateContext<VolumesStateModel>,
+    createdVolume: VolumeModel,
+  ): Promise<void> {
+    if (VolumeStatusUtils.shouldBeInMissingVolumes(createdVolume)) {
+      ctx.setState(
+        patch({
+          missingVolumes: append([createdVolume]),
+        }),
+      );
+    } else if (VolumeStatusUtils.shouldBeInCollectedVolumes(createdVolume)) {
+      const collectedVolumes = await this.getCollectedVolumesUseCase.execute();
+
+      ctx.patchState({ collectedVolumes: new Map(collectedVolumes) });
+    }
+
+    if (VolumeStatusUtils.shouldBeInInDeliveryVolumes(createdVolume)) {
+      ctx.setState(
+        patch({
+          inDeliveryVolumes: append([createdVolume]),
+        }),
+      );
+    } else if (VolumeStatusUtils.shouldBeInReleasedVolumes(createdVolume)) {
+      ctx.setState(
+        patch({
+          releasedVolumes: append([createdVolume]),
+        }),
+      );
+    } else if (VolumeStatusUtils.shouldBeInUpcomingVolumes(createdVolume)) {
+      ctx.setState(
+        patch({
+          upcomingVolumes: append([createdVolume]),
         }),
       );
     }

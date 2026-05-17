@@ -27,7 +27,6 @@ import { ModalDialogComponent } from '../../../components/core/modal-dialog/moda
 import { environment } from '../../../../../environments/environment';
 import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
 import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
-import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
 import { SeriesTags, VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
 import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
@@ -81,7 +80,6 @@ export class IncompleteSeriesPage implements OnInit, OnDestroy {
   readonly showVolumeFormModal = signal(false);
 
   readonly showDeleteSeriesConfirmation = signal(false);
-  readonly selectedMediaType = signal<SeriesMediaTypes.SeriesMediaType | null>(null);
 
   constructor() {
     this.translate
@@ -252,14 +250,5 @@ export class IncompleteSeriesPage implements OnInit, OnDestroy {
   onCancelledDeleteSeries(): void {
     this.showDeleteSeriesConfirmation.set(false);
     this.seriesModel.set(null);
-  }
-
-  onMediaTypeFilterChange(mediaType: SeriesMediaTypes.SeriesMediaType | null): void {
-    this.selectedMediaType.set(mediaType);
-    if (mediaType !== null) {
-      this.store.dispatch(new Series.GetIncomplete(mediaType));
-    } else {
-      this.store.dispatch(new Series.GetIncomplete());
-    }
   }
 }

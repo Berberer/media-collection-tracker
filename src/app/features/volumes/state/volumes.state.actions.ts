@@ -22,7 +22,6 @@ export namespace Volumes {
 
   export class GetUpcoming {
     static readonly type = `${ACTION_SCOPE} Get Upcoming`;
-    constructor(readonly maxReleaseDate?: Date) {}
   }
 
   export class Create {

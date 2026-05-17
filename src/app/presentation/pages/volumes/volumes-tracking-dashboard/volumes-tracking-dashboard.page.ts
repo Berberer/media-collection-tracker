@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
@@ -36,6 +37,7 @@ import {
 import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
 import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
 import { SeriesModel } from '../../../../features/series/model/series.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-volumes-tracking-dashboard-page',
@@ -64,6 +66,7 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
   readonly inDeliveryVolumes$ = this.store.select(VolumesStateSelectors.inDeliveryVolumes);
   readonly releasedVolumes$ = this.store.select(VolumesStateSelectors.releasedVolumes);
   readonly upcomingVolumes$ = this.store.select(VolumesStateSelectors.upcomingVolumes);
+  readonly upcomingVolumes = toSignal(this.upcomingVolumes$, { initialValue: [] });
 
   readonly VolumeViewMode = VolumeViewMode;
   readonly SortableColumn = SortableColumn;
@@ -91,6 +94,21 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
   readonly volumeToMarkAsDelivered = signal<VolumeModel | null>(null);
 
   readonly selectedUpcomingTimeframe = signal<number | null>(null);
+
+  readonly filteredUpcomingVolumes = computed(() => {
+    const timeframeDays = this.selectedUpcomingTimeframe();
+
+    if (timeframeDays !== null) {
+      const maxReleaseDate = new Date();
+      maxReleaseDate.setDate(maxReleaseDate.getDate() + timeframeDays);
+
+      return this.upcomingVolumes().filter(
+        (volume) => volume.releaseDate !== null && volume.releaseDate <= maxReleaseDate,
+      );
+    } else {
+      return this.upcomingVolumes();
+    }
+  });
 
   constructor() {
     this.translate
@@ -209,14 +227,6 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
 
   onUpcomingTimeframeChange(days: number | null): void {
     this.selectedUpcomingTimeframe.set(days);
-
-    let maxReleaseDate: Date | undefined = undefined;
-    if (days !== null) {
-      maxReleaseDate = new Date();
-      maxReleaseDate.setDate(maxReleaseDate.getDate() + days);
-    }
-
-    this.store.dispatch(new Volumes.GetUpcoming(maxReleaseDate));
   }
 
   confirmMarkAsDelivered(): void {

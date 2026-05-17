@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
@@ -24,13 +24,22 @@ export class SeriesCardsGalleryComponent {
   readonly editSeries = output<SeriesModel>();
   readonly markCompleted = output<SeriesModel>();
   readonly deleteSeries = output<SeriesModel>();
-  readonly mediaTypeFilterChange = output<SeriesMediaTypes.SeriesMediaType | null>();
 
   readonly SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
   readonly selectedMediaType = signal<SeriesMediaTypes.SeriesMediaType | null>(null);
 
+  readonly filteredSeries = computed(() => {
+    const mediaTypeFilter = this.selectedMediaType();
+    const allSeries = this.series();
+
+    if (mediaTypeFilter !== null) {
+      return allSeries.filter((series) => series.mediaType === mediaTypeFilter);
+    } else {
+      return allSeries;
+    }
+  });
+
   onMediaTypeFilterChange(mediaType: SeriesMediaTypes.SeriesMediaType | null): void {
     this.selectedMediaType.set(mediaType);
-    this.mediaTypeFilterChange.emit(mediaType);
   }
 }
