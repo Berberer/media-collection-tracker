@@ -5,18 +5,40 @@ const rxjs = require('@rxlint/eslint-plugin');
 const rxjsAngular = require('@rxlint/eslint-plugin-angular');
 const eslintConfigPrettier = require('eslint-config-prettier');
 
-module.exports = tseslint.config(
+const codeStyle = {
+  quotes: [2, 'single', { avoidEscape: true }],
+  'no-alert': 'error',
+  'no-debugger': 'error',
+  'no-console': ['error', { allow: ['error'] }],
+  'no-warning-comments': ['warn', { terms: ['todo'], location: 'anywhere' }],
+  'no-await-in-loop': 'error',
+  'no-constant-binary-expression': 'error',
+  'no-constructor-return': 'error',
+  'no-duplicate-imports': 'error',
+  'no-promise-executor-return': 'error',
+  'no-self-compare': 'error',
+  'no-template-curly-in-string': 'error',
+  '@typescript-eslint/no-namespace': 'off',
+  '@typescript-eslint/explicit-function-return-type': 'error',
+  '@rxlint/no-unsafe-takeuntil': 'error',
+};
+
+const commonExtends = [
   eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+  ...angular.configs.tsRecommended,
+  rxjs.configs.recommendedTypeChecked,
+  eslintConfigPrettier,
+];
+
+module.exports = tseslint.config(
   {
     ignores: ['.angular/**', '.nx/**', 'coverage/**', 'dist/**', 'src/pocketbase-types.ts'],
-    files: ['**/*.ts'],
-    extends: [
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-      ...angular.configs.tsRecommended,
-      rxjs.configs.recommendedTypeChecked,
-      eslintConfigPrettier,
-    ],
+  },
+  {
+    files: ['src/**/*.ts'],
+    extends: commonExtends,
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -49,24 +71,23 @@ module.exports = tseslint.config(
           suffixes: ['Page', 'Component'],
         },
       ],
-      quotes: [2, 'single', { avoidEscape: true }],
-      'no-alert': 'error',
-      'no-debugger': 'error',
-      'no-console': ['error', { allow: ['error'] }],
-      'no-warning-comments': ['warn', { terms: ['todo'], location: 'anywhere' }],
-      'no-await-in-loop': 'error',
-      'no-constant-binary-expression': 'error',
-      'no-constructor-return': 'error',
-      'no-duplicate-imports': 'error',
-      'no-promise-executor-return': 'error',
-      'no-self-compare': 'error',
-      'no-template-curly-in-string': 'error',
-      '@typescript-eslint/no-namespace': 'off',
-      '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
-      '@typescript-eslint/explicit-function-return-type': 'error',
-      '@rxlint/no-unsafe-takeuntil': 'error',
       '@rxlint-angular/prefer-takeuntil': 'error',
       '@angular-eslint/prefer-on-push-component-change-detection': 'error',
+      '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
+      ...codeStyle,
+    },
+  },
+  {
+    files: ['src/**/*.spec.ts'],
+    extends: commonExtends,
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      ...codeStyle,
     },
   },
   {

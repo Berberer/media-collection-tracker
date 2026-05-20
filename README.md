@@ -24,6 +24,7 @@ It allows you to organize items into series, track missing volumes, and tag item
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) & [daisyUI 5](https://daisyui.com/)
 - **Backend/Database**: [PocketBase](https://pocketbase.io/)
 - **Icons**: [Heroicons](https://heroicons.com/) via [ng-icons](https://ng-icons.github.io/ng-icons/)
+- **Testing**: [Jest](https://jestjs.io/) with [jest-preset-angular](https://github.com/thymikee/jest-preset-angular)
 - **Development Environment** (_optional_): [Nix Flake](https://nixos.org/)
 
 ---
@@ -57,9 +58,9 @@ It allows you to organize items into series, track missing volumes, and tag item
 
 ### Git Hooks
 
-This project uses [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged) to automatically run Prettier formatting and ESLint linting on staged files before each commit.
+This project uses [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged) to automatically run Prettier formatting, ESLint linting, and Jest tests before each commit.
 Git hooks are automatically installed when running `npm install` – no manual setup required.
-Commits will be blocked if linting fails.
+Commits will be blocked if linting fails or tests don't pass.
 
 ---
 
@@ -94,6 +95,9 @@ npm run start:mock
 - `npm run build`: Builds the production-ready Angular application.
 - `npm run lint`: Runs ESLint for code quality checks.
 - `npm run format`: Runs Prettier for code formatting.
+- `npm test`: Runs unit tests with Jest.
+- `npm run test:watch`: Runs tests in watch mode.
+- `npm run test:coverage`: Runs tests with coverage report.
 
 ---
 

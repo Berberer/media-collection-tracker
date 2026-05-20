@@ -52,6 +52,14 @@ npm run lint          # Run ESLint
 npm run format        # Run Prettier
 ```
 
+### Testing
+
+```bash
+npm test              # Run all tests with Jest
+npm test:watch       # Run tests in watch mode
+npm test:coverage    # Run tests with coverage report
+```
+
 ## 🏗 Architecture Patterns
 
 ### Clean Architecture Layers
@@ -156,6 +164,8 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 - **Linting**: ESLint with Angular-specific rules
 - **Type Safety**: Strict TypeScript configuration
 - **State Management**: NGXS actions and selectors tested through component interactions
+- **Unit Testing**: Jest with `jest-preset-angular` for testing feature states and business logic
+- **State Testing**: Feature states are tested in isolation using `NgxsModule.forRoot()` with mocked dependencies
 
 ## ⚠️ Gotchas & Non-Obvious Patterns
 
