@@ -98,6 +98,7 @@ npm run start:mock
 - `npm test`: Runs unit tests with Jest.
 - `npm run test:watch`: Runs tests in watch mode.
 - `npm run test:coverage`: Runs tests with coverage report.
+- `npm run release`: Bumps version, update CHANGELOG.md, and creates new git tag for the release.
 
 ---
 
