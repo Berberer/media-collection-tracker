@@ -28,6 +28,7 @@ import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.s
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
 import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { PurchaseMethodDialogComponent } from '../../../components/volumes/purchase-method-dialog/purchase-method-dialog.component';
 import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
 import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
 import {
@@ -50,6 +51,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     TranslatePipe,
     ConfirmationPromptComponent,
     ModalDialogComponent,
+    PurchaseMethodDialogComponent,
     VolumeFormComponent,
   ],
 })
@@ -75,6 +77,7 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
   readonly volume = signal<VolumeModel | null>(null);
   readonly volumeToUpdate = signal<UpdateVolumeModel | null>(null);
   readonly allSeriesForAddingVolume = signal<SeriesModel[] | null>(null);
+  readonly volumeToMarkAsBought = signal<VolumeModel | null>(null);
 
   readonly loadingVolumeTags = signal(false);
   readonly loadingInDeliveryVolumes = signal(false);
@@ -86,6 +89,7 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
 
   readonly showDeleteVolumeConfirmation = signal(false);
   readonly showMarkAsDeliveredConfirmation = signal(false);
+  readonly showMarkAsBoughtConfirmation = signal(false);
 
   readonly showPurchaseMethodDialog = signal(false);
   readonly showVolumeFormDialog = signal(false);
@@ -216,6 +220,7 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
         this.showMarkAsDeliveredConfirmation.set(false);
         this.volumeToUpdate.set(null);
         this.volumeToMarkAsDelivered.set(null);
+        this.volumeToMarkAsBought.set(null);
         this.allSeriesForAddingVolume.set(null);
       });
   }
@@ -223,6 +228,29 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
   onVolumeMarkedAsDelivered(volume: VolumeModel): void {
     this.volumeToMarkAsDelivered.set(volume);
     this.showMarkAsDeliveredConfirmation.set(true);
+  }
+
+  onVolumeMarkedAsBought(volume: VolumeModel): void {
+    this.volumeToMarkAsBought.set(volume);
+    this.showPurchaseMethodDialog.set(true);
+  }
+
+  onConfirmedMarkVolumeAsBought(purchaseData: { purchaseDate: Date; inDelivery: boolean }): void {
+    const volume = this.volumeToMarkAsBought();
+    if (volume) {
+      this.store.dispatch(
+        new Volumes.Update({
+          ...volume,
+          purchaseDate: purchaseData.purchaseDate,
+          inDelivery: purchaseData.inDelivery,
+        }),
+      );
+    }
+  }
+
+  onCancelledMarkVolumeAsBought(): void {
+    this.showPurchaseMethodDialog.set(false);
+    this.volumeToMarkAsBought.set(null);
   }
 
   onUpcomingTimeframeChange(days: number | null): void {

@@ -126,6 +126,12 @@
         },
         "mark-volume-bought-tooltip": "Ausgabe als gekauft markieren",
         "mark-volume-delivered-tooltip": "Ausgabe als geliefert markieren"
+      },
+      "purchase-method-dialog": {
+        "title": "Ausgabe als gekauft markieren",
+        "direct-purchase": "Direkter Kauf (im Geschäft)",
+        "delivery-purchase": "Lieferung (online bestellt)",
+        "purchase-date": "Kaufdatum"
       }
     }
   },
@@ -181,13 +187,7 @@
       },
       "missing": {
         "no-volumes-message": "Keine fehlenden Ausgaben vorhanden",
-        "delete-volume-prompt": "Sind Sie sicher, dass Sie diese Ausgabe löschen möchten?",
-        "mark-volume-bought-dialog": {
-          "title": "Ausgabe als gekauft markieren",
-          "direct-purchase": "Direkter Kauf (im Geschäft)",
-          "delivery-purchase": "Lieferung (online bestellt)",
-          "purchase-date": "Kaufdatum"
-        }
+        "delete-volume-prompt": "Sind Sie sicher, dass Sie diese Ausgabe löschen möchten?"
       },
       "collected": {
         "no-volumes-message": "Keine gesammelten Ausgaben vorhanden",

@@ -126,6 +126,12 @@
         },
         "mark-volume-bought-tooltip": "Mark volume as bought",
         "mark-volume-delivered-tooltip": "Mark volume as delivered"
+      },
+      "purchase-method-dialog": {
+        "title": "Mark Volume as Bought",
+        "direct-purchase": "Direct purchase (in store)",
+        "delivery-purchase": "Delivery (ordered online)",
+        "purchase-date": "Purchase date"
       }
     }
   },
@@ -181,13 +187,7 @@
       },
       "missing": {
         "no-volumes-message": "No missing volumes",
-        "delete-volume-prompt": "Are you sure you want to delete this volume?",
-        "mark-volume-bought-dialog": {
-          "title": "Mark Volume as Bought",
-          "direct-purchase": "Direct purchase (in store)",
-          "delivery-purchase": "Delivery (ordered online)",
-          "purchase-date": "Purchase date"
-        }
+        "delete-volume-prompt": "Are you sure you want to delete this volume?"
       },
       "collected": {
         "no-volumes-message": "No collected volumes",

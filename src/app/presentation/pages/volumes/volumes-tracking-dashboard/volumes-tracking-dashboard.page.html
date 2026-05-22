@@ -56,6 +56,7 @@
             [viewMode]="VolumeViewMode.NOT_BOUGHT"
             (volumeTagAdded)="onVolumeTagAdded($event)"
             (volumeTagRemoved)="onVolumeTagRemoved($event)"
+            (volumeMarkedAsBought)="onVolumeMarkedAsBought($event)"
             (volumeEdited)="onVolumeEdited($event)"
             (volumeDeleted)="onDeleteVolume($event)"
           ></app-volumes-table>
@@ -159,6 +160,13 @@
   (confirmed)="confirmMarkAsDelivered()"
   (cancelled)="cancelMarkAsDelivered()"
 ></app-confirmation-prompt>
+
+<app-purchase-method-dialog
+  [open]="showPurchaseMethodDialog()"
+  [loading]="savingVolume()"
+  (confirmed)="onConfirmedMarkVolumeAsBought($event)"
+  (cancelled)="onCancelledMarkVolumeAsBought()"
+></app-purchase-method-dialog>
 
 <app-modal-dialog
   [open]="showVolumeFormDialog() && volumeToUpdate() !== undefined"
