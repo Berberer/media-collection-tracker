@@ -222,5 +222,13 @@
       "missing": "{{applicationName}} – Fehlende Ausgaben",
       "collected": "{{applicationName}} – Gesammelte Ausgaben"
     }
+  },
+  "errors": {
+    "default": "Ein Fehler ist aufgetreten",
+    "tags": {
+      "use-case": {
+        "already-exists": "Ein Tag mit dem Namen {{identifier}} existiert bereits."
+      }
+    }
   }
 }

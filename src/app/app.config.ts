@@ -5,7 +5,7 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideStore } from '@ngxs/store';
+import { provideStore, NgxsUnhandledErrorHandler } from '@ngxs/store';
 import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -18,6 +18,7 @@ import { TagsState } from './features/tags/state/tags.state';
 import { tagsDataSourceProviders } from './features/tags/data-sources/tags.data-source.provider';
 import { volumesDataSourceProviders } from './features/volumes/data-sources/volumes.data-source.provider';
 import { VolumesState } from './features/volumes/state/volumes.state';
+import { GlobalNgxsErrorHandler } from './core/errors/global-error.handler';
 
 if (environment.production) {
   enableProdMode();
@@ -46,5 +47,6 @@ export const appConfig: ApplicationConfig = {
     seriesDataSourceProvider,
     tagsDataSourceProviders,
     volumesDataSourceProviders,
+    { provide: NgxsUnhandledErrorHandler, useClass: GlobalNgxsErrorHandler },
   ],
 };

@@ -32,7 +32,9 @@
 <app-modal-dialog
   [open]="showVolumeTagFormModal()"
   [loading]="savingVolumeTag()"
+  [errors]="errors()"
   (closed)="onCloseVolumeTagModal()"
+  (errorDismissed)="onDismissError($event)"
 >
   <app-tag-creation-form
     [tagType]="tagType"

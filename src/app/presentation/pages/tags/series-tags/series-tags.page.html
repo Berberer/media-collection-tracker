@@ -32,7 +32,9 @@
 <app-modal-dialog
   [open]="showSeriesTagFormModal()"
   [loading]="savingSeriesTag()"
+  [errors]="errors()"
   (closed)="onCloseSeriesTagModal()"
+  (errorDismissed)="onDismissError($event)"
 >
   <app-tag-creation-form
     [tagType]="tagType"

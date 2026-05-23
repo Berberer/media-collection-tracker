@@ -252,7 +252,7 @@ describe('TagsState', () => {
       expect(volumeTags).toEqual([]);
     });
 
-    it('should not add tag if use case returns null', async () => {
+    it('should not add tag if use-case returns null', async () => {
       createSeriesTagUseCase.execute.mockResolvedValueOnce(null);
       const createModel = new CreateSeriesTagModel({ label: 'New Series Tag' });
 
@@ -286,7 +286,7 @@ describe('TagsState', () => {
       expect(volumeTags).toEqual([]);
     });
 
-    it('should not remove tag if use case returns false', async () => {
+    it('should not remove tag if use-case returns false', async () => {
       deleteSeriesTagUseCase.execute.mockResolvedValueOnce(false);
       await firstValueFrom(store.dispatch(new SeriesTags.GetAll()));
 
@@ -321,7 +321,7 @@ describe('TagsState', () => {
       expect(seriesTags).toEqual([]);
     });
 
-    it('should not add tag if use case returns null', async () => {
+    it('should not add tag if use-case returns null', async () => {
       createVolumeTagUseCase.execute.mockResolvedValueOnce(null);
       const createModel = new CreateVolumeTagModel({ label: 'New Volume Tag' });
 
@@ -355,7 +355,7 @@ describe('TagsState', () => {
       expect(seriesTags).toEqual([]);
     });
 
-    it('should not remove tag if use case returns false', async () => {
+    it('should not remove tag if use-case returns false', async () => {
       deleteVolumeTagUseCase.execute.mockResolvedValueOnce(false);
       await firstValueFrom(store.dispatch(new VolumeTags.GetAll()));
 

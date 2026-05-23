@@ -9,19 +9,26 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroXMark } from '@ng-icons/heroicons/outline';
+import { ErrorTranslatePipe } from '../../../../core/pipes/error-translate.pipe';
+import { BaseError } from '../../../../core/errors';
 
 @Component({
   selector: 'app-modal-dialog',
   templateUrl: './modal-dialog.component.html',
   styleUrl: './modal-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgStyle],
+  imports: [NgStyle, ErrorTranslatePipe, NgIcon],
+  providers: [provideIcons({ heroXMark })],
 })
 export class ModalDialogComponent {
   readonly open = input.required<boolean>();
   readonly loading = input.required<boolean>();
+  readonly errors = input<BaseError[]>([]);
 
   readonly closed = output<void>();
+  readonly errorDismissed = output<BaseError>();
 
   readonly modalContent = viewChild<ElementRef<HTMLElement>>('modalContent');
   readonly contentWidth = signal('unset');

@@ -222,5 +222,13 @@
       "missing": "{{applicationName}} – Missing Volumes",
       "collected": "{{applicationName}} – Collected Volumes"
     }
+  },
+  "errors": {
+    "default": "An error occurred",
+    "tags": {
+      "use-case": {
+        "already-exists": "A tag with the name {{identifier}} already exists."
+      }
+    }
   }
 }

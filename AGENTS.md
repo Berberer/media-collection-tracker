@@ -12,21 +12,22 @@ A comprehensive Angular 21 application for tracking media collections (books, ga
 src/
 ├── app/
 │   ├── core/               # Shared services, utilities, base classes
-│   ├── features/           # Domain logic (State, Repositories, Use Cases, Utils)
+│   │   └── errors/         # Error hierarchy system (BaseError, FeatureError, layer-specific errors)
+│   ├── features/           # Domain logic (State, Repositories, Use-Cases, Utils)
 │   │   ├── series/         # Series management feature
 │   │   │   ├── state/      # NGXS state management
 │   │   │   ├── use-cases/  # Business logic operations
 │   │   │   ├── utils/      # Utility functions and helpers
-│   │   │   └── ...
+│   │   │   └── errors/     # Series-specific errors
 │   │   ├── tags/           # Tagging system feature
 │   │   │   ├── state/      # NGXS state management
 │   │   │   ├── use-cases/  # Business logic operations
-│   │   │   └── ...
+│   │   │   └── errors/     # Tags-specific errors
 │   │   └── volumes/        # Volume tracking feature
 │   │       ├── state/      # NGXS state management
 │   │       ├── use-cases/  # Business logic operations
 │   │       ├── utils/      # Utility functions and helpers
-│   │       └── ...
+│   │       └── errors/     # Volumes-specific errors
 │   └── presentation/       # UI Components and Pages
 │       ├── components/     # Reusable UI components
 │       └── pages/          # Page components
@@ -68,10 +69,10 @@ npm test:coverage    # Run tests with coverage report
    - **UI Services**: Local data processing for display (sorting, filtering), view state management.
 2. **Features**: Domain logic organized by feature
    - **State**: NGXS state management
-   - **Use Cases**: Business logic operations
+   - **Use-Cases**: Business logic operations
    - **Utils**: Utility functions and helpers
    - **Repositories**: Data access coordination
-   - **Data Sources**: Backend/mock data access
+   - **Data-Sources**: Backend/mock data access
 3. **Core**: Shared infrastructure and utilities
 
 ### Separation of UI and Business Logic
@@ -79,21 +80,21 @@ npm test:coverage    # Run tests with coverage report
 To maintain a clean architecture, we strictly separate UI-related logic from business logic:
 
 - **UI Logic**: Logic that only affects how data is presented (e.g., table sorting, filtering for a specific view, toggling UI elements). This should reside in the **Presentation** layer, often in dedicated UI services or within the components themselves.
-- **Business Logic**: Logic that defines domain rules, data transformations, or state changes (e.g., calculating series status, validating form data, executing feature-specific operations). This must reside in the **Features** layer (Use Cases or Utils).
+- **Business Logic**: Logic that defines domain rules, data transformations, or state changes (e.g., calculating series status, validating form data, executing feature-specific operations). This must reside in the **Features** layer (Use-Cases or Utils).
 
 ### Data Flow
 
 ```
-UI Components → State Actions → NGXS Store → Use Cases → Repositories → Data Sources → PocketBase
+UI Components → State Actions → NGXS Store → Use-Cases → Repositories → Data-Sources → PocketBase
 ```
 
 ### Key Components
 
 - **State**: NGXS stores manage application state
-- **Use Cases**: Business logic operations
+- **Use-Cases**: Business logic operations
 - **Utils**: Utility functions for business logic and helpers
 - **Repositories**: Data access coordination
-- **Data Sources**: Abstracted data access (backend/mock)
+- **Data-Sources**: Abstracted data access (backend/mock)
 - **Models**: Domain objects with business logic
 
 ## 📝 Code Conventions
@@ -137,6 +138,53 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 - **Routing**: Feature-based lazy loading with route files
 - **i18n**: Uses `@ngx-translate/core` for translations
 
+### Internationalization (i18n)
+
+- **Library**: `@ngx-translate/core` with HTTP loader (`@ngx-translate/http-loader`)
+- **Configuration**: Set up in `src/app/app.config.ts:31-40` with automatic language detection from browser settings
+- **Translation Files**: Located in `public/i18n/` directory with JSON files per language (e.g., `en.json`, `de.json`)
+- **Fallback Language**: English (`en`)
+- **Usage in Components**: Import `TranslatePipe` and `TranslateService` from `@ngx-translate/core`
+
+#### Translation Keys Structure
+
+Translation keys follow a hierarchical naming convention that mirrors the component/page structure:
+
+```
+components/
+  core/
+    nav-bar/
+      series-nav/
+        title: "Series"
+  series/
+    series-card/
+      properties/
+        orphaned: "Orphaned"
+pages/
+  series/
+    incomplete/
+      no-series-message: "No incomplete series"
+common/
+  buttons/
+    save: "Save"
+titles/
+  series/
+    incomplete: "{{applicationName}} – Incomplete Series"
+```
+
+**Key Naming Practices**:
+
+- **Hierarchical**: Keys are nested objects that follow the project structure (components → feature → specific element)
+- **Feature-based**: Grouped by feature area (series, volumes, tags, core)
+- **Contextual**: Each component has its own namespace within the hierarchy
+- **Consistent**: The same keys exist across all language files
+- **Parameterized**: Uses `{{paramName}}` syntax for dynamic values (e.g., page titles)
+
+**Adding New Translations**:
+
+1. Add the key to all language JSON files in `public/i18n/`
+2. Use the key in templates with `{{ 'key.path' | translate }}` or in components via `TranslateService`
+
 ## 🔍 Key Files to Understand
 
 ### Entry Points
@@ -149,7 +197,7 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 
 - `src/app/features/series/state/series.state.ts`: NGXS state management
 - `src/app/features/series/repository/series.repository.ts`: Repository pattern
-- `src/app/features/series/use-cases/`: Business logic use cases
+- `src/app/features/series/use-cases/`: Business logic use-cases
 - `src/app/features/series/data-sources/`: Data access abstraction
 - `src/app/features/series/model/series.model.ts`: Domain model
 
@@ -169,12 +217,24 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 
 ## ⚠️ Gotchas & Non-Obvious Patterns
 
+### Error Handling System
+
+The application uses a structured error hierarchy following the pattern `feature.domain.code`:
+
+- **Feature**: The feature module (series, volumes, tags)
+- **Domain**: The architectural layer (DATA_SOURCE, REPOSITORY, USE_CASE, BUSINESS)
+- **Code**: Specific error type in kebab-case
+
+All errors extend from `BaseError` and support i18n through translation keys following `errors.{feature}.{domain-kebab-case}.{error-code}`.
+
+For detailed information, see [ERROR_HIERARCHY.md](src/app/core/errors/ERROR_HIERARCHY.md).
+
 ### PocketBase Integration
 
 - **Type Generation**: `npm run typegen` must be run after schema changes
-- **Data Source Pattern**: Backend vs Mock data sources are switched automatically
-- **Collections**: Multiple PocketBase collections represent different views of same data
-- **Mock Implementations**: Every data source should have a corresponding mock implementation for development without PocketBase
+- **Data-Source Pattern**: Backend vs. Mock data-sources are switched automatically
+- **Collections**: Multiple PocketBase collections represent different views of the same data
+- **Mock Implementations**: Every data-source should have a corresponding mock implementation for development without PocketBase
 
 ### State Management
 
@@ -190,7 +250,7 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 
 ### Data Flow Complexity
 
-- **Series-Volume Relationship**: Adding volumes can change series state (orphaned → incomplete)
+- **Series-Volume Relationship**: Adding volumes can change the series state (orphaned → incomplete)
 - **Tag System**: Both series and volumes have separate tag systems
 - **Media Types**: Enum-based media type system (Book, Game, Movie, Show)
 
@@ -211,7 +271,7 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 
 ## 🌐 Environment Configuration
 
-- **Development**: Uses mock data source if PocketBase not available
+- **Development**: Uses a mock data-source if PocketBase not available
 - **Production**: Connects to PocketBase backend
 - **Configuration**: Environment-specific files in `src/environments/`
 
@@ -226,5 +286,5 @@ UI Components → State Actions → NGXS Store → Use Cases → Repositories �
 1. **State Issues**: Check NGXS devtools (enabled in development mode)
 2. **Type Errors**: Run `npm run typegen` if PocketBase schema changed
 3. **Routing Problems**: Verify route configurations in feature route files
-4. **Data Flow**: Follow actions from UI → State → Use Case → Repository → Data Source
+4. **Data Flow**: Follow actions from UI → State → Use-Case → Repository → Data-Source
 5. **Business Logic**: Check utility functions in `features/*/utils/` for domain-specific logic

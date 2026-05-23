@@ -12,6 +12,7 @@ import {
   Actions,
   ofActionCompleted,
   ofActionDispatched,
+  ofActionErrored,
   ofActionSuccessful,
   Store,
 } from '@ngxs/store';
@@ -29,6 +30,7 @@ import { Title } from '@angular/platform-browser';
 import { environment } from '../../../../../environments/environment';
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
+import { BaseError } from '../../../../core/errors';
 
 @Component({
   selector: 'app-volume-tags-page',
@@ -66,6 +68,8 @@ export class VolumeTagsPage implements OnInit, OnDestroy {
   readonly showVolumeTagFormModal = signal(false);
   readonly showDeleteVolumeTagConfirmation = signal(false);
 
+  readonly errors = signal<BaseError[]>([]);
+
   constructor() {
     this.translate
       .get('titles.tags.volume', { applicationName: environment.appTitle })
@@ -98,7 +102,10 @@ export class VolumeTagsPage implements OnInit, OnDestroy {
   private setUpCreateVolumeTagActionHandlers(): void {
     this.actions$
       .pipe(ofActionDispatched(VolumeTags.Create), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.savingVolumeTag.set(true));
+      .subscribe(() => {
+        this.savingVolumeTag.set(true);
+        this.errors.set([]);
+      });
 
     this.actions$
       .pipe(ofActionCompleted(VolumeTags.Create), takeUntil(this.ngUnsubscribe))
@@ -106,7 +113,19 @@ export class VolumeTagsPage implements OnInit, OnDestroy {
 
     this.actions$
       .pipe(ofActionSuccessful(VolumeTags.Create), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.showVolumeTagFormModal.set(false));
+      .subscribe(() => {
+        this.showVolumeTagFormModal.set(false);
+        this.errors.set([]);
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(VolumeTags.Create), takeUntil(this.ngUnsubscribe))
+      .subscribe(({ result }) => {
+        this.savingVolumeTag.set(false);
+        if (result.error && result.error instanceof BaseError) {
+          this.errors.set([result.error]);
+        }
+      });
   }
 
   private setUpDeleteVolumeTagActionHandlers(): void {
@@ -133,10 +152,16 @@ export class VolumeTagsPage implements OnInit, OnDestroy {
 
   onCloseVolumeTagModal(): void {
     this.showVolumeTagFormModal.set(false);
+    this.errors.set([]);
   }
 
   onCreateVolumeTag(): void {
     this.showVolumeTagFormModal.set(true);
+    this.errors.set([]);
+  }
+
+  onDismissError(error: BaseError): void {
+    this.errors.update((currentErrors) => currentErrors.filter((e) => e !== error));
   }
 
   onSaveVolumeTag(tag: CreateVolumeTagModel): void {

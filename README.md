@@ -111,7 +111,7 @@ npm run start:mock
 ├── src/
 │   ├── app/
 │   │   ├── core/            # Shared services, utilities, and base classes
-│   │   ├── features/        # Domain logic (State, Repositories, Use Cases)
+│   │   ├── features/        # Domain logic (State, Repositories, Use-Cases)
 │   │   │   ├── series/
 │   │   │   ├── tags/
 │   │   │   └── volumes/

@@ -13,6 +13,7 @@ import {
   Actions,
   ofActionCompleted,
   ofActionDispatched,
+  ofActionErrored,
   ofActionSuccessful,
   Store,
 } from '@ngxs/store';
@@ -29,6 +30,7 @@ import { SeriesTags } from '../../../../features/tags/state/tags.state.actions';
 import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
 import { CreateSeriesTagModel } from '../../../../features/tags/model/create.series-tag.model';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
+import { BaseError } from '../../../../core/errors';
 
 @Component({
   selector: 'app-series-tags-page',
@@ -66,6 +68,8 @@ export class SeriesTagsPage implements OnInit, OnDestroy {
   readonly showSeriesTagFormModal = signal(false);
   readonly showDeleteSeriesTagConfirmation = signal(false);
 
+  readonly errors = signal<BaseError[]>([]);
+
   constructor() {
     this.translate
       .get('titles.tags.series', { applicationName: environment.appTitle })
@@ -98,7 +102,10 @@ export class SeriesTagsPage implements OnInit, OnDestroy {
   private setUpCreateSeriesTagActionHandlers(): void {
     this.actions$
       .pipe(ofActionDispatched(SeriesTags.Create), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.savingSeriesTag.set(true));
+      .subscribe(() => {
+        this.savingSeriesTag.set(true);
+        this.errors.set([]);
+      });
 
     this.actions$
       .pipe(ofActionCompleted(SeriesTags.Create), takeUntil(this.ngUnsubscribe))
@@ -106,7 +113,19 @@ export class SeriesTagsPage implements OnInit, OnDestroy {
 
     this.actions$
       .pipe(ofActionSuccessful(SeriesTags.Create), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.showSeriesTagFormModal.set(false));
+      .subscribe(() => {
+        this.showSeriesTagFormModal.set(false);
+        this.errors.set([]);
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(SeriesTags.Create), takeUntil(this.ngUnsubscribe))
+      .subscribe(({ result }) => {
+        this.savingSeriesTag.set(false);
+        if (result.error && result.error instanceof BaseError) {
+          this.errors.set([result.error]);
+        }
+      });
   }
 
   private setUpDeleteSeriesTagActionHandlers(): void {
@@ -133,10 +152,16 @@ export class SeriesTagsPage implements OnInit, OnDestroy {
 
   onCloseSeriesTagModal(): void {
     this.showSeriesTagFormModal.set(false);
+    this.errors.set([]);
   }
 
   onCreateSeriesTag(): void {
     this.showSeriesTagFormModal.set(true);
+    this.errors.set([]);
+  }
+
+  onDismissError(error: BaseError): void {
+    this.errors.update((currentErrors) => currentErrors.filter((e) => e !== error));
   }
 
   onSaveSeriesTag(tag: CreateSeriesTagModel): void {

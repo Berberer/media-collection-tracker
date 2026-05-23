@@ -574,7 +574,7 @@ describe('VolumesState', () => {
       expect(state.collectedVolumes.size).toBe(1);
     });
 
-    it('should not add volume if use case returns null', async () => {
+    it('should not add volume if use-case returns null', async () => {
       createVolumeUseCase.execute.mockResolvedValueOnce(null);
       const createModel = new CreateVolumeModel({
         series: mockSeries,
@@ -783,7 +783,7 @@ describe('VolumesState', () => {
       expect(state.upcomingVolumes[0].id).toBe('new-volume-id');
     });
 
-    it('should not add volume if use case returns null', async () => {
+    it('should not add volume if use-case returns null', async () => {
       createVolumeUseCase.execute.mockResolvedValueOnce(null);
       const createSeriesVolumeModel = new CreateSeriesVolumeModel({
         sequenceNumber: 2,
@@ -908,7 +908,7 @@ describe('VolumesState', () => {
       expect(state.missingVolumes).toEqual([updatedVolume]);
     });
 
-    it('should not update volumes if use case returns null', async () => {
+    it('should not update volumes if use-case returns null', async () => {
       updateVolumeUseCase.execute.mockResolvedValueOnce(null);
       const updateModel = new UpdateVolumeModel({
         id: '1',
@@ -984,7 +984,7 @@ describe('VolumesState', () => {
       expect(state.collectedVolumes).toEqual(new Map());
     });
 
-    it('should not remove volume if use case returns false', async () => {
+    it('should not remove volume if use-case returns false', async () => {
       deleteVolumeUseCase.execute.mockResolvedValueOnce(false);
       await firstValueFrom(store.dispatch(new Volumes.GetMissing()));
 

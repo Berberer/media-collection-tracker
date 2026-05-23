@@ -1,5 +1,17 @@
 <dialog class="modal" [open]="open() && !backdropClicked()">
   <div class="modal-box overflow-visible" style="width: unset">
+    @if (errors().length > 0) {
+      <div class="flex flex-col gap-2 mb-4">
+        @for (error of errors(); track error) {
+          <div class="alert alert-error">
+            <span>{{ error | errorTranslate }}</span>
+            <button class="btn btn-ghost btn-sm" (click)="errorDismissed.emit(error)">
+              <ng-icon name="heroXMark" class="h-5 w-5" />
+            </button>
+          </div>
+        }
+      </div>
+    }
     @if (loading()) {
       <div
         class="flex flex-col items-center justify-center"

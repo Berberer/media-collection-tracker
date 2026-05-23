@@ -444,7 +444,7 @@ describe('SeriesState', () => {
       expect(state.orphanedSeries).toEqual([]);
     });
 
-    it('should not add series if use case returns null', async () => {
+    it('should not add series if use-case returns null', async () => {
       createSeriesUseCase.execute.mockResolvedValueOnce(null);
       const createModel = new CreateSeriesModel({
         name: 'New Series',
@@ -708,7 +708,7 @@ describe('SeriesState', () => {
       expect(state.orphanedSeries).toEqual([]);
     });
 
-    it('should not update series if use case returns null', async () => {
+    it('should not update series if use-case returns null', async () => {
       updateSeriesUseCase.execute.mockResolvedValueOnce(null);
       const updateModel = new UpdateSeriesModel({
         id: '1',
@@ -836,7 +836,7 @@ describe('SeriesState', () => {
       expect(state.completedSeries).toEqual([]);
     });
 
-    it('should not remove series if use case returns false', async () => {
+    it('should not remove series if use-case returns false', async () => {
       deleteSeriesUseCase.execute.mockResolvedValueOnce(false);
       await firstValueFrom(store.dispatch(new Series.GetAll()));
 
