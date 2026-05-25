@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroCheckSolid,
@@ -8,9 +7,11 @@ import {
   heroPlusSolid,
   heroTrashSolid,
 } from '@ng-icons/heroicons/solid';
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { SeriesModel } from '../../../../features/series/model/series.model';
-import { TagBadgeComponent } from '../../tags/tag-badge/tag-badge.component';
 import { MediaTypeBadgeComponent } from '../../core/media-type-badge/media-type-badge.component';
+import { TagBadgeComponent } from '../../tags/tag-badge/tag-badge.component';
 
 export enum SeriesViewMode {
   INCOMPLETE = 'INCOMPLETE',

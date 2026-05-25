@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,12 +8,8 @@ import {
   signal,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
-import { environment } from '../environments/environment';
-import { NavBarComponent } from './presentation/components/core/nav-bar/nav-bar.component';
-import { ModalDialogComponent } from './presentation/components/core/modal-dialog/modal-dialog.component';
-import { SeriesFormComponent } from './presentation/components/series/series-form/series-form.component';
-import { VolumeFormComponent } from './presentation/components/volumes/volume-form/volume-form.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroCodeBracketSolid } from '@ng-icons/heroicons/solid';
 import {
   Actions,
   ofActionCompleted,
@@ -21,18 +18,22 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroCodeBracketSolid } from '@ng-icons/heroicons/solid';
-import { TagsStateSelectors } from './features/tags/state/tags.state.selectors';
-import { SeriesStateSelectors } from './features/series/state/series.state.selectors';
+
+import { environment } from '../environments/environment';
 import { CreateSeriesModel } from './features/series/model/create.series.model';
-import { CreateVolumeModel } from './features/volumes/model/create.volume.model';
-import { Series } from './features/series/state/series.state.actions';
-import { SeriesTags, VolumeTags } from './features/tags/state/tags.state.actions';
-import { Volumes } from './features/volumes/state/volumes.state.actions';
-import { UpdateSeriesModel } from './features/series/model/update.series.model';
-import { UpdateVolumeModel } from './features/volumes/model/update.volume.model';
 import { SeriesMediaTypes } from './features/series/model/media-type.model';
+import { UpdateSeriesModel } from './features/series/model/update.series.model';
+import { Series } from './features/series/state/series.state.actions';
+import { SeriesStateSelectors } from './features/series/state/series.state.selectors';
+import { SeriesTags, VolumeTags } from './features/tags/state/tags.state.actions';
+import { TagsStateSelectors } from './features/tags/state/tags.state.selectors';
+import { CreateVolumeModel } from './features/volumes/model/create.volume.model';
+import { UpdateVolumeModel } from './features/volumes/model/update.volume.model';
+import { Volumes } from './features/volumes/state/volumes.state.actions';
+import { ModalDialogComponent } from './presentation/components/core/modal-dialog/modal-dialog.component';
+import { NavBarComponent } from './presentation/components/core/nav-bar/nav-bar.component';
+import { SeriesFormComponent } from './presentation/components/series/series-form/series-form.component';
+import { VolumeFormComponent } from './presentation/components/volumes/volume-form/volume-form.component';
 
 @Component({
   selector: 'app-root',

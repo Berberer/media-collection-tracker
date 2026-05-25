@@ -1,7 +1,8 @@
 import { Selector } from '@ngxs/store';
+
+import { SeriesModel } from '../model/series.model';
 import { SeriesState } from './series.state';
 import { SeriesStateModel } from './series.state.model';
-import { SeriesModel } from '../model/series.model';
 
 export abstract class SeriesStateSelectors {
   @Selector([SeriesState])

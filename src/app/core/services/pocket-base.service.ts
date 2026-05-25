@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import PocketBase, { RecordService } from 'pocketbase';
-import { Collections, TypedPocketBase } from '../../../pocketbase-types';
+
 import { environment } from '../../../environments/environment';
+import { Collections, TypedPocketBase } from '../../../pocketbase-types';
 
 @Injectable({ providedIn: 'root' })
 export class PocketBaseService {

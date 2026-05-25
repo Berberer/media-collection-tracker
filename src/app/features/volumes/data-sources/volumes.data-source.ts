@@ -1,13 +1,13 @@
 import {
-  InDeliverySeriesVolumesRecord,
-  MissingSeriesVolumesRecord,
-  UpcomingSeriesVolumesRecord,
   CollectedSeriesVolumesRecord,
-  ReleasedSeriesVolumesRecord,
-  SeriesVolumesRecord,
-  VolumeTagsRecord,
+  InDeliverySeriesVolumesRecord,
   MediaSeriesRecord,
+  MissingSeriesVolumesRecord,
+  ReleasedSeriesVolumesRecord,
   SeriesTagsRecord,
+  SeriesVolumesRecord,
+  UpcomingSeriesVolumesRecord,
+  VolumeTagsRecord,
 } from '../../../../pocketbase-types';
 import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';

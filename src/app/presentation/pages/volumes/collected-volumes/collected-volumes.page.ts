@@ -1,3 +1,4 @@
+import { CommonModule, NgStyle } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +9,6 @@ import {
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { CommonModule, NgStyle } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -19,26 +19,27 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 import { environment } from '../../../../../environments/environment';
-import { VolumeModel } from '../../../../features/volumes/model/volume.model';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
-import { Volumes } from '../../../../features/volumes/state/volumes.state.actions';
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
+import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
+import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
+import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
+import { VolumeModel } from '../../../../features/volumes/model/volume.model';
+import { Volumes } from '../../../../features/volumes/state/volumes.state.actions';
+import { VolumesStateSelectors } from '../../../../features/volumes/state/volumes.state.selectors';
+import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
+import { MediaTypeBadgeComponent } from '../../../components/core/media-type-badge/media-type-badge.component';
+import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
+import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
+import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
 import {
   VolumesTableComponent,
   VolumeViewMode,
 } from '../../../components/volumes/volumes-table/volumes-table.component';
-import { VolumesStateSelectors } from '../../../../features/volumes/state/volumes.state.selectors';
-import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
-import { MediaTypeBadgeComponent } from '../../../components/core/media-type-badge/media-type-badge.component';
-import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
-import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
-import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
-import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
-import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
-import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
-import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
 
 @Component({
   selector: 'app-collected-volumes-page',

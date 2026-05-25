@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,10 +7,8 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { filter, Subject, takeUntil } from 'rxjs';
 import {
   Actions,
   ofActionCompleted,
@@ -17,23 +16,25 @@ import {
   ofActionSuccessful,
   Store,
 } from '@ngxs/store';
-import { SeriesModel } from '../../../../features/series/model/series.model';
-import { SeriesStateSelectors } from '../../../../features/series/state/series.state.selectors';
-import { Series } from '../../../../features/series/state/series.state.actions';
-import { SeriesFormComponent } from '../../../components/series/series-form/series-form.component';
-import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
-import { UpdateSeriesModel } from '../../../../features/series/model/update.series.model';
-import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { filter, Subject, takeUntil } from 'rxjs';
+
 import { environment } from '../../../../../environments/environment';
-import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
-import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
+import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
+import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
+import { SeriesModel } from '../../../../features/series/model/series.model';
+import { UpdateSeriesModel } from '../../../../features/series/model/update.series.model';
+import { Series } from '../../../../features/series/state/series.state.actions';
+import { SeriesStateSelectors } from '../../../../features/series/state/series.state.selectors';
 import { SeriesTags, VolumeTags } from '../../../../features/tags/state/tags.state.actions';
-import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
-import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
+import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
 import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
 import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
-import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
+import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
+import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
 import { SeriesCardsGalleryComponent } from '../../../components/series/series-cards-gallery/series-cards-gallery.component';
+import { SeriesFormComponent } from '../../../components/series/series-form/series-form.component';
+import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
 
 @Component({
   selector: 'app-incomplete-series-page',

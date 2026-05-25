@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+
 import { UseCase } from '../../../core/use-case';
 import { SeriesTagModel } from '../model/series-tag.model';
 import { TagsRepository } from '../repository/tags.repository';

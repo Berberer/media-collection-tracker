@@ -1,19 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
-import { defaultVolumesState, VolumesStateModel } from './volumes.state.model';
-import { GetMissingVolumeUseCase } from '../use-cases/get-missing.volume.use-case';
-import { GetInDeliveryVolumeUseCase } from '../use-cases/get-in-delivery.volume.use-case';
-import { GetReleasedVolumeUseCase } from '../use-cases/get-released.volume.use-case';
-import { GetUpcomingVolumeUseCase } from '../use-cases/get-upcoming.volume.use-case';
-import { GetCollectedVolumesUseCase } from '../use-cases/get-collected.volumes.use-case';
-import { CreateVolumeUseCase } from '../use-cases/create.volume.use-case';
-import { Volumes } from './volumes.state.actions';
-import { UpdateVolumeUseCase } from '../use-cases/update.volume.use-case';
 import { append, patch, removeItem } from '@ngxs/store/operators';
-import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
-import { VolumeStatusUtils } from '../utils/volume-status.utils';
+
 import { Series } from '../../series/state/series.state.actions';
 import { VolumeModel } from '../model/volume.model';
+import { CreateVolumeUseCase } from '../use-cases/create.volume.use-case';
+import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
+import { GetCollectedVolumesUseCase } from '../use-cases/get-collected.volumes.use-case';
+import { GetInDeliveryVolumeUseCase } from '../use-cases/get-in-delivery.volume.use-case';
+import { GetMissingVolumeUseCase } from '../use-cases/get-missing.volume.use-case';
+import { GetReleasedVolumeUseCase } from '../use-cases/get-released.volume.use-case';
+import { GetUpcomingVolumeUseCase } from '../use-cases/get-upcoming.volume.use-case';
+import { UpdateVolumeUseCase } from '../use-cases/update.volume.use-case';
+import { VolumeStatusUtils } from '../utils/volume-status.utils';
+import { Volumes } from './volumes.state.actions';
+import { defaultVolumesState, VolumesStateModel } from './volumes.state.model';
 
 @State<VolumesStateModel>({ name: 'volumes', defaults: defaultVolumesState })
 @Injectable({ providedIn: 'root' })

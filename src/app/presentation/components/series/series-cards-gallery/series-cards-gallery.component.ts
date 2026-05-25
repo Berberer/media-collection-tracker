@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SeriesModel } from '../../../../features/series/model/series.model';
-import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
-import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
+import { SeriesModel } from '../../../../features/series/model/series.model';
 import { MediaTypeBadgeComponent } from '../../core/media-type-badge/media-type-badge.component';
+import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
 
 @Component({
   selector: 'app-series-cards-gallery',

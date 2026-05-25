@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
+
 import { UseCase } from '../../../core/use-case';
+import { SeriesModel } from '../../series/model/series.model';
 import { VolumeModel } from '../model/volume.model';
 import { VolumesRepository } from '../repository/volumes.repository';
-import { SeriesModel } from '../../series/model/series.model';
 
 @Injectable({
   providedIn: 'root',

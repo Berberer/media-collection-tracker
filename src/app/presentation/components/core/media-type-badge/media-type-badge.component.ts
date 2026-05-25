@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
 
 @Component({
   selector: 'app-media-type-badge',

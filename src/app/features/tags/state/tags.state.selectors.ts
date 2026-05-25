@@ -1,8 +1,9 @@
 import { Selector } from '@ngxs/store';
-import { TagsStateModel } from './tags.state.model';
-import { TagsState } from './tags.state';
+
 import { SeriesTagModel } from '../model/series-tag.model';
 import { VolumeTagModel } from '../model/volume-tag.model';
+import { TagsState } from './tags.state';
+import { TagsStateModel } from './tags.state.model';
 
 export abstract class TagsStateSelectors {
   @Selector([TagsState])

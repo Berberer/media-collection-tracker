@@ -1,22 +1,23 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   ChildFieldContext,
+  disabled,
   form,
   FormField,
+  min,
   required,
   validate,
-  min,
-  disabled,
 } from '@angular/forms/signals';
-import { NgClass } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
 import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
-import { TagAssignmentFormControlComponent } from '../../tags/tag-assignment-form-control/tag-assignment-form-control.component';
 import { DropdownControlComponent } from '../../core/dropdown-control/dropdown-control.component';
+import { TagAssignmentFormControlComponent } from '../../tags/tag-assignment-form-control/tag-assignment-form-control.component';
 
 interface VolumeFormData {
   series: SeriesModel | null;

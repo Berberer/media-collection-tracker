@@ -1,6 +1,6 @@
+import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
-import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 
 export class CreateVolumeModel {
   readonly series: SeriesModel;

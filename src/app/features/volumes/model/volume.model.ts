@@ -1,14 +1,14 @@
-import { SeriesModel } from '../../series/model/series.model';
-import { VolumeTagModel } from '../../tags/model/volume-tag.model';
-import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import {
-  MissingSeriesVolumesRecord,
+  CollectedSeriesVolumesRecord,
   InDeliverySeriesVolumesRecord,
+  MissingSeriesVolumesRecord,
   ReleasedSeriesVolumesRecord,
   SeriesVolumesRecord,
-  CollectedSeriesVolumesRecord,
   UpcomingSeriesVolumesRecord,
 } from '../../../../pocketbase-types';
+import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
+import { SeriesModel } from '../../series/model/series.model';
+import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 
 export class VolumeModel {
   readonly id: string;

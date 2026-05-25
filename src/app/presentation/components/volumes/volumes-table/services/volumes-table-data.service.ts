@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { VolumeModel } from '../../../../../features/volumes/model/volume.model';
+
 import { VolumeTagModel } from '../../../../../features/tags/model/volume-tag.model';
+import { VolumeModel } from '../../../../../features/volumes/model/volume.model';
 import { SortDirection } from '../../../core/sort-button/sort-button.component';
 
 export enum SortableColumn {

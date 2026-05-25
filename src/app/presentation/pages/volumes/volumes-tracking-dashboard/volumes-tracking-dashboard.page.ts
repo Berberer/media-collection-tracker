@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +8,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -18,27 +19,27 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 import { environment } from '../../../../../environments/environment';
+import { SeriesModel } from '../../../../features/series/model/series.model';
+import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
+import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
+import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
+import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
+import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
+import { VolumeModel } from '../../../../features/volumes/model/volume.model';
 import { Volumes } from '../../../../features/volumes/state/volumes.state.actions';
 import { VolumesStateSelectors } from '../../../../features/volumes/state/volumes.state.selectors';
-import { VolumeModel } from '../../../../features/volumes/model/volume.model';
-import { UpdateVolumeModel } from '../../../../features/volumes/model/update.volume.model';
-import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
-import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
-import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
 import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
 import { PurchaseMethodDialogComponent } from '../../../components/volumes/purchase-method-dialog/purchase-method-dialog.component';
 import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
-import { CreateVolumeModel } from '../../../../features/volumes/model/create.volume.model';
+import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
 import {
   VolumesTableComponent,
   VolumeViewMode,
 } from '../../../components/volumes/volumes-table/volumes-table.component';
-import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
-import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
-import { SeriesModel } from '../../../../features/series/model/series.model';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-volumes-tracking-dashboard-page',

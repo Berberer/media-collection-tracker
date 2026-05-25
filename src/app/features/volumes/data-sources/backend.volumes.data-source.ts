@@ -1,5 +1,5 @@
-import { VolumesDataSource } from './volumes.data-source';
 import { RecordService } from 'pocketbase';
+
 import {
   CollectedSeriesVolumesRecord,
   CollectedSeriesVolumesResponse,
@@ -22,6 +22,7 @@ import {
 } from '../../../../pocketbase-types';
 import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
+import { VolumesDataSource } from './volumes.data-source';
 
 interface VolumeSeriesAndTagsExpand {
   series: MediaSeriesResponse<{ tags: SeriesTagsResponse[] }>;

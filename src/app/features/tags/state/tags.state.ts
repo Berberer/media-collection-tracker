@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem } from '@ngxs/store/operators';
-import { defaultTagStateModel, TagsStateModel } from './tags.state.model';
-import { SeriesTags, VolumeTags } from './tags.state.actions';
-import { GetAllSeriesTagUseCase } from '../use-cases/get-all.series-tag.use-case';
+
 import { CreateSeriesTagUseCase } from '../use-cases/create.series-tag.use-case';
-import { DeleteSeriesTagUseCase } from '../use-cases/delete.series-tag.use-case';
-import { GetAllVolumeTagUseCase } from '../use-cases/get-all.volume-tag.use-case';
 import { CreateVolumeTagUseCase } from '../use-cases/create.volume-tag.use-case';
+import { DeleteSeriesTagUseCase } from '../use-cases/delete.series-tag.use-case';
 import { DeleteVolumeTagUseCase } from '../use-cases/delete.volume-tag.use-case';
+import { GetAllSeriesTagUseCase } from '../use-cases/get-all.series-tag.use-case';
+import { GetAllVolumeTagUseCase } from '../use-cases/get-all.volume-tag.use-case';
+import { SeriesTags, VolumeTags } from './tags.state.actions';
+import { defaultTagStateModel, TagsStateModel } from './tags.state.model';
 
 @State<TagsStateModel>({
   name: 'volumeTags',

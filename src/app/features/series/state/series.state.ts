@@ -1,18 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, State, StateContext, StateOperator } from '@ngxs/store';
-import { defaultSeriesStateModel, SeriesStateModel } from './series.state.model';
-import { GetAllSeriesUseCase } from '../use-cases/get-all.series.use-case';
-import { Series } from './series.state.actions';
-import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
-import { UpdateSeriesUseCase } from '../use-cases/update.series.use-case';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
-import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
-import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
-import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
-import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
-import { SeriesModel } from '../model/series.model';
+
 import { CreateVolumeModel } from '../../volumes/model/create.volume.model';
 import { Volumes } from '../../volumes/state/volumes.state.actions';
+import { SeriesModel } from '../model/series.model';
+import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
+import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
+import { GetAllSeriesUseCase } from '../use-cases/get-all.series.use-case';
+import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
+import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
+import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
+import { UpdateSeriesUseCase } from '../use-cases/update.series.use-case';
+import { Series } from './series.state.actions';
+import { defaultSeriesStateModel, SeriesStateModel } from './series.state.model';
 
 @State<SeriesStateModel>({
   name: 'series',

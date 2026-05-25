@@ -1,7 +1,7 @@
-import { SeriesMediaTypes } from './media-type.model';
 import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
 import { CreateSeriesVolumeModel } from './create.series-volume.model';
+import { SeriesMediaTypes } from './media-type.model';
 
 export class CreateSeriesModel {
   readonly name: string;

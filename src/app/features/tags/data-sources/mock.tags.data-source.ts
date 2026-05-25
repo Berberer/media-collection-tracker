@@ -1,9 +1,9 @@
-import { TagsDataSource } from './tags.data-source';
 import {
   IsoAutoDateString,
   SeriesTagsRecord,
   VolumeTagsRecord,
 } from '../../../../pocketbase-types';
+import { TagsDataSource } from './tags.data-source';
 
 export class MockTagsDataSource implements TagsDataSource {
   private seriesTagsIdCounter = 2;

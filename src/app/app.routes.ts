@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { seriesRoutes } from './presentation/pages/series/series.page.routes';
 import { tagsRoutes } from './presentation/pages/tags/tags.page.routes';
 import { volumesRoutes } from './presentation/pages/volumes/volumes.page.routes';

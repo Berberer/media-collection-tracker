@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { NgClass, NgStyle } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
 

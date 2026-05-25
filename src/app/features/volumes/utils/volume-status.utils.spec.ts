@@ -1,7 +1,7 @@
-import { VolumeStatusUtils } from './volume-status.utils';
-import { VolumeModel } from '../model/volume.model';
-import { SeriesModel } from '../../series/model/series.model';
 import { SeriesMediaTypes } from '../../series/model/media-type.model';
+import { SeriesModel } from '../../series/model/series.model';
+import { VolumeModel } from '../model/volume.model';
+import { VolumeStatusUtils } from './volume-status.utils';
 import SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 

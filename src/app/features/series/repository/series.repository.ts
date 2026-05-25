@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { SeriesDataSource } from '../data-sources/series.data-source';
-import { SeriesModel } from '../model/series.model';
-import { CreateSeriesModel } from '../model/create.series.model';
-import { UpdateSeriesModel } from '../model/update.series.model';
-import { SeriesMediaTypes } from '../model/media-type.model';
-import { ColorService } from '../../../core/services/color.service';
+
 import { SeriesTagsRecord } from '../../../../pocketbase-types';
+import { ColorService } from '../../../core/services/color.service';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesDataSource } from '../data-sources/series.data-source';
+import { CreateSeriesModel } from '../model/create.series.model';
+import { SeriesMediaTypes } from '../model/media-type.model';
+import { SeriesModel } from '../model/series.model';
+import { UpdateSeriesModel } from '../model/update.series.model';
 
 @Injectable({
   providedIn: 'root',

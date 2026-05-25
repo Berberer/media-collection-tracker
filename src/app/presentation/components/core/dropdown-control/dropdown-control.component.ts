@@ -1,3 +1,4 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,9 +10,8 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
-import { FormValueControl } from '@angular/forms/signals';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FormValueControl } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-dropdown-control',

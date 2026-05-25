@@ -1,27 +1,29 @@
 import { TestBed } from '@angular/core/testing';
 import { NgxsModule, Store } from '@ngxs/store';
-import { VolumesState } from './volumes.state';
-import { defaultVolumesState } from './volumes.state.model';
-import { VolumeModel } from '../model/volume.model';
+
+import { SeriesMediaTypes } from '../../series/model/media-type.model';
 import { SeriesModel } from '../../series/model/series.model';
-import { GetMissingVolumeUseCase } from '../use-cases/get-missing.volume.use-case';
+import { VolumeModel } from '../model/volume.model';
+import { CreateVolumeUseCase } from '../use-cases/create.volume.use-case';
+import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
+import { GetCollectedVolumesUseCase } from '../use-cases/get-collected.volumes.use-case';
 import { GetInDeliveryVolumeUseCase } from '../use-cases/get-in-delivery.volume.use-case';
+import { GetMissingVolumeUseCase } from '../use-cases/get-missing.volume.use-case';
 import { GetReleasedVolumeUseCase } from '../use-cases/get-released.volume.use-case';
 import { GetUpcomingVolumeUseCase } from '../use-cases/get-upcoming.volume.use-case';
-import { GetCollectedVolumesUseCase } from '../use-cases/get-collected.volumes.use-case';
-import { CreateVolumeUseCase } from '../use-cases/create.volume.use-case';
 import { UpdateVolumeUseCase } from '../use-cases/update.volume.use-case';
-import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
 import { VolumeStatusUtils } from '../utils/volume-status.utils';
-import { SeriesMediaTypes } from '../../series/model/media-type.model';
+import { VolumesState } from './volumes.state';
+import { defaultVolumesState } from './volumes.state.model';
 import SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
-import { VolumesStateSelectors } from './volumes.state.selectors';
+import { firstValueFrom } from 'rxjs';
+
+import { CreateSeriesVolumeModel } from '../../series/model/create.series-volume.model';
+import { Series } from '../../series/state/series.state.actions';
 import { CreateVolumeModel } from '../model/create.volume.model';
 import { UpdateVolumeModel } from '../model/update.volume.model';
 import { Volumes } from './volumes.state.actions';
-import { Series } from '../../series/state/series.state.actions';
-import { CreateSeriesVolumeModel } from '../../series/model/create.series-volume.model';
-import { firstValueFrom } from 'rxjs';
+import { VolumesStateSelectors } from './volumes.state.selectors';
 
 describe('VolumesState', () => {
   let store: Store;

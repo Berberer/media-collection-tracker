@@ -1,6 +1,7 @@
-import { TagsDataSource } from './tags.data-source';
-import { SeriesTagsRecord, VolumeTagsRecord } from '../../../../pocketbase-types';
 import { RecordService } from 'pocketbase';
+
+import { SeriesTagsRecord, VolumeTagsRecord } from '../../../../pocketbase-types';
+import { TagsDataSource } from './tags.data-source';
 
 export class BackendTagsDataSource implements TagsDataSource {
   constructor(

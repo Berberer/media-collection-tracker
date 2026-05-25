@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+import { BaseError, FeatureDomain, FeatureError } from '../errors';
 import { ErrorTranslatePipe } from './error-translate.pipe';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { BaseError, FeatureError, FeatureDomain } from '../errors';
 
 describe('ErrorTranslatePipe', () => {
   let pipe: ErrorTranslatePipe;

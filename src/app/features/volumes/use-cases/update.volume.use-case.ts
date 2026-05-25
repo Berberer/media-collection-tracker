@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
+
 import { UseCase } from '../../../core/use-case';
-import { VolumeModel } from '../model/volume.model';
 import { UpdateVolumeModel } from '../model/update.volume.model';
+import { VolumeModel } from '../model/volume.model';
 import { VolumesRepository } from '../repository/volumes.repository';
 
 @Injectable({

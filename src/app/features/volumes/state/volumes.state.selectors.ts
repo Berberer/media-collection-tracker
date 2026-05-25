@@ -1,8 +1,9 @@
 import { Selector } from '@ngxs/store';
+
+import { SeriesModel } from '../../series/model/series.model';
+import { VolumeModel } from '../model/volume.model';
 import { VolumesState } from './volumes.state';
 import { VolumesStateModel } from './volumes.state.model';
-import { VolumeModel } from '../model/volume.model';
-import { SeriesModel } from '../../series/model/series.model';
 
 export abstract class VolumesStateSelectors {
   @Selector([VolumesState])

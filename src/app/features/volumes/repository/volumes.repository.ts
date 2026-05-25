@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { VolumesDataSource } from '../data-sources/volumes.data-source';
-import { ColorService } from '../../../core/services/color.service';
-import { VolumeModel } from '../model/volume.model';
-import { CreateVolumeModel } from '../model/create.volume.model';
-import { SeriesModel } from '../../series/model/series.model';
-import { VolumeTagModel } from '../../tags/model/volume-tag.model';
+
 import {
   MediaSeriesRecord,
   SeriesTagsRecord,
   VolumeTagsRecord,
 } from '../../../../pocketbase-types';
+import { ColorService } from '../../../core/services/color.service';
+import { SeriesModel } from '../../series/model/series.model';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { VolumeTagModel } from '../../tags/model/volume-tag.model';
+import { VolumesDataSource } from '../data-sources/volumes.data-source';
+import { CreateVolumeModel } from '../model/create.volume.model';
 import { UpdateVolumeModel } from '../model/update.volume.model';
+import { VolumeModel } from '../model/volume.model';
 
 @Injectable({
   providedIn: 'root',

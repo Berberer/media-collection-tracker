@@ -1,9 +1,10 @@
+import { Provider } from '@angular/core';
+
 import { Collections } from '../../../../pocketbase-types';
-import { SeriesDataSource } from './series.data-source';
+import { PocketBaseService } from '../../../core/services/pocket-base.service';
 import { BackendSeriesDataSource } from './backend.series.data-source';
 import { MockSeriesDataSource } from './mock.series.data-source';
-import { Provider } from '@angular/core';
-import { PocketBaseService } from '../../../core/services/pocket-base.service';
+import { SeriesDataSource } from './series.data-source';
 
 const seriesDataSourceFactory = (pocketBaseService: PocketBaseService): SeriesDataSource => {
   const seriesPocketBaseService = pocketBaseService.getRecordService(Collections.MediaSeries);

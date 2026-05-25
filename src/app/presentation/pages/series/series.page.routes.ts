@@ -1,7 +1,8 @@
-import { IncompleteSeriesPage } from './incomplete-series/incomplete-series.page';
 import { Routes } from '@angular/router';
-import { OrphanedSeriesPage } from './orphaned-series/orphaned-series.page';
+
 import { CompletedSeriesPage } from './completed-series/completed-series.page';
+import { IncompleteSeriesPage } from './incomplete-series/incomplete-series.page';
+import { OrphanedSeriesPage } from './orphaned-series/orphaned-series.page';
 
 enum SeriesRoutes {
   Incomplete = 'incomplete',

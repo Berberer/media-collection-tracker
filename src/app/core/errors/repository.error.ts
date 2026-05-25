@@ -1,4 +1,4 @@
-import { FeatureError, FeatureDomain } from './feature.error';
+import { FeatureDomain, FeatureError } from './feature.error';
 
 /**
  * Error codes for repository operations

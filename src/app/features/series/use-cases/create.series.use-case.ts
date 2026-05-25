@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+
 import { UseCase } from '../../../core/use-case';
 import { CreateSeriesModel } from '../model/create.series.model';
 import { SeriesModel } from '../model/series.model';

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
+
 import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { TagAssignmentComponent } from '../tag-assignment/tag-assignment.component';

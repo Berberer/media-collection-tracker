@@ -1,6 +1,6 @@
-import { SeriesMediaTypes } from './media-type.model';
 import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesMediaTypes } from './media-type.model';
 
 export class UpdateSeriesModel {
   readonly id: string;

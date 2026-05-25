@@ -1,5 +1,5 @@
-import { VolumeModel } from '../model/volume.model';
 import { SeriesModel } from '../../series/model/series.model';
+import { VolumeModel } from '../model/volume.model';
 
 export interface VolumesStateModel {
   missingVolumes: VolumeModel[];

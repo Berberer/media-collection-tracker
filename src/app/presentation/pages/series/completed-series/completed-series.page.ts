@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,7 +7,6 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -17,19 +17,20 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 import { environment } from '../../../../../environments/environment';
-import { SeriesStateSelectors } from '../../../../features/series/state/series.state.selectors';
-import { Series } from '../../../../features/series/state/series.state.actions';
-import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
-import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
-import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
-import { SeriesFormComponent } from '../../../components/series/series-form/series-form.component';
-import { SeriesTags, VolumeTags } from '../../../../features/tags/state/tags.state.actions';
+import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { UpdateSeriesModel } from '../../../../features/series/model/update.series.model';
-import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
+import { Series } from '../../../../features/series/state/series.state.actions';
+import { SeriesStateSelectors } from '../../../../features/series/state/series.state.selectors';
+import { SeriesTags, VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
+import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
+import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { SeriesViewMode } from '../../../components/series/series-card/series-card.component';
 import { SeriesCardsGalleryComponent } from '../../../components/series/series-cards-gallery/series-cards-gallery.component';
+import { SeriesFormComponent } from '../../../components/series/series-form/series-form.component';
 
 @Component({
   selector: 'app-completed-series-page',

@@ -1,4 +1,3 @@
-import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import {
   AllMediaSeriesRecord,
   CompletedMediaSeriesRecord,
@@ -6,10 +5,11 @@ import {
   MediaSeriesRecord,
   OrphanedMediaSeriesRecord,
 } from '../../../../pocketbase-types';
-import { SeriesMediaTypes } from './media-type.model';
 import { HashedTextColors } from '../../../core/hashed-text-colors';
 import { ExcludeSuperProperties } from '../../../core/typing-utilities/exclude-super-properties';
+import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesMediaTypes } from './media-type.model';
 
 export class SeriesModel extends HashedTextColors<SeriesModel> {
   readonly id: string;

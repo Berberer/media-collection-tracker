@@ -1,20 +1,20 @@
-import { VolumesDataSource } from './volumes.data-source';
-import { SeriesModel } from '../../series/model/series.model';
-import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 import {
+  CollectedSeriesVolumesRecord,
   IncompleteMediaSeriesTypeOptions,
+  InDeliverySeriesVolumesRecord,
   IsoAutoDateString,
   MediaSeriesRecord,
   MissingSeriesVolumesRecord,
-  CollectedSeriesVolumesRecord,
   ReleasedSeriesVolumesRecord,
-  UpcomingSeriesVolumesRecord,
-  SeriesVolumesRecord,
-  VolumeTagsRecord,
-  InDeliverySeriesVolumesRecord,
   SeriesTagsRecord,
+  SeriesVolumesRecord,
+  UpcomingSeriesVolumesRecord,
+  VolumeTagsRecord,
 } from '../../../../pocketbase-types';
 import { SeriesMediaTypes } from '../../series/model/media-type.model';
+import { SeriesModel } from '../../series/model/series.model';
+import { VolumeTagModel } from '../../tags/model/volume-tag.model';
+import { VolumesDataSource } from './volumes.data-source';
 
 export class MockVolumesDataSource implements VolumesDataSource {
   private volumesIdCounter = 5;

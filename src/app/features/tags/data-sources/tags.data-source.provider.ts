@@ -1,9 +1,10 @@
-import { PocketBaseService } from '../../../core/services/pocket-base.service';
-import { TagsDataSource } from './tags.data-source';
-import { Collections } from '../../../../pocketbase-types';
 import { Provider } from '@angular/core';
-import { MockTagsDataSource } from './mock.tags.data-source';
+
+import { Collections } from '../../../../pocketbase-types';
+import { PocketBaseService } from '../../../core/services/pocket-base.service';
 import { BackendTagsDataSource } from './backend.tags.data-source';
+import { MockTagsDataSource } from './mock.tags.data-source';
+import { TagsDataSource } from './tags.data-source';
 
 const tagsDataSourceFactory = (pocketBaseService: PocketBaseService): TagsDataSource => {
   const seriesTagsPocketBaseService = pocketBaseService.getRecordService(Collections.SeriesTags);

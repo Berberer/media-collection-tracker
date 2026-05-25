@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'app-confirmation-prompt',

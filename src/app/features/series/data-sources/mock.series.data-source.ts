@@ -1,4 +1,3 @@
-import { SeriesDataSource } from './series.data-source';
 import {
   AllMediaSeriesRecord,
   AllMediaSeriesTypeOptions,
@@ -14,6 +13,7 @@ import {
   SeriesTagsRecord,
 } from '../../../../pocketbase-types';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesDataSource } from './series.data-source';
 
 export class MockSeriesDataSource extends SeriesDataSource {
   private idCounter = 5;

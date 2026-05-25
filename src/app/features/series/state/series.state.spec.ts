@@ -1,25 +1,26 @@
 import { TestBed } from '@angular/core/testing';
+import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
 import { firstValueFrom } from 'rxjs';
-import { NgxsModule, Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { SeriesState } from './series.state';
-import { defaultSeriesStateModel } from './series.state.model';
+
+import { SeriesMediaTypes } from '../model/media-type.model';
 import { SeriesModel } from '../model/series.model';
+import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
+import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
 import { GetAllSeriesUseCase } from '../use-cases/get-all.series.use-case';
+import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
 import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
 import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
-import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
-import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
 import { UpdateSeriesUseCase } from '../use-cases/update.series.use-case';
-import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
-import { SeriesMediaTypes } from '../model/media-type.model';
+import { SeriesState } from './series.state';
+import { defaultSeriesStateModel } from './series.state.model';
 import SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
-import { SeriesStateSelectors } from './series.state.selectors';
-import { CreateSeriesModel } from '../model/create.series.model';
-import { UpdateSeriesModel } from '../model/update.series.model';
-import { CreateSeriesVolumeModel } from '../model/create.series-volume.model';
-import { Series } from './series.state.actions';
-import { Volumes } from '../../volumes/state/volumes.state.actions';
 import { CreateVolumeModel } from '../../volumes/model/create.volume.model';
+import { Volumes } from '../../volumes/state/volumes.state.actions';
+import { CreateSeriesModel } from '../model/create.series.model';
+import { CreateSeriesVolumeModel } from '../model/create.series-volume.model';
+import { UpdateSeriesModel } from '../model/update.series.model';
+import { Series } from './series.state.actions';
+import { SeriesStateSelectors } from './series.state.selectors';
 
 describe('SeriesState', () => {
   let store: Store;

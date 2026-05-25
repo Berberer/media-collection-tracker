@@ -1,20 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { NgxsModule, Store } from '@ngxs/store';
-import { TagsState } from './tags.state';
-import { defaultTagStateModel } from './tags.state.model';
-import { SeriesTagModel } from '../model/series-tag.model';
-import { VolumeTagModel } from '../model/volume-tag.model';
-import { SeriesTags, VolumeTags } from './tags.state.actions';
-import { GetAllSeriesTagUseCase } from '../use-cases/get-all.series-tag.use-case';
-import { CreateSeriesTagUseCase } from '../use-cases/create.series-tag.use-case';
-import { DeleteSeriesTagUseCase } from '../use-cases/delete.series-tag.use-case';
-import { GetAllVolumeTagUseCase } from '../use-cases/get-all.volume-tag.use-case';
-import { CreateVolumeTagUseCase } from '../use-cases/create.volume-tag.use-case';
-import { DeleteVolumeTagUseCase } from '../use-cases/delete.volume-tag.use-case';
-import { TagsStateSelectors } from './tags.state.selectors';
+import { firstValueFrom } from 'rxjs';
+
 import { CreateSeriesTagModel } from '../model/create.series-tag.model';
 import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
-import { firstValueFrom } from 'rxjs';
+import { SeriesTagModel } from '../model/series-tag.model';
+import { VolumeTagModel } from '../model/volume-tag.model';
+import { CreateSeriesTagUseCase } from '../use-cases/create.series-tag.use-case';
+import { CreateVolumeTagUseCase } from '../use-cases/create.volume-tag.use-case';
+import { DeleteSeriesTagUseCase } from '../use-cases/delete.series-tag.use-case';
+import { DeleteVolumeTagUseCase } from '../use-cases/delete.volume-tag.use-case';
+import { GetAllSeriesTagUseCase } from '../use-cases/get-all.series-tag.use-case';
+import { GetAllVolumeTagUseCase } from '../use-cases/get-all.volume-tag.use-case';
+import { TagsState } from './tags.state';
+import { SeriesTags, VolumeTags } from './tags.state.actions';
+import { defaultTagStateModel } from './tags.state.model';
+import { TagsStateSelectors } from './tags.state.selectors';
 
 describe('TagsState', () => {
   let store: Store;

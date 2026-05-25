@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import ColorHash from 'color-hash';
 import { ContrastRatioChecker } from 'contrast-ratio-checker';
+
 import { HashedTextColors } from '../hashed-text-colors';
 
 const HEX_WHITE = '#FFFFFF';

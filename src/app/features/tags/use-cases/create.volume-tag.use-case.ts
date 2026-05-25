@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
+
 import { UseCase } from '../../../core/use-case';
+import { TagAlreadyExistsError } from '../errors/tags.errors';
 import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
 import { VolumeTagModel } from '../model/volume-tag.model';
 import { TagsRepository } from '../repository/tags.repository';
-import { TagAlreadyExistsError } from '../errors/tags.errors';
 
 @Injectable({
   providedIn: 'root',

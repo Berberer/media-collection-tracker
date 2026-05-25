@@ -1,6 +1,6 @@
-import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { HashedTextColors } from '../../../core/hashed-text-colors';
 import { ExcludeSuperProperties } from '../../../core/typing-utilities/exclude-super-properties';
+import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 
 export class SeriesTagModel extends HashedTextColors<SeriesTagModel> {
   readonly id: string;

@@ -1,5 +1,5 @@
-import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
+import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 
 export class CreateSeriesVolumeModel {
   readonly sequenceNumber: number;

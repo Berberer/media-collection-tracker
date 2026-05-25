@@ -1,4 +1,5 @@
-import { SeriesDataSource } from './series.data-source';
+import { RecordService } from 'pocketbase';
+
 import {
   AllMediaSeriesRecord,
   AllMediaSeriesResponse,
@@ -13,8 +14,8 @@ import {
   SeriesTagsRecord,
   SeriesTagsResponse,
 } from '../../../../pocketbase-types';
-import { RecordService } from 'pocketbase';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesDataSource } from './series.data-source';
 
 interface SeriesTagsExpand {
   tags: SeriesTagsResponse[];

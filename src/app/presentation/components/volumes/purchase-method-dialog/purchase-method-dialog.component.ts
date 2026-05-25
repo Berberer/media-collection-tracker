@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
-import { ModalDialogComponent } from '../../core/modal-dialog/modal-dialog.component';
-import { TranslatePipe } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { form, FormField, required } from '@angular/forms/signals';
+import { TranslatePipe } from '@ngx-translate/core';
+
+import { ModalDialogComponent } from '../../core/modal-dialog/modal-dialog.component';
 
 enum PurchaseMethod {
   DIRECT = 'direct',

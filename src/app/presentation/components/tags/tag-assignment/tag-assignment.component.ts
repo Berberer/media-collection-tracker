@@ -1,10 +1,11 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 import { heroPlusSolid } from '@ng-icons/heroicons/solid';
+
 import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
-import { NgClass } from '@angular/common';
+import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
   selector: 'app-tag-assignment',

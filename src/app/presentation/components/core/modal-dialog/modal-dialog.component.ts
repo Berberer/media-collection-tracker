@@ -1,3 +1,4 @@
+import { NgStyle } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,11 +9,11 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgStyle } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
-import { ErrorTranslatePipe } from '../../../../core/pipes/error-translate.pipe';
+
 import { BaseError } from '../../../../core/errors';
+import { ErrorTranslatePipe } from '../../../../core/pipes/error-translate.pipe';
 
 @Component({
   selector: 'app-modal-dialog',

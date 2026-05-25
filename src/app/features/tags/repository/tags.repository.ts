@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { TagsDataSource } from '../data-sources/tags.data-source';
-import { VolumeTagModel } from '../model/volume-tag.model';
-import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
+
 import { SeriesTagsRecord, VolumeTagsRecord } from '../../../../pocketbase-types';
 import { ColorService } from '../../../core/services/color.service';
-import { SeriesTagModel } from '../model/series-tag.model';
+import { TagsDataSource } from '../data-sources/tags.data-source';
 import { CreateSeriesTagModel } from '../model/create.series-tag.model';
+import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
+import { SeriesTagModel } from '../model/series-tag.model';
+import { VolumeTagModel } from '../model/volume-tag.model';
 
 @Injectable({
   providedIn: 'root',

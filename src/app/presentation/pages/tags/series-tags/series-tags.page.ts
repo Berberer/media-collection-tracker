@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,7 +7,6 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -18,19 +18,20 @@ import {
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 import { environment } from '../../../../../environments/environment';
+import { BaseError } from '../../../../core/errors';
+import { CreateSeriesTagModel } from '../../../../features/tags/model/create.series-tag.model';
+import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
+import { SeriesTags } from '../../../../features/tags/state/tags.state.actions';
+import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
+import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
 import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
+import { TagBadgeComponent } from '../../../components/tags/tag-badge/tag-badge.component';
 import {
   TagCreationFormComponent,
   TagType,
 } from '../../../components/tags/tag-creation-form/tag-creation-form.component';
-import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
-import { TagBadgeComponent } from '../../../components/tags/tag-badge/tag-badge.component';
-import { SeriesTags } from '../../../../features/tags/state/tags.state.actions';
-import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
-import { CreateSeriesTagModel } from '../../../../features/tags/model/create.series-tag.model';
-import { ConfirmationPromptComponent } from '../../../components/core/confirmation-prompt/confirmation-prompt.component';
-import { BaseError } from '../../../../core/errors';
 
 @Component({
   selector: 'app-series-tags-page',

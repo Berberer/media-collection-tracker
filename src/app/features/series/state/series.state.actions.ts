@@ -1,7 +1,7 @@
 import { CreateSeriesModel } from '../model/create.series.model';
-import { UpdateSeriesModel } from '../model/update.series.model';
-import { SeriesModel } from '../model/series.model';
 import { CreateSeriesVolumeModel } from '../model/create.series-volume.model';
+import { SeriesModel } from '../model/series.model';
+import { UpdateSeriesModel } from '../model/update.series.model';
 
 const ACTION_SCOPE = '[Series]';
 

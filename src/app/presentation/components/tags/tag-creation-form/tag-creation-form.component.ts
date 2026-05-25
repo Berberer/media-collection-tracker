@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
 import { FormsModule } from '@angular/forms';
 import { form, FormField, required } from '@angular/forms/signals';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CreateVolumeTagModel } from '../../../../features/tags/model/create.volume-tag.model';
+
 import { CreateSeriesTagModel } from '../../../../features/tags/model/create.series-tag.model';
+import { CreateVolumeTagModel } from '../../../../features/tags/model/create.volume-tag.model';
 
 interface TagFormData {
   label: string;

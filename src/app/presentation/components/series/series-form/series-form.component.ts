@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,18 +9,18 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { form, required, FormField, validate } from '@angular/forms/signals';
+import { form, FormField, required, validate } from '@angular/forms/signals';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
+
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
+import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
+import { SeriesMediaTypes } from '../../../../features/series/model/media-type.model';
 import { UpdateSeriesModel } from '../../../../features/series/model/update.series.model';
 import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
-import { TagAssignmentFormControlComponent } from '../../tags/tag-assignment-form-control/tag-assignment-form-control.component';
-import { MediaTypeBadgeComponent } from '../../core/media-type-badge/media-type-badge.component';
 import { DropdownControlComponent } from '../../core/dropdown-control/dropdown-control.component';
-import { NgClass } from '@angular/common';
-import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
+import { MediaTypeBadgeComponent } from '../../core/media-type-badge/media-type-badge.component';
+import { TagAssignmentFormControlComponent } from '../../tags/tag-assignment-form-control/tag-assignment-form-control.component';
 
 interface SeriesFormData {
   name: string;

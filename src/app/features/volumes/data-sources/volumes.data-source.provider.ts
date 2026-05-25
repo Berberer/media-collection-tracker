@@ -1,9 +1,10 @@
 import { Provider } from '@angular/core';
+
 import { Collections } from '../../../../pocketbase-types';
 import { PocketBaseService } from '../../../core/services/pocket-base.service';
-import { VolumesDataSource } from './volumes.data-source';
 import { BackendVolumesDataSource } from './backend.volumes.data-source';
 import { MockVolumesDataSource } from './mock.volumes.data-source';
+import { VolumesDataSource } from './volumes.data-source';
 
 const volumesDataSourceFactory = (pocketBaseService: PocketBaseService): VolumesDataSource => {
   const volumesPocketBaseService = pocketBaseService.getRecordService(Collections.SeriesVolumes);

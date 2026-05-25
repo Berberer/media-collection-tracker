@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
-import { VolumesTrackingDashboardPage } from './volumes-tracking-dashboard/volumes-tracking-dashboard.page';
-import { MissingVolumesPage } from './missing-volumes/missing-volumes.page';
+
 import { CollectedVolumesPage } from './collected-volumes/collected-volumes.page';
+import { MissingVolumesPage } from './missing-volumes/missing-volumes.page';
+import { VolumesTrackingDashboardPage } from './volumes-tracking-dashboard/volumes-tracking-dashboard.page';
 
 enum VolumesRoutes {
   Dashboard = 'tracking-dashboard',

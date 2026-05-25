@@ -1,23 +1,24 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { TagAssignmentComponent } from '../../tags/tag-assignment/tag-assignment.component';
-import { TagBadgeComponent } from '../../tags/tag-badge/tag-badge.component';
-import { SortButtonComponent, SortDirection } from '../../core/sort-button/sort-button.component';
 import {
   heroArrowPathSolid,
+  heroArrowRightEndOnRectangleSolid,
+  heroFunnelSolid,
   heroPencilSolid,
   heroShoppingCartSolid,
   heroTrashSolid,
-  heroArrowRightEndOnRectangleSolid,
-  heroFunnelSolid,
   heroXMarkSolid,
 } from '@ng-icons/heroicons/solid';
-import { VolumeModel } from '../../../../features/volumes/model/volume.model';
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
-import { SortableColumn, VolumesTableDataService } from './services/volumes-table-data.service';
+import { VolumeModel } from '../../../../features/volumes/model/volume.model';
+import { SortButtonComponent, SortDirection } from '../../core/sort-button/sort-button.component';
 import { SeriesBadgeComponent } from '../../series/series-badge/series-badge.component';
+import { TagAssignmentComponent } from '../../tags/tag-assignment/tag-assignment.component';
+import { TagBadgeComponent } from '../../tags/tag-badge/tag-badge.component';
+import { SortableColumn, VolumesTableDataService } from './services/volumes-table-data.service';
 
 export enum VolumeViewMode {
   IN_DELIVERY = 'IN_DELIVERY',
