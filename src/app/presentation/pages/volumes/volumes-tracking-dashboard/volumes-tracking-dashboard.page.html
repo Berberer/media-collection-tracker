@@ -4,7 +4,7 @@
   </div>
 }
 
-<div class="flex flex-col gap-y-16 h-full">
+<div class="flex flex-col gap-y-16 h-full overflow-auto">
   @if (!loadingVolumeTags()) {
     @if (loadingInDeliveryVolumes()) {
       <div class="flex flex-row justify-center">
@@ -98,7 +98,9 @@
             </p>
           </div>
         }
-        <div class="tabs tabs-box mx-auto" role="tablist">
+        <div
+          class="tabs tabs-box mx-auto sticky bottom-10 bg-base-200/95 backdrop-blur-sm z-10 p-4"
+        >
           <input
             type="radio"
             class="tab"
