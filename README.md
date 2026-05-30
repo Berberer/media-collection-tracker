@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/favicon.svg" alt="Project Icon" height="256" />
+</p>
+
 # Media Collection Tracker
 
 Application for tracking media collections (books, games, movies, shows), built with Angular 21 and PocketBase.
@@ -14,6 +18,23 @@ It allows you to organize items into series, track missing volumes, and tag item
 - **Tagging System**: Flexible tagging for both series and individual volumes.
 - **Multi-language Support**: i18n support (English and German included so far).
 - **Included Backend**: Powered by PocketBase for real-time data and easy deployment.
+
+---
+
+- [🛠 Technologies](#-technologies)
+- [📋 Requirements](#-requirements)
+- [⚙️ Setup & Installation](#-setup--installation)
+  - [Git Hooks](#git-hooks)
+- [🏃 Running the Application](#-running-the-application)
+  - [Development Server](#development-server)
+  - [Mock Mode](#mock-mode)
+- [📜 Available Scripts](#-available-scripts)
+- [🏗 Project Structure](#-project-structure)
+- [🐳 Docker](#-docker)
+  - [Manual Docker Build](#manual-docker-build)
+  - [Docker Compose](#docker-compose)
+- [🌍 Environment Configuration](#-environment-configuration)
+- [📄 License](#-license)
 
 ---
 
@@ -107,7 +128,7 @@ npm run start:mock
 ```text
 ├── pb_data/                 # PocketBase database files
 ├── pb_migrations/           # PocketBase schema migrations
-├── public/                  # Static assets (i18n, etc.)
+├── public/                  # Static assets (i18n, icons, etc.)
 ├── src/
 │   ├── app/
 │   │   ├── core/            # Shared services, utilities, and base classes
@@ -154,7 +175,7 @@ The Docker image bundles both the Angular frontend (served by PocketBase) and th
 
 ---
 
-## 🌍 Environment Variables
+## 🌍 Environment Configuration
 
 Configuration is handled via Angular environment files in `src/environments/`:
 
