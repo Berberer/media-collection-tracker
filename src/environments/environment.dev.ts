@@ -5,7 +5,7 @@ import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   production: false,
-  appTitle: 'Media Collection Tracker',
+  appTitle: 'Media Collection Tracker Dev',
   version,
   backendUrl: 'http://localhost:8090',
   imports: [NgxsReduxDevtoolsPluginModule.forRoot()],
