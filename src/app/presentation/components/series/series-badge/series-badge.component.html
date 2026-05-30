@@ -1,5 +1,5 @@
-<div class="tooltip max-w-none" [ngClass]="'tooltip-' + tooltipPlacement()">
-  <div class="tooltip-content p-0 bg-transparent border-none max-w-none">
+<div class="tooltip" [ngClass]="tooltipPlacement()">
+  <div class="tooltip-content p-0 bg-transparent min-w-[20vw]">
     <app-series-card
       [series]="series()"
       [viewMode]="resolvedViewMode()"

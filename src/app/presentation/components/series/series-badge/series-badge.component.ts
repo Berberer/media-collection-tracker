@@ -13,7 +13,9 @@ import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.
 })
 export class SeriesBadgeComponent {
   readonly series = input.required<SeriesModel>();
-  readonly tooltipPlacement = input<'top' | 'bottom' | 'left' | 'right'>('bottom');
+  readonly tooltipPlacement = input<
+    'tooltip-top' | 'tooltip-bottom' | 'tooltip-left' | 'tooltip-right'
+  >('tooltip-bottom');
   readonly viewMode = input<SeriesViewMode>();
 
   protected readonly resolvedViewMode = computed(() => {
