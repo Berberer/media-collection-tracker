@@ -21,7 +21,9 @@
 <app-modal-dialog
   [open]="showSeriesFormModal() && seriesModel() !== null"
   [loading]="loadingSeriesTags() || savingSeries()"
+  [errors]="errors()"
   (closed)="onCloseSeriesModal()"
+  (errorDismissed)="onDismissError($event)"
 >
   @if (seriesModel() !== null) {
     <app-series-form

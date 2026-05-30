@@ -21,6 +21,31 @@ export class VolumesRepository {
   private readonly dataSource = inject(VolumesDataSource);
   private readonly colorService = inject(ColorService);
 
+  async getVolumeById(id: string): Promise<VolumeModel> {
+    const [volumeRecord, seriesRecord, volumeTagRecords, seriesTagsRecords] =
+      await this.dataSource.getVolumeById(id);
+    return this.volumeModelFromRecord(
+      volumeRecord,
+      seriesRecord,
+      volumeTagRecords,
+      seriesTagsRecords,
+      VolumeModel.fromSeriesVolumeRecord,
+    );
+  }
+
+  async getVolumesBySeries(seriesId: string): Promise<VolumeModel[]> {
+    const volumeRecords = await this.dataSource.getVolumesBySeries(seriesId);
+    return volumeRecords.map(([volumeRecord, seriesRecord, volumeTagRecords, seriesTagsRecords]) =>
+      this.volumeModelFromRecord(
+        volumeRecord,
+        seriesRecord,
+        volumeTagRecords,
+        seriesTagsRecords,
+        VolumeModel.fromSeriesVolumeRecord,
+      ),
+    );
+  }
+
   async getMissingVolumes(): Promise<VolumeModel[]> {
     const volumeRecords = await this.dataSource.getMissingVolumes();
     return volumeRecords.map(([volumeRecord, seriesRecord, volumeTagRecords, seriesTagsRecords]) =>

@@ -19,6 +19,74 @@ import { VolumesDataSource } from './volumes.data-source';
 export class MockVolumesDataSource implements VolumesDataSource {
   private volumesIdCounter = 5;
 
+  getVolumeById(
+    id: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]]> {
+    return new Promise((resolve) => {
+      setTimeout(
+        () =>
+          resolve([
+            {
+              id,
+              release_date: new Date().toISOString(),
+              sequence_number: 1,
+              series: '1',
+              shopping_link: undefined,
+              tags: [],
+              created: new Date().toISOString() as IsoAutoDateString,
+              updated: new Date().toISOString() as IsoAutoDateString,
+            },
+            {
+              id: '1',
+              name: 'Final Fantasy',
+              single_volume: false,
+              type: IncompleteMediaSeriesTypeOptions.Game,
+              created: new Date().toISOString() as IsoAutoDateString,
+              updated: new Date().toISOString() as IsoAutoDateString,
+            },
+            [],
+            [],
+          ]),
+        1000,
+      );
+    });
+  }
+
+  getVolumesBySeries(
+    seriesId: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]> {
+    return new Promise((resolve) => {
+      setTimeout(
+        () =>
+          resolve([
+            [
+              {
+                id: '1',
+                release_date: new Date().toISOString(),
+                sequence_number: 1,
+                series: seriesId,
+                shopping_link: undefined,
+                tags: [],
+                created: new Date().toISOString() as IsoAutoDateString,
+                updated: new Date().toISOString() as IsoAutoDateString,
+              },
+              {
+                id: seriesId,
+                name: 'Test Series',
+                single_volume: false,
+                type: IncompleteMediaSeriesTypeOptions.Game,
+                created: new Date().toISOString() as IsoAutoDateString,
+                updated: new Date().toISOString() as IsoAutoDateString,
+              },
+              [],
+              [],
+            ],
+          ]),
+        1000,
+      );
+    });
+  }
+
   getMissingVolumes(): Promise<
     [MissingSeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]
   > {

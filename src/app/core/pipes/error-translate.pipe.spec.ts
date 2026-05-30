@@ -45,12 +45,13 @@ describe('ErrorTranslatePipe', () => {
         constructor() {
           super(
             'Test error',
-            'TEST_ERROR',
-            'testFeature',
+            'test-feature',
             FeatureDomain.USE_CASE,
-            {},
+            'test-error-code',
             'test-error',
-            { param1: 'value1' },
+            {
+              param1: 'value1',
+            },
           );
         }
       })();
@@ -58,47 +59,25 @@ describe('ErrorTranslatePipe', () => {
       const result = pipe.transform(error);
 
       expect(translateService.instant).toHaveBeenCalledWith(
-        'errors.testFeature.use-case.test-error',
+        'errors.test-feature.use-case.test-error-code.test-error',
         { param1: 'value1' },
       );
-      expect(result).toBe('translated:errors.testFeature.use-case.test-error');
+      expect(result).toBe('translated:errors.test-feature.use-case.test-error-code.test-error');
     });
 
     it('should use translation key from BaseError with translationKey', () => {
       const error = new (class extends BaseError {
         constructor() {
-          super('Test error', 'TEST_ERROR', {}, 'custom-error', { param: 'test' });
+          super('Test error', 'test-error', ['custom-error'], { param: 'test' });
         }
       })();
 
       const result = pipe.transform(error);
 
-      expect(translateService.instant).toHaveBeenCalledWith('custom-error', { param: 'test' });
-      expect(result).toBe('translated:custom-error');
-    });
-
-    it('should prioritize fullTranslationKey over translationKey for FeatureError', () => {
-      const error = new (class extends FeatureError {
-        constructor() {
-          super(
-            'Test error',
-            'TEST_ERROR',
-            'testFeature',
-            FeatureDomain.DATA_SOURCE,
-            {},
-            'simple-key',
-          );
-        }
-      })();
-
-      const result = pipe.transform(error);
-
-      // fullTranslationKey should be used
-      expect(translateService.instant).toHaveBeenCalledWith(
-        'errors.testFeature.data-source.simple-key',
-        {},
-      );
-      expect(result).toBe('translated:errors.testFeature.data-source.simple-key');
+      expect(translateService.instant).toHaveBeenCalledWith('errors.custom-error', {
+        param: 'test',
+      });
+      expect(result).toBe('translated:errors.custom-error');
     });
   });
 
@@ -110,19 +89,6 @@ describe('ErrorTranslatePipe', () => {
 
       expect(translateService.instant).not.toHaveBeenCalled();
       expect(result).toBe('Something went wrong');
-    });
-
-    it('should fall back to error message for BaseError without translationKey', () => {
-      const error = new (class extends BaseError {
-        constructor() {
-          super('Base error message', 'BASE_ERROR', {});
-        }
-      })();
-
-      const result = pipe.transform(error);
-
-      expect(translateService.instant).not.toHaveBeenCalled();
-      expect(result).toBe('Base error message');
     });
 
     it('should fall back to error message for string error', () => {
@@ -227,14 +193,14 @@ describe('ErrorTranslatePipe', () => {
     it('should handle error with translationKey but empty message', () => {
       const error = new (class extends BaseError {
         constructor() {
-          super('', 'EMPTY_ERROR', {}, 'empty-error', {});
+          super('', 'empty-error', ['empty-error']);
         }
       })();
 
       const result = pipe.transform(error);
 
-      expect(translateService.instant).toHaveBeenCalledWith('empty-error', {});
-      expect(result).toBe('translated:empty-error');
+      expect(translateService.instant).toHaveBeenCalledWith('errors.empty-error', {});
+      expect(result).toBe('translated:errors.empty-error');
     });
   });
 
@@ -242,22 +208,17 @@ describe('ErrorTranslatePipe', () => {
     it('should pass translation parameters to translate service', () => {
       const error = new (class extends FeatureError {
         constructor() {
-          super(
-            'Test error',
-            'TEST_ERROR',
-            'testFeature',
-            FeatureDomain.USE_CASE,
-            {},
-            'param-error',
-            { id: '123', name: 'test' },
-          );
+          super('Test error', 'test-feature', FeatureDomain.USE_CASE, 'test-error', 'param-error', {
+            id: '123',
+            name: 'test',
+          });
         }
       })();
 
       pipe.transform(error);
 
       expect(translateService.instant).toHaveBeenCalledWith(
-        'errors.testFeature.use-case.param-error',
+        'errors.test-feature.use-case.test-error.param-error',
         { id: '123', name: 'test' },
       );
     });
@@ -265,13 +226,13 @@ describe('ErrorTranslatePipe', () => {
     it('should handle undefined translation parameters', () => {
       const error = new (class extends BaseError {
         constructor() {
-          super('Test error', 'TEST_ERROR', {}, 'no-params');
+          super('Test error', 'test-error', ['no-params']);
         }
       })();
 
       pipe.transform(error);
 
-      expect(translateService.instant).toHaveBeenCalledWith('no-params', {});
+      expect(translateService.instant).toHaveBeenCalledWith('errors.no-params', {});
     });
   });
 });

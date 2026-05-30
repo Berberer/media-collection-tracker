@@ -225,6 +225,14 @@
   },
   "errors": {
     "default": "Ein Fehler ist aufgetreten",
+    "series": {
+      "use-case": {
+        "precondition-failed": {
+          "single-volume-with-multiple-volumes": "Serie hat {{volumeCount}} Ausgaben und kann nicht als Einzelausgabe markiert werden",
+          "completed-with-missing-volumes": "Serie hat {{missingVolumeCount}} fehlende Ausgabe(n) und kann nicht als abgeschlossen markiert werden"
+        }
+      }
+    },
     "tags": {
       "use-case": {
         "already-exists": "Ein Tag mit dem Namen {{identifier}} existiert bereits."

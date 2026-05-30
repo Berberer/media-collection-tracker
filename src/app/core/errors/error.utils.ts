@@ -14,17 +14,6 @@ export function isBaseError(error: unknown): error is BaseError {
 }
 
 /**
- * Type guard to check if an error is a FeatureError
- */
-export function isFeatureError(error: unknown): error is FeatureError {
-  return (
-    isBaseError(error) &&
-    'feature' in error &&
-    typeof (error as Record<string, unknown>)['feature'] === 'string'
-  );
-}
-
-/**
  * Extract error information safely from any error-like object
  */
 export function extractErrorInfo(error: unknown): {
@@ -32,12 +21,10 @@ export function extractErrorInfo(error: unknown): {
   message: string;
   code?: string;
   feature?: string;
-  context?: Record<string, unknown>;
   timestamp?: Date;
   stack?: string;
-  translationKey?: string;
-  translationParams?: Record<string, string>;
-  fullTranslationKey?: string;
+  translationKey?: (string | undefined)[];
+  translationParams?: Record<string, unknown>;
 } {
   if (isBaseError(error)) {
     const featureError = error as FeatureError;
@@ -46,13 +33,10 @@ export function extractErrorInfo(error: unknown): {
       message: error.message,
       code: error.code,
       feature: 'feature' in error ? featureError.feature : undefined,
-      context: error.context ? { ...error.context } : undefined,
       timestamp: error.timestamp,
       stack: error.stack,
       translationKey: error.translationKey,
       translationParams: error.translationParams,
-      fullTranslationKey:
-        'fullTranslationKey' in featureError ? featureError.fullTranslationKey : undefined,
     };
   }
 
@@ -75,7 +59,6 @@ export function extractErrorInfo(error: unknown): {
     return {
       name: 'UnknownError',
       message: JSON.stringify(error),
-      context: error as unknown as Record<string, unknown>,
     };
   }
 
@@ -88,15 +71,15 @@ export function extractErrorInfo(error: unknown): {
 /**
  * Get the translation key for an error, if available
  */
-export function getTranslationKey(error: unknown): string | undefined {
+export function getTranslationKey(error: unknown): (string | undefined)[] | undefined {
   const info = extractErrorInfo(error);
-  return info.fullTranslationKey ?? info.translationKey;
+  return info.translationKey;
 }
 
 /**
  * Get translation parameters for an error, if available
  */
-export function getTranslationParams(error: unknown): Record<string, string> | undefined {
+export function getTranslationParams(error: unknown): Record<string, unknown> | undefined {
   const info = extractErrorInfo(error);
   return info.translationParams;
 }
@@ -104,9 +87,8 @@ export function getTranslationParams(error: unknown): Record<string, string> | u
 /**
  * Log an error with consistent formatting
  */
-export function logError(error: unknown, additionalContext: Record<string, unknown> = {}): void {
+export function logError(error: unknown): void {
   const info = extractErrorInfo(error);
-  const context = { ...info.context, ...additionalContext };
 
   console.error({
     timestamp: info.timestamp?.toISOString() ?? new Date().toISOString(),
@@ -117,30 +99,5 @@ export function logError(error: unknown, additionalContext: Record<string, unkno
       feature: info.feature,
       stack: info.stack,
     },
-    context,
   });
-}
-
-/**
- * Wrap a promise to catch and transform errors
- */
-export async function wrapError<T>(
-  promise: Promise<T>,
-  context: Record<string, unknown> = {},
-): Promise<T> {
-  try {
-    return await promise;
-  } catch (error) {
-    const info = extractErrorInfo(error);
-
-    // If it's already a BaseError, just add context and rethrow
-    if (isBaseError(error)) {
-      throw new Error(
-        `${info.message}\nContext: ${JSON.stringify({ ...info.context, ...context })}`,
-      );
-    }
-
-    // Otherwise, wrap it in a generic error
-    throw new Error(`${info.message}\nContext: ${JSON.stringify(context)}`);
-  }
 }

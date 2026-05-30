@@ -16,6 +16,15 @@ export class SeriesRepository {
   private readonly dataSource = inject(SeriesDataSource);
   private readonly colorService = inject(ColorService);
 
+  async getSeriesById(id: string): Promise<SeriesModel> {
+    const [seriesRecord, seriesTagRecords] = await this.dataSource.getSeriesById(id);
+    return this.seriesModelFromRecord(
+      seriesRecord,
+      seriesTagRecords,
+      SeriesModel.fromMediaSeriesRecord,
+    );
+  }
+
   async getAllSeries(): Promise<readonly SeriesModel[]> {
     const seriesRecords = await this.dataSource.getAllSeries();
     return seriesRecords.map(([seriesRecord, seriesTagRecords]) =>

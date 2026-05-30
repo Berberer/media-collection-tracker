@@ -222,10 +222,12 @@ titles/
 The application uses a structured error hierarchy following the pattern `feature.domain.code`:
 
 - **Feature**: The feature module (series, volumes, tags)
-- **Domain**: The architectural layer (DATA_SOURCE, REPOSITORY, USE_CASE, BUSINESS)
+- **Domain**: The architectural layer (data-source, repository, use-case)
 - **Code**: Specific error type in kebab-case
 
-All errors extend from `BaseError` and support i18n through translation keys following `errors.{feature}.{domain-kebab-case}.{error-code}`.
+All errors extend from `BaseError` and support i18n through translation keys following `errors.{feature}.{domain}.{error-code}`.
+
+The `FeatureDomain` enum uses kebab-case values (`data-source`, `repository`, `use-case`) and the BUSINESS domain has been removed.
 
 For detailed information, see [ERROR_HIERARCHY.md](src/app/core/errors/ERROR_HIERARCHY.md).
 

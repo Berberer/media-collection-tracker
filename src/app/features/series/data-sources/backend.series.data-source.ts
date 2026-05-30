@@ -1,4 +1,4 @@
-import { RecordService } from 'pocketbase';
+import { ClientResponseError, RecordService } from 'pocketbase';
 
 import {
   AllMediaSeriesRecord,
@@ -15,6 +15,7 @@ import {
   SeriesTagsResponse,
 } from '../../../../pocketbase-types';
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
+import { SeriesRecordNotFoundError } from '../errors';
 import { SeriesDataSource } from './series.data-source';
 
 interface SeriesTagsExpand {
@@ -37,6 +38,18 @@ export class BackendSeriesDataSource implements SeriesDataSource {
       CompletedMediaSeriesResponse<SeriesTagsExpand>
     >,
   ) {}
+
+  async getSeriesById(id: string): Promise<[MediaSeriesRecord, SeriesTagsRecord[]]> {
+    try {
+      const record = await this.seriesRecordService.getOne(id, { expand: 'tags' });
+      return [record, record.expand.tags ?? []];
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new SeriesRecordNotFoundError(id);
+      }
+      throw error;
+    }
+  }
 
   async getAllSeries(): Promise<readonly [AllMediaSeriesRecord<number>, SeriesTagsRecord[]][]> {
     const records = await this.allSeriesRecordService.getFullList({
@@ -101,18 +114,32 @@ export class BackendSeriesDataSource implements SeriesDataSource {
       seriesTags: SeriesTagModel[];
     },
   ): Promise<[MediaSeriesRecord, SeriesTagsRecord[]]> {
-    const record = await this.seriesRecordService.update(
-      id,
-      {
-        tags: model.seriesTags.map((tag) => tag.id),
-        ...model,
-      },
-      { expand: 'tags' },
-    );
-    return [record, record.expand.tags ?? []];
+    try {
+      const record = await this.seriesRecordService.update(
+        id,
+        {
+          tags: model.seriesTags.map((tag) => tag.id),
+          ...model,
+        },
+        { expand: 'tags' },
+      );
+      return [record, record.expand.tags ?? []];
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new SeriesRecordNotFoundError(id);
+      }
+      throw error;
+    }
   }
 
   async deleteSeries(id: string): Promise<boolean> {
-    return await this.seriesRecordService.delete(id);
+    try {
+      return await this.seriesRecordService.delete(id);
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new SeriesRecordNotFoundError(id);
+      }
+      throw error;
+    }
   }
 }

@@ -10,6 +10,8 @@ import {
 import { SeriesTagModel } from '../../tags/model/series-tag.model';
 
 export abstract class SeriesDataSource {
+  abstract getSeriesById(id: string): Promise<[MediaSeriesRecord, SeriesTagsRecord[]]>;
+
   abstract getAllSeries(): Promise<readonly [AllMediaSeriesRecord<number>, SeriesTagsRecord[]][]>;
 
   abstract getIncompleteSeries(): Promise<

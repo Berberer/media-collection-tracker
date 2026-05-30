@@ -25,11 +25,14 @@ export class ErrorTranslatePipe implements PipeTransform {
     const info = extractErrorInfo(error);
 
     // Get translation key
-    const translationKey = getTranslationKey(error);
+    const translationKeyElements = getTranslationKey(error);
 
     // If we have a translation key, use it
-    if (translationKey) {
+    if (translationKeyElements) {
       const params = getTranslationParams(error) ?? {};
+      const translationKey = translationKeyElements
+        .filter((element) => element !== undefined)
+        .join('.');
       return this.translate.instant(translationKey, params) as string;
     }
 

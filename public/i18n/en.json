@@ -225,6 +225,14 @@
   },
   "errors": {
     "default": "An error occurred",
+    "series": {
+      "use-case": {
+        "precondition-failed": {
+          "single-volume-with-multiple-volumes": "Series has {{volumeCount}} volumes and cannot be set as single volume",
+          "completed-with-missing-volumes": "Series has {{missingVolumeCount}} missing volume(s) and cannot be marked as completed"
+        }
+      }
+    },
     "tags": {
       "use-case": {
         "already-exists": "A tag with the name {{identifier}} already exists."

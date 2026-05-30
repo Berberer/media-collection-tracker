@@ -1,4 +1,4 @@
-import { RecordService } from 'pocketbase';
+import { ClientResponseError, RecordService } from 'pocketbase';
 
 import {
   CollectedSeriesVolumesRecord,
@@ -22,6 +22,7 @@ import {
 } from '../../../../pocketbase-types';
 import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
+import { VolumeRecordNotFoundError } from '../errors';
 import { VolumesDataSource } from './volumes.data-source';
 
 interface VolumeSeriesAndTagsExpand {
@@ -50,6 +51,42 @@ export class BackendVolumesDataSource implements VolumesDataSource {
       CollectedSeriesVolumesResponse<VolumeSeriesAndTagsExpand>
     >,
   ) {}
+
+  async getVolumeById(
+    id: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]]> {
+    try {
+      const record = await this.volumesRecordService.getOne(id, {
+        expand: 'series,tags,series.tags',
+      });
+      return [
+        record,
+        record.expand.series,
+        record.expand.tags ?? [],
+        record.expand.series.expand?.tags ?? [],
+      ];
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new VolumeRecordNotFoundError(id);
+      }
+      throw error;
+    }
+  }
+
+  async getVolumesBySeries(
+    seriesId: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]> {
+    const records = await this.volumesRecordService.getFullList({
+      expand: 'series,tags,series.tags',
+      filter: `series = '${seriesId}'`,
+    });
+    return records.map((record) => [
+      record,
+      record.expand.series,
+      record.expand.tags ?? [],
+      record.expand.series.expand?.tags ?? [],
+    ]);
+  }
 
   async getMissingVolumes(): Promise<
     [MissingSeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]
@@ -158,26 +195,40 @@ export class BackendVolumesDataSource implements VolumesDataSource {
     purchase_date?: Date;
     volume_tags: VolumeTagModel[];
   }): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]]> {
-    const record = await this.volumesRecordService.update(
-      model.id,
-      {
-        ...model,
-        series: model.series.id,
-        release_date: model.release_date?.toISOString() ?? '',
-        purchase_date: model.purchase_date?.toISOString() ?? '',
-        tags: model.volume_tags.map((tag) => tag.id),
-      },
-      { expand: 'series,tags,series.tags' },
-    );
-    return [
-      record,
-      record.expand.series,
-      record.expand.tags ?? [],
-      record.expand.series.expand?.tags ?? [],
-    ];
+    try {
+      const record = await this.volumesRecordService.update(
+        model.id,
+        {
+          ...model,
+          series: model.series.id,
+          release_date: model.release_date?.toISOString() ?? '',
+          purchase_date: model.purchase_date?.toISOString() ?? '',
+          tags: model.volume_tags.map((tag) => tag.id),
+        },
+        { expand: 'series,tags,series.tags' },
+      );
+      return [
+        record,
+        record.expand.series,
+        record.expand.tags ?? [],
+        record.expand.series.expand?.tags ?? [],
+      ];
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new VolumeRecordNotFoundError(model.id);
+      }
+      throw error;
+    }
   }
 
   async deleteVolume(id: string): Promise<boolean> {
-    return await this.volumesRecordService.delete(id);
+    try {
+      return await this.volumesRecordService.delete(id);
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new VolumeRecordNotFoundError(id);
+      }
+      throw error;
+    }
   }
 }

@@ -4,9 +4,9 @@ import { BaseError } from './base.error';
  * Domain layers within a feature
  */
 export enum FeatureDomain {
-  DATA_SOURCE = 'DATA_SOURCE',
-  REPOSITORY = 'REPOSITORY',
-  USE_CASE = 'USE_CASE',
+  DATA_SOURCE = 'data-source',
+  REPOSITORY = 'repository',
+  USE_CASE = 'use-case',
 }
 
 /**
@@ -15,34 +15,19 @@ export enum FeatureDomain {
  */
 export abstract class FeatureError extends BaseError {
   readonly domain: FeatureDomain;
+  readonly feature: string;
 
   protected constructor(
     message: string,
-    code: string,
-    readonly feature: string,
+    feature: string,
     domain: FeatureDomain,
-    context?: Record<string, unknown>,
+    code: string,
     translationKey?: string,
-    translationParams?: Record<string, string>,
+    translationParams?: Record<string, unknown>,
   ) {
-    super(message, code, context, translationKey, translationParams);
+    super(message, code, [feature, domain, code, translationKey], translationParams);
     this.domain = domain;
-  }
-
-  /**
-   * Get the fully qualified error code including feature and domain
-   */
-  get qualifiedCode(): string {
-    return `${this.feature}.${this.domain}.${this.code}`;
-  }
-
-  /**
-   * Get the translation key with feature and domain prefix in kebab-case
-   */
-  get fullTranslationKey(): string | undefined {
-    if (!this.translationKey) return undefined;
-    const domainKebab = this.domain.toLowerCase().replace('_', '-');
-    return `errors.${this.feature}.${domainKebab}.${this.translationKey}`;
+    this.feature = feature;
   }
 
   override toJSON(): Record<string, unknown> {
@@ -50,8 +35,6 @@ export abstract class FeatureError extends BaseError {
       ...super.toJSON(),
       feature: this.feature,
       domain: this.domain,
-      qualifiedCode: this.qualifiedCode,
-      fullTranslationKey: this.fullTranslationKey,
     };
   }
 }

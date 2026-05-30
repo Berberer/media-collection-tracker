@@ -18,6 +18,28 @@ import { SeriesDataSource } from './series.data-source';
 export class MockSeriesDataSource extends SeriesDataSource {
   private idCounter = 5;
 
+  getSeriesById(id: string): Promise<[MediaSeriesRecord, SeriesTagsRecord[]]> {
+    return new Promise((resolve) => {
+      setTimeout(
+        () =>
+          resolve([
+            {
+              id,
+              name: 'Test Series',
+              single_volume: false,
+              completed: false,
+              type: AllMediaSeriesTypeOptions.Book,
+              created: new Date().toISOString() as IsoAutoDateString,
+              updated: new Date().toISOString() as IsoAutoDateString,
+              tags: [],
+            },
+            [],
+          ]),
+        1000,
+      );
+    });
+  }
+
   getAllSeries(): Promise<readonly [AllMediaSeriesRecord<number>, SeriesTagsRecord[]][]> {
     return new Promise((resolve) => {
       setTimeout(

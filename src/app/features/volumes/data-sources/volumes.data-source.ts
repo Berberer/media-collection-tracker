@@ -13,6 +13,14 @@ import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 
 export abstract class VolumesDataSource {
+  abstract getVolumeById(
+    id: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]]>;
+
+  abstract getVolumesBySeries(
+    seriesId: string,
+  ): Promise<[SeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]>;
+
   abstract getMissingVolumes(): Promise<
     [MissingSeriesVolumesRecord, MediaSeriesRecord, VolumeTagsRecord[], SeriesTagsRecord[]][]
   >;

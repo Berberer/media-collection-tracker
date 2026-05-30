@@ -13,12 +13,14 @@ import {
   Actions,
   ofActionCompleted,
   ofActionDispatched,
+  ofActionErrored,
   ofActionSuccessful,
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
+import { BaseError } from '../../../../core/errors';
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
 import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
 import { SeriesModel } from '../../../../features/series/model/series.model';
@@ -82,6 +84,8 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
 
   readonly showMarkSeriesCompletedConfirmation = signal(false);
   readonly showDeleteSeriesConfirmation = signal(false);
+
+  readonly errors = signal<BaseError[]>([]);
 
   constructor() {
     this.translate
@@ -147,7 +151,10 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
   private setUpUpdateSeriesActionHandlers(): void {
     this.actions$
       .pipe(ofActionDispatched(Series.Update), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.savingSeries.set(true));
+      .subscribe(() => {
+        this.savingSeries.set(true);
+        this.errors.set([]);
+      });
 
     this.actions$
       .pipe(ofActionCompleted(Series.Update), takeUntil(this.ngUnsubscribe))
@@ -159,6 +166,15 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
         this.showSeriesFormModal.set(false);
         this.showMarkSeriesCompletedConfirmation.set(false);
         this.seriesModel.set(null);
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(Series.Update), takeUntil(this.ngUnsubscribe))
+      .subscribe(({ result }) => {
+        this.savingSeries.set(false);
+        if (result.error && result.error instanceof BaseError) {
+          this.errors.set([result.error]);
+        }
       });
   }
 
@@ -199,6 +215,11 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
 
   onCloseSeriesModal(): void {
     this.showSeriesFormModal.set(false);
+    this.errors.set([]);
+  }
+
+  onDismissError(error: BaseError): void {
+    this.errors.update((currentErrors) => currentErrors.filter((e) => e !== error));
   }
 
   onEditSeries(series: SeriesModel): void {

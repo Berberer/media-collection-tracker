@@ -3,23 +3,21 @@
  * Provides a consistent error structure across the application.
  */
 export abstract class BaseError extends Error {
+  readonly code: string;
   readonly timestamp: Date;
-  readonly context?: Record<string, unknown>;
-  readonly translationKey?: string;
-  readonly translationParams?: Record<string, string>;
+  readonly translationKey: (string | undefined)[];
+  readonly translationParams?: Record<string, unknown>;
 
   protected constructor(
     message: string,
-    readonly code: string,
-    context?: Record<string, unknown>,
-    translationKey?: string,
-    translationParams?: Record<string, string>,
+    code: string,
+    translationKey: (string | undefined)[],
+    translationParams?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = this.constructor.name;
+    this.code = code;
     this.timestamp = new Date();
-    this.context = context;
-    this.translationKey = translationKey;
+    this.translationKey = ['errors', ...translationKey];
     this.translationParams = translationParams;
   }
 
@@ -28,11 +26,9 @@ export abstract class BaseError extends Error {
    */
   toJSON(): Record<string, unknown> {
     return {
-      name: this.name,
       message: this.message,
       code: this.code,
       timestamp: this.timestamp.toISOString(),
-      context: this.context,
       translationKey: this.translationKey,
       translationParams: this.translationParams,
       stack: this.stack?.split('\n'),

@@ -1,6 +1,7 @@
-import { RecordService } from 'pocketbase';
+import { ClientResponseError, RecordService } from 'pocketbase';
 
 import { SeriesTagsRecord, VolumeTagsRecord } from '../../../../pocketbase-types';
+import { TagRecordNotFoundError } from '../errors';
 import { TagsDataSource } from './tags.data-source';
 
 export class BackendTagsDataSource implements TagsDataSource {
@@ -26,10 +27,24 @@ export class BackendTagsDataSource implements TagsDataSource {
   }
 
   deleteSeriesTag(id: string): Promise<boolean> {
-    return this.seriesTagsRecordService.delete(id);
+    try {
+      return this.seriesTagsRecordService.delete(id);
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new TagRecordNotFoundError(id);
+      }
+      throw error;
+    }
   }
 
   deleteVolumeTag(id: string): Promise<boolean> {
-    return this.volumeTagsRecordService.delete(id);
+    try {
+      return this.volumeTagsRecordService.delete(id);
+    } catch (error) {
+      if (error instanceof ClientResponseError && error.status === 404) {
+        throw new TagRecordNotFoundError(id);
+      }
+      throw error;
+    }
   }
 }
