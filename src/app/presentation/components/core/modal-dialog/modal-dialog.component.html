@@ -1,29 +1,29 @@
 <dialog class="modal" [open]="open() && !backdropClicked()">
   <div class="modal-box overflow-visible" style="width: unset">
-    @if (errors().length > 0) {
-      <div class="flex flex-col gap-2 mb-4">
-        @for (error of errors(); track error) {
-          <div class="alert alert-error">
-            <span>{{ error | errorTranslate }}</span>
-            <button class="btn btn-ghost btn-sm" (click)="errorDismissed.emit(error)">
-              <ng-icon name="heroXMark" class="h-5 w-5" />
-            </button>
-          </div>
-        }
-      </div>
-    }
-    @if (loading()) {
-      <div
-        class="flex flex-col items-center justify-center"
-        [ngStyle]="{ width: contentWidth(), height: contentHeight() }"
-      >
-        <span class="loading loading-spinner loading-xl"></span>
-      </div>
-    } @else {
-      <div [ngStyle]="{ width: contentWidth(), height: contentHeight() }">
-        <ng-content #modalContent />
-      </div>
-    }
+    <div #modalContentContainer>
+      @if (errors().length > 0) {
+        <div class="flex flex-col gap-2 mb-4" [ngStyle]="{ 'max-width': contentWidth() }">
+          @for (error of errors(); track error) {
+            <div class="alert alert-error mx-auto">
+              <span>{{ error | errorTranslate }}</span>
+              <button class="btn btn-ghost btn-sm" (click)="errorDismissed.emit(error)">
+                <ng-icon name="heroXMark" class="h-5 w-5" />
+              </button>
+            </div>
+          }
+        </div>
+      }
+      @if (loading()) {
+        <div
+          class="flex flex-col items-center justify-center"
+          [ngStyle]="{ 'min-width': contentWidth(), 'min-height': contentHeight() }"
+        >
+          <span class="loading loading-spinner loading-xl"></span>
+        </div>
+      } @else {
+        <ng-content />
+      }
+    </div>
   </div>
 
   <form method="dialog" class="modal-backdrop">

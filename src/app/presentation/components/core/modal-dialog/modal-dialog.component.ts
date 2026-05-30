@@ -31,7 +31,7 @@ export class ModalDialogComponent {
   readonly closed = output<void>();
   readonly errorDismissed = output<BaseError>();
 
-  readonly modalContent = viewChild<ElementRef<HTMLElement>>('modalContent');
+  readonly modalContent = viewChild<ElementRef<HTMLElement>>('modalContentContainer');
   readonly contentWidth = signal('unset');
   readonly contentHeight = signal('unset');
 
@@ -41,14 +41,22 @@ export class ModalDialogComponent {
     effect(() => {
       if (this.open()) {
         this.backdropClicked.set(false);
-        this.updateContentDimensions();
+      }
+    });
+
+    effect(() => {
+      const modalContent = this.modalContent();
+      const open = this.open();
+      const loading = this.loading();
+
+      if (modalContent && (open || loading)) {
+        this.updateContentDimensions(modalContent?.nativeElement);
       }
     });
   }
 
-  private updateContentDimensions(): void {
-    if (this.modalContent()) {
-      const contentElement = this.modalContent()!.nativeElement;
+  private updateContentDimensions(contentElement?: HTMLElement): void {
+    if (contentElement) {
       this.contentWidth.set(`${contentElement.clientWidth}px`);
       this.contentHeight.set(`${contentElement.clientHeight}px`);
     }
