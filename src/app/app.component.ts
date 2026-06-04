@@ -32,6 +32,7 @@ import { UpdateVolumeModel } from './features/volumes/model/update.volume.model'
 import { Volumes } from './features/volumes/state/volumes.state.actions';
 import { ModalDialogComponent } from './presentation/components/core/modal-dialog/modal-dialog.component';
 import { NavBarComponent } from './presentation/components/core/nav-bar/nav-bar.component';
+import { NotificationToastComponent } from './presentation/components/core/notification-toast/notification-toast.component';
 import { SeriesFormComponent } from './presentation/components/series/series-form/series-form.component';
 import { VolumeFormComponent } from './presentation/components/volumes/volume-form/volume-form.component';
 
@@ -47,6 +48,7 @@ import { VolumeFormComponent } from './presentation/components/volumes/volume-fo
     ModalDialogComponent,
     SeriesFormComponent,
     VolumeFormComponent,
+    NotificationToastComponent,
     NgIcon,
   ],
   providers: [provideIcons({ heroCodeBracketSolid })],

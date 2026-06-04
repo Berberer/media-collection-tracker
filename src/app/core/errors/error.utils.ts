@@ -14,6 +14,16 @@ export function isBaseError(error: unknown): error is BaseError {
 }
 
 /**
+ * Check if an error has already been marked as handled
+ */
+export function isHandled(error: unknown): boolean {
+  if (error && typeof error === 'object' && 'handled' in error) {
+    return (error as Record<string, unknown>)['handled'] === true;
+  }
+  return false;
+}
+
+/**
  * Extract error information safely from any error-like object
  */
 export function extractErrorInfo(error: unknown): {
@@ -22,18 +32,19 @@ export function extractErrorInfo(error: unknown): {
   code?: string;
   feature?: string;
   timestamp?: Date;
+  handled?: boolean;
   stack?: string;
   translationKey?: (string | undefined)[];
   translationParams?: Record<string, unknown>;
 } {
   if (isBaseError(error)) {
-    const featureError = error as FeatureError;
     return {
       name: error.name,
       message: error.message,
       code: error.code,
-      feature: 'feature' in error ? featureError.feature : undefined,
+      feature: error instanceof FeatureError ? error.feature : undefined,
       timestamp: error.timestamp,
+      handled: error.handled,
       stack: error.stack,
       translationKey: error.translationKey,
       translationParams: error.translationParams,
@@ -59,6 +70,8 @@ export function extractErrorInfo(error: unknown): {
     return {
       name: 'UnknownError',
       message: JSON.stringify(error),
+      handled:
+        'handled' in error ? (error as Record<string, unknown>)['handled'] === true : undefined,
     };
   }
 
@@ -85,6 +98,15 @@ export function getTranslationParams(error: unknown): Record<string, unknown> | 
 }
 
 /**
+ * Mark an error as handled to prevent global error handling
+ */
+export function markAsHandled(error: unknown): void {
+  if (error && typeof error === 'object') {
+    (error as Record<string, unknown>)['handled'] = true;
+  }
+}
+
+/**
  * Log an error with consistent formatting
  */
 export function logError(error: unknown): void {
@@ -97,6 +119,7 @@ export function logError(error: unknown): void {
       message: info.message,
       code: info.code,
       feature: info.feature,
+      handled: info.handled,
       stack: info.stack,
     },
   });

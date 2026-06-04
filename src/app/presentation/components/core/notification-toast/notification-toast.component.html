@@ -1,0 +1,12 @@
+<div class="toast toast-center toast-bottom z-[1000]">
+  @for (error of errors(); track error) {
+    <div class="alert alert-error shadow-lg">
+      <div class="flex items-center gap-2">
+        <span>{{ error | errorTranslate }}</span>
+        <button class="btn btn-ghost btn-circle btn-xs" (click)="onDismiss(error)">
+          <ng-icon name="heroXMark" size="1.2rem"></ng-icon>
+        </button>
+      </div>
+    </div>
+  }
+</div>

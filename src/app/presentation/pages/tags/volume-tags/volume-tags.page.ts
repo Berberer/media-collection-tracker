@@ -20,7 +20,7 @@ import {
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
-import { BaseError } from '../../../../core/errors';
+import { BaseError, markAsHandled } from '../../../../core/errors';
 import { CreateVolumeTagModel } from '../../../../features/tags/model/create.volume-tag.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
@@ -124,6 +124,7 @@ export class VolumeTagsPage implements OnInit, OnDestroy {
       .subscribe(({ result }) => {
         this.savingVolumeTag.set(false);
         if (result.error && result.error instanceof BaseError) {
+          markAsHandled(result.error);
           this.errors.set([result.error]);
         }
       });

@@ -38,6 +38,7 @@ The root error class with:
 - `timestamp`: When the error occurred
 - `translationKey`: Array of translation key segments (joined with '.' to form the full key)
 - `translationParams`: Parameters for translation
+- `handled`: Boolean flag indicating whether the error has been handled (defaults to `false`)
 
 ### `FeatureError` (core/errors/feature.error.ts)
 

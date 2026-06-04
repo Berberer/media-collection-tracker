@@ -20,7 +20,7 @@ import {
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
-import { BaseError } from '../../../../core/errors';
+import { BaseError, markAsHandled } from '../../../../core/errors';
 import { CreateSeriesTagModel } from '../../../../features/tags/model/create.series-tag.model';
 import { SeriesTagModel } from '../../../../features/tags/model/series-tag.model';
 import { SeriesTags } from '../../../../features/tags/state/tags.state.actions';
@@ -124,6 +124,7 @@ export class SeriesTagsPage implements OnInit, OnDestroy {
       .subscribe(({ result }) => {
         this.savingSeriesTag.set(false);
         if (result.error && result.error instanceof BaseError) {
+          markAsHandled(result.error);
           this.errors.set([result.error]);
         }
       });

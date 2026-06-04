@@ -7,6 +7,7 @@ export abstract class BaseError extends Error {
   readonly timestamp: Date;
   readonly translationKey: (string | undefined)[];
   readonly translationParams?: Record<string, unknown>;
+  handled = false;
 
   protected constructor(
     message: string,

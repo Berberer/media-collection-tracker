@@ -20,7 +20,7 @@ import {
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
-import { BaseError } from '../../../../core/errors';
+import { BaseError, markAsHandled } from '../../../../core/errors';
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { UpdateSeriesModel } from '../../../../features/series/model/update.series.model';
@@ -164,6 +164,7 @@ export class CompletedSeriesPage implements OnInit, OnDestroy {
       .subscribe(({ result }) => {
         this.savingSeries.set(false);
         if (result.error && result.error instanceof BaseError) {
+          markAsHandled(result.error);
           this.errors.set([result.error]);
         }
       });
