@@ -12,6 +12,7 @@
           [searchable]="true"
           [items]="allSeries()"
           [itemLabelMapper]="(series) => series?.name ?? ''"
+          (itemSelected)="onSeriesSelected($event)"
         >
           <ng-template let-series>
             <span class="w-full overflow-hidden text-ellipsis">{{ series.name }}</span>

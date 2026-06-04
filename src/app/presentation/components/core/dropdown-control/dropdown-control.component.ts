@@ -7,6 +7,7 @@ import {
   ElementRef,
   input,
   model,
+  output,
   TemplateRef,
   viewChild,
 } from '@angular/core';
@@ -32,6 +33,8 @@ export class DropdownControlComponent<T> implements FormValueControl<T | undefin
   readonly searchable = input(false);
   readonly itemLabelMapper = input.required<(item: T) => string>();
   readonly itemTracker = input<(item: T) => string | number | undefined>(this.defaultTracker);
+
+  readonly itemSelected = output<T>();
 
   readonly searchQueryInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
   readonly searchQuery = model('');
@@ -67,6 +70,8 @@ export class DropdownControlComponent<T> implements FormValueControl<T | undefin
     }
     this.dirty.set(true);
     this.touched.set(true);
+
+    this.itemSelected.emit(item);
   }
 
   private isClonable<T>(item: T): item is T & { clone(): T } {

@@ -97,6 +97,14 @@ export class VolumeFormComponent {
     });
   }
 
+  onSeriesSelected(series: SeriesModel | null): void {
+    if (series !== null && series.highestVolumeNumber !== null) {
+      this.volumeForm.sequenceNumber().value.set(series.highestVolumeNumber + 1);
+    } else {
+      this.volumeForm.sequenceNumber().value.set(1);
+    }
+  }
+
   onSave(): void {
     if (this.volumeForm().valid()) {
       const volume = this.volume();
