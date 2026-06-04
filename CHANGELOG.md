@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://github.com/Berberer/media-collection-tracker/compare/v0.1.9...v0.1.10) (2026-06-04)
+
+### Features
+
+- implement global error handler for showing error toasts in case of unhandled feature errors ([f36f557](https://github.com/Berberer/media-collection-tracker/commit/f36f5574f2d2afc074fa1488103cf3457d1932a8))
+- set next sequence number for creating a volume when selecting a series ([5fa12d3](https://github.com/Berberer/media-collection-tracker/commit/5fa12d3d733ab0e0bc57fab100f11f5fe8456897))
+
+### Bug Fixes
+
+- add missing event handler for marking upcoming volume as bought ([67a2964](https://github.com/Berberer/media-collection-tracker/commit/67a2964e809383fa25ca75f51392a0d619831526))
+- layout of series tooltip in volumes table ([3ce1528](https://github.com/Berberer/media-collection-tracker/commit/3ce152849b9ac6a303f8fc1b7fcd5571db94dbac))
+- select 30 days as default time frame for filtering upcoming volumes ([b9a2118](https://github.com/Berberer/media-collection-tracker/commit/b9a211867eae06a80a4546175a32a5574597f59f))
+- use proper app titles ([05b0706](https://github.com/Berberer/media-collection-tracker/commit/05b07060fc90230e091fa8fef0f76c6ef8227f57))
+
 ### [0.1.9](https://github.com/Berberer/media-collection-tracker/compare/v0.1.7...v0.1.9) (2026-05-30)
 
 ### Features
