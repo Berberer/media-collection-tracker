@@ -96,7 +96,7 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
   readonly volumeToDelete = signal<VolumeModel | null>(null);
   readonly volumeToMarkAsDelivered = signal<VolumeModel | null>(null);
 
-  readonly selectedUpcomingTimeframe = signal<number | null>(null);
+  readonly selectedUpcomingTimeframe = signal<number | null>(30);
 
   readonly filteredUpcomingVolumes = computed(() => {
     const timeframeDays = this.selectedUpcomingTimeframe();
