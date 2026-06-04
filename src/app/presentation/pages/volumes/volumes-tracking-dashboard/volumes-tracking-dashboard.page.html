@@ -88,6 +88,7 @@
             [viewMode]="VolumeViewMode.NOT_BOUGHT"
             (volumeTagAdded)="onVolumeTagAdded($event)"
             (volumeTagRemoved)="onVolumeTagRemoved($event)"
+            (volumeMarkedAsBought)="onVolumeMarkedAsBought($event)"
             (volumeEdited)="onVolumeEdited($event)"
             (volumeDeleted)="onDeleteVolume($event)"
           ></app-volumes-table>

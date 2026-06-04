@@ -90,8 +90,6 @@ export class VolumesTrackingDashboardPage implements OnInit, OnDestroy {
 
   readonly showDeleteVolumeConfirmation = signal(false);
   readonly showMarkAsDeliveredConfirmation = signal(false);
-  readonly showMarkAsBoughtConfirmation = signal(false);
-
   readonly showPurchaseMethodDialog = signal(false);
   readonly showVolumeFormDialog = signal(false);
 
