@@ -7,8 +7,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import {
   Actions,
   ofActionCompleted,
@@ -19,8 +18,8 @@ import {
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
-import { environment } from '../../../../../environments/environment';
 import { BaseError, markAsHandled } from '../../../../core/errors';
+import { TitleService } from '../../../../core/services/title.service';
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
 import { CreateSeriesVolumeModel } from '../../../../features/series/model/create.series-volume.model';
 import { SeriesModel } from '../../../../features/series/model/series.model';
@@ -54,8 +53,7 @@ import { VolumeFormComponent } from '../../../components/volumes/volume-form/vol
   ],
 })
 export class OrphanedSeriesPage implements OnInit, OnDestroy {
-  private readonly title = inject(Title);
-  private readonly translate = inject(TranslateService);
+  private readonly title = inject(TitleService);
 
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
@@ -88,10 +86,7 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
   readonly errors = signal<BaseError[]>([]);
 
   constructor() {
-    this.translate
-      .get('titles.series.orphans', { applicationName: environment.appTitle })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((title: string) => this.title.setTitle(title));
+    this.title.setTitleByTranslation('titles.series.orphans');
   }
 
   ngOnInit(): void {

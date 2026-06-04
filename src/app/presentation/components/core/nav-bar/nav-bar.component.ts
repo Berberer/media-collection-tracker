@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroBars3Solid } from '@ng-icons/heroicons/solid';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { TitleService } from '../../../../core/services/title.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,11 +15,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   providers: [provideIcons({ heroBars3Solid })],
 })
 export class NavBarComponent {
-  private readonly title = inject(Title);
-
-  get currentTitle(): string {
-    return this.title.getTitle();
-  }
+  readonly titleService = inject(TitleService);
 
   readonly createSeries = output();
   readonly createVolume = output();

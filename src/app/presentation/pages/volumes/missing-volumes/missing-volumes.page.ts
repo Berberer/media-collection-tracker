@@ -7,8 +7,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import {
   Actions,
   ofActionCompleted,
@@ -18,7 +17,7 @@ import {
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
-import { environment } from '../../../../../environments/environment';
+import { TitleService } from '../../../../core/services/title.service';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
@@ -55,8 +54,7 @@ import {
   ],
 })
 export class MissingVolumesPage implements OnInit, OnDestroy {
-  private readonly title = inject(Title);
-  private readonly translate = inject(TranslateService);
+  private readonly title = inject(TitleService);
 
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
@@ -85,10 +83,7 @@ export class MissingVolumesPage implements OnInit, OnDestroy {
   readonly showVolumeFormDialog = signal(false);
 
   constructor() {
-    this.translate
-      .get('titles.volumes.missing', { applicationName: environment.appTitle })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((title: string) => this.title.setTitle(title));
+    this.title.setTitleByTranslation('titles.volumes.missing');
   }
 
   ngOnInit(): void {
