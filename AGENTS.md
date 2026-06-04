@@ -82,6 +82,14 @@ To maintain a clean architecture, we strictly separate UI-related logic from bus
 - **UI Logic**: Logic that only affects how data is presented (e.g., table sorting, filtering for a specific view, toggling UI elements). This should reside in the **Presentation** layer, often in dedicated UI services or within the components themselves.
 - **Business Logic**: Logic that defines domain rules, data transformations, or state changes (e.g., calculating series status, validating form data, executing feature-specific operations). This must reside in the **Features** layer (Use-Cases or Utils).
 
+### Stupid Components and Intelligent Pages
+
+Components should only implement simple UI logic that is scoped to the component's responsibility.
+Every complex UI or business logic should be implemented in the pages instead.
+This approach allows for a clear separation of concerns and promotes reusability.
+If a component needs to trigger a complex operation, it should have a corresponding output.
+If there are nested components, those outputs need to be forwarded until they reach a page where a proper handler can be implemented.
+
 ### Data Flow
 
 ```
