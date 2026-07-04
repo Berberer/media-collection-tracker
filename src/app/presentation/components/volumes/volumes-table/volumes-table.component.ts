@@ -12,6 +12,7 @@ import {
 } from '@ng-icons/heroicons/solid';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { SeriesModel } from '../../../../features/series/model/series.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { VolumeModel } from '../../../../features/volumes/model/volume.model';
 import { SortButtonComponent, SortDirection } from '../../core/sort-button/sort-button.component';
@@ -24,6 +25,7 @@ export enum VolumeViewMode {
   IN_DELIVERY = 'IN_DELIVERY',
   NOT_BOUGHT = 'NOT_BOUGHT',
   COLLECTED = 'COLLECTED',
+  SERIES_DETAILS = 'SERIES_DETAILS',
 }
 
 @Component({
@@ -74,6 +76,7 @@ export class VolumesTableComponent {
   readonly volumeMarkedAsDelivered = output<VolumeModel>();
   readonly volumeEdited = output<VolumeModel>();
   readonly volumeDeleted = output<VolumeModel>();
+  readonly seriesViewDetails = output<SeriesModel>();
 
   readonly SortableColumn = SortableColumn;
   readonly sortDirections = this.dataService.sortDirections;

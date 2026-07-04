@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
-import { append, patch, removeItem } from '@ngxs/store/operators';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 
 import { Series } from '../../series/state/series.state.actions';
 import { VolumeModel } from '../model/volume.model';
 import { CreateVolumeUseCase } from '../use-cases/create.volume.use-case';
 import { DeleteVolumeUseCase } from '../use-cases/delete.volume.use-case';
+import { GetBySeriesVolumeUseCase } from '../use-cases/get-by-series.volume.use-case';
 import { GetCollectedVolumesUseCase } from '../use-cases/get-collected.volumes.use-case';
 import { GetInDeliveryVolumeUseCase } from '../use-cases/get-in-delivery.volume.use-case';
 import { GetMissingVolumeUseCase } from '../use-cases/get-missing.volume.use-case';
@@ -19,6 +20,7 @@ import { defaultVolumesState, VolumesStateModel } from './volumes.state.model';
 @State<VolumesStateModel>({ name: 'volumes', defaults: defaultVolumesState })
 @Injectable({ providedIn: 'root' })
 export class VolumesState {
+  private readonly getBySeriesVolumeUseCase = inject(GetBySeriesVolumeUseCase);
   private readonly getMissingVolumesUseCase = inject(GetMissingVolumeUseCase);
   private readonly getInDeliveryVolumesUseCase = inject(GetInDeliveryVolumeUseCase);
   private readonly getReleasedVolumesUseCase = inject(GetReleasedVolumeUseCase);
@@ -27,6 +29,16 @@ export class VolumesState {
   private readonly createVolumeUseCase = inject(CreateVolumeUseCase);
   private readonly updateVolumeUseCase = inject(UpdateVolumeUseCase);
   private readonly deleteVolumeUseCase = inject(DeleteVolumeUseCase);
+
+  @Action(Volumes.GetVolumesOfSeries)
+  async getVolumesOfSeries(
+    ctx: StateContext<VolumesStateModel>,
+    { seriesId }: Volumes.GetVolumesOfSeries,
+  ): Promise<void> {
+    const volumesOfSeries = await this.getBySeriesVolumeUseCase.execute(seriesId);
+
+    ctx.patchState({ currentVolumesContext: { seriesId, volumes: volumesOfSeries } });
+  }
 
   @Action(Volumes.GetMissing)
   async getMissingVolumes(ctx: StateContext<VolumesStateModel>): Promise<void> {
@@ -83,6 +95,18 @@ export class VolumesState {
     const updatedVolume = await this.updateVolumeUseCase.execute(updateModel);
 
     if (updatedVolume) {
+      const { currentVolumesContext } = ctx.getState();
+
+      if (currentVolumesContext.seriesId === updatedVolume.series.id) {
+        ctx.setState(
+          patch({
+            currentVolumesContext: patch({
+              volumes: updateItem((item) => item.id === updatedVolume.id, updatedVolume),
+            }),
+          }),
+        );
+      }
+
       const missingVolumes = await this.getMissingVolumesUseCase.execute();
       const collectedVolumes = await this.getCollectedVolumesUseCase.execute();
       const inDeliveryVolumes = await this.getInDeliveryVolumesUseCase.execute();
@@ -108,6 +132,9 @@ export class VolumesState {
 
       ctx.setState(
         patch({
+          currentVolumesContext: patch({
+            volumes: removeItem((item) => item.id === id),
+          }),
           missingVolumes: removeItem((item) => item.id === id),
           inDeliveryVolumes: removeItem((item) => item.id === id),
           releasedVolumes: removeItem((item) => item.id === id),
@@ -137,6 +164,18 @@ export class VolumesState {
     ctx: StateContext<VolumesStateModel>,
     createdVolume: VolumeModel,
   ): Promise<void> {
+    const { currentVolumesContext } = ctx.getState();
+
+    if (currentVolumesContext.seriesId === createdVolume.series.id) {
+      ctx.setState(
+        patch({
+          currentVolumesContext: patch({
+            volumes: append([createdVolume]),
+          }),
+        }),
+      );
+    }
+
     if (VolumeStatusUtils.shouldBeInMissingVolumes(createdVolume)) {
       ctx.setState(
         patch({

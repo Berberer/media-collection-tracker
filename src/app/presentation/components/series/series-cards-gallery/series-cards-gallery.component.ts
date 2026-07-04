@@ -25,6 +25,7 @@ export class SeriesCardsGalleryComponent {
   readonly editSeries = output<SeriesModel>();
   readonly markCompleted = output<SeriesModel>();
   readonly deleteSeries = output<SeriesModel>();
+  readonly viewDetails = output<SeriesModel>();
 
   readonly SeriesMediaType = SeriesMediaTypes.SeriesMediaType;
   readonly selectedMediaType = signal<SeriesMediaTypes.SeriesMediaType | null>(null);

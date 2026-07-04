@@ -11,6 +11,7 @@
     (editSeries)="onEditSeries($event)"
     (markCompleted)="onMarkSeriesCompleted($event)"
     (deleteSeries)="onDeleteSeries($event)"
+    (viewDetails)="onViewSeriesDetails($event)"
     [loading]="loadingSeries()"
     [noSeriesMessage]="'pages.series.orphaned.no-series-message' | translate"
     [noSeriesForFilterTypeMessage]="

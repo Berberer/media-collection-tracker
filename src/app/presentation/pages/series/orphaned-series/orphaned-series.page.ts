@@ -7,6 +7,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
   Actions,
@@ -18,6 +19,7 @@ import {
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { AppRoutes } from '../../../../app.routes';
 import { BaseError, markAsHandled } from '../../../../core/errors';
 import { TitleService } from '../../../../core/services/title.service';
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
@@ -54,6 +56,7 @@ import { VolumeFormComponent } from '../../../components/volumes/volume-form/vol
 })
 export class OrphanedSeriesPage implements OnInit, OnDestroy {
   private readonly title = inject(TitleService);
+  private readonly router = inject(Router);
 
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
@@ -283,5 +286,9 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
   onCancelledDeleteSeries(): void {
     this.showDeleteSeriesConfirmation.set(false);
     this.seriesModel.set(null);
+  }
+
+  async onViewSeriesDetails(series: SeriesModel): Promise<void> {
+    await this.router.navigate([AppRoutes.Series, series.id]);
   }
 }

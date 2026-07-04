@@ -7,6 +7,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
   Actions,
@@ -18,6 +19,7 @@ import {
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { AppRoutes } from '../../../../app.routes';
 import { BaseError, markAsHandled } from '../../../../core/errors';
 import { TitleService } from '../../../../core/services/title.service';
 import { CreateSeriesModel } from '../../../../features/series/model/create.series.model';
@@ -49,6 +51,7 @@ import { SeriesFormComponent } from '../../../components/series/series-form/seri
 })
 export class CompletedSeriesPage implements OnInit, OnDestroy {
   private readonly title = inject(TitleService);
+  private readonly router = inject(Router);
 
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
@@ -196,6 +199,10 @@ export class CompletedSeriesPage implements OnInit, OnDestroy {
 
     this.seriesModel.set(new UpdateSeriesModel({ ...series }));
     this.showSeriesFormModal.set(true);
+  }
+
+  async onViewSeriesDetails(series: SeriesModel): Promise<void> {
+    await this.router.navigate([AppRoutes.Series, series.id]);
   }
 
   onSaveSeries(series: CreateSeriesModel | UpdateSeriesModel): void {

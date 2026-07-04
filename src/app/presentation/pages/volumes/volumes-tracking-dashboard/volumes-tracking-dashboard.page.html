@@ -27,6 +27,7 @@
             (volumeMarkedAsDelivered)="onVolumeMarkedAsDelivered($event)"
             (volumeEdited)="onVolumeEdited($event)"
             (volumeDeleted)="onDeleteVolume($event)"
+            (seriesViewDetails)="onViewSeriesDetails($event)"
           ></app-volumes-table>
         } @else {
           <div class="flex flex-row justify-center">
@@ -59,6 +60,7 @@
             (volumeMarkedAsBought)="onVolumeMarkedAsBought($event)"
             (volumeEdited)="onVolumeEdited($event)"
             (volumeDeleted)="onDeleteVolume($event)"
+            (seriesViewDetails)="onViewSeriesDetails($event)"
           ></app-volumes-table>
         } @else {
           <div class="flex flex-row justify-center">
@@ -91,6 +93,7 @@
             (volumeMarkedAsBought)="onVolumeMarkedAsBought($event)"
             (volumeEdited)="onVolumeEdited($event)"
             (volumeDeleted)="onDeleteVolume($event)"
+            (seriesViewDetails)="onViewSeriesDetails($event)"
           ></app-volumes-table>
         } @else {
           <div class="flex flex-row justify-center">

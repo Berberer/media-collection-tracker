@@ -6,6 +6,11 @@ import { UpdateSeriesModel } from '../model/update.series.model';
 const ACTION_SCOPE = '[Series]';
 
 export namespace Series {
+  export class GetById {
+    static readonly type = `${ACTION_SCOPE} Get By Id`;
+    constructor(readonly id: string) {}
+  }
+
   export class GetAll {
     static readonly type = `${ACTION_SCOPE} Get All`;
   }

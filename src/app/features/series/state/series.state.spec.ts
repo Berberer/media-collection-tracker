@@ -7,6 +7,7 @@ import { SeriesModel } from '../model/series.model';
 import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
 import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
 import { GetAllSeriesUseCase } from '../use-cases/get-all.series.use-case';
+import { GetSeriesByIdUseCase } from '../use-cases/get-by-id.series.use-case';
 import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
 import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
 import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
@@ -25,6 +26,7 @@ import { SeriesStateSelectors } from './series.state.selectors';
 describe('SeriesState', () => {
   let store: Store;
   let actions$: Actions;
+  let getSeriesByIdUseCase: jest.Mocked<GetSeriesByIdUseCase>;
   let getAllSeriesUseCase: jest.Mocked<GetAllSeriesUseCase>;
   let getIncompleteSeriesUseCase: jest.Mocked<GetIncompleteSeriesUseCase>;
   let getOrphanedSeriesUseCase: jest.Mocked<GetOrphanedSeriesUseCase>;
@@ -57,6 +59,14 @@ describe('SeriesState', () => {
   ];
 
   beforeEach(() => {
+    const mockGetSeriesByIdUseCase = {
+      execute: jest
+        .fn()
+        .mockImplementation((id: string) =>
+          Promise.resolve(mockSeries.find((s) => s.id === id) ?? null),
+        ),
+    } as unknown as GetSeriesByIdUseCase;
+
     const mockGetAllSeriesUseCase = {
       execute: jest.fn().mockResolvedValue(mockSeries),
     } as unknown as GetAllSeriesUseCase;
@@ -114,6 +124,7 @@ describe('SeriesState', () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([SeriesState])],
       providers: [
+        { provide: GetSeriesByIdUseCase, useValue: mockGetSeriesByIdUseCase },
         { provide: GetAllSeriesUseCase, useValue: mockGetAllSeriesUseCase },
         { provide: GetIncompleteSeriesUseCase, useValue: mockGetIncompleteSeriesUseCase },
         { provide: GetOrphanedSeriesUseCase, useValue: mockGetOrphanedSeriesUseCase },
@@ -126,6 +137,9 @@ describe('SeriesState', () => {
 
     store = TestBed.inject(Store);
     actions$ = TestBed.inject(Actions);
+    getSeriesByIdUseCase = TestBed.inject(
+      GetSeriesByIdUseCase,
+    ) as jest.Mocked<GetSeriesByIdUseCase>;
     getAllSeriesUseCase = TestBed.inject(GetAllSeriesUseCase) as jest.Mocked<GetAllSeriesUseCase>;
     getIncompleteSeriesUseCase = TestBed.inject(
       GetIncompleteSeriesUseCase,
@@ -144,6 +158,49 @@ describe('SeriesState', () => {
   it('should have initial state', () => {
     const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
     expect(state).toEqual(defaultSeriesStateModel);
+  });
+
+  describe('getSeriesById', () => {
+    it('should execute GetById use-case and update currentSeries in state', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      expect(getSeriesByIdUseCase.execute).toHaveBeenCalledTimes(1);
+      expect(getSeriesByIdUseCase.execute).toHaveBeenCalledWith('1');
+
+      const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.currentSeries).toEqual(mockSeries[0]);
+    });
+
+    it('should update currentSeries selector after GetById action', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetById('2')));
+
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
+      expect(currentSeries).toEqual(mockSeries[1]);
+    });
+
+    it('should handle GetById use-case returning null', async () => {
+      getSeriesByIdUseCase.execute.mockResolvedValueOnce(null);
+
+      await firstValueFrom(store.dispatch(new Series.GetById('nonexistent')));
+
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
+      expect(currentSeries).toBeNull();
+    });
+
+    it('should not affect other series lists when getting series by id', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      const series = store.selectSnapshot(SeriesStateSelectors.series);
+      const incompleteSeries = store.selectSnapshot(SeriesStateSelectors.incompleteSeries);
+      const orphanedSeries = store.selectSnapshot(SeriesStateSelectors.orphanedSeries);
+      const completedSeries = store.selectSnapshot(SeriesStateSelectors.completedSeries);
+
+      expect(series).toEqual(mockSeries);
+      expect(incompleteSeries).toEqual([]);
+      expect(orphanedSeries).toEqual([]);
+      expect(completedSeries).toEqual([]);
+    });
   });
 
   describe('getAllSeries', () => {
@@ -183,10 +240,12 @@ describe('SeriesState', () => {
       const incompleteSeries = store.selectSnapshot(SeriesStateSelectors.incompleteSeries);
       const orphanedSeries = store.selectSnapshot(SeriesStateSelectors.orphanedSeries);
       const completedSeries = store.selectSnapshot(SeriesStateSelectors.completedSeries);
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
 
       expect(incompleteSeries).toEqual([]);
       expect(orphanedSeries).toEqual([]);
       expect(completedSeries).toEqual([]);
+      expect(currentSeries).toBeNull();
     });
   });
 
@@ -227,10 +286,12 @@ describe('SeriesState', () => {
       const series = store.selectSnapshot(SeriesStateSelectors.series);
       const orphanedSeries = store.selectSnapshot(SeriesStateSelectors.orphanedSeries);
       const completedSeries = store.selectSnapshot(SeriesStateSelectors.completedSeries);
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
 
       expect(series).toEqual([]);
       expect(orphanedSeries).toEqual([]);
       expect(completedSeries).toEqual([]);
+      expect(currentSeries).toBeNull();
     });
   });
 
@@ -271,10 +332,12 @@ describe('SeriesState', () => {
       const series = store.selectSnapshot(SeriesStateSelectors.series);
       const incompleteSeries = store.selectSnapshot(SeriesStateSelectors.incompleteSeries);
       const completedSeries = store.selectSnapshot(SeriesStateSelectors.completedSeries);
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
 
       expect(series).toEqual([]);
       expect(incompleteSeries).toEqual([]);
       expect(completedSeries).toEqual([]);
+      expect(currentSeries).toBeNull();
     });
   });
 
@@ -315,10 +378,12 @@ describe('SeriesState', () => {
       const series = store.selectSnapshot(SeriesStateSelectors.series);
       const incompleteSeries = store.selectSnapshot(SeriesStateSelectors.incompleteSeries);
       const orphanedSeries = store.selectSnapshot(SeriesStateSelectors.orphanedSeries);
+      const currentSeries = store.selectSnapshot(SeriesStateSelectors.currentSeries);
 
       expect(series).toEqual([]);
       expect(incompleteSeries).toEqual([]);
       expect(orphanedSeries).toEqual([]);
+      expect(currentSeries).toBeNull();
     });
   });
 
@@ -744,6 +809,65 @@ describe('SeriesState', () => {
       expect(series).toHaveLength(2);
       expect(series[0].name).toBe('Updated Series');
     });
+
+    it('should update currentSeries when updating the current series', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      const stateBefore = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateBefore.currentSeries?.id).toBe('1');
+
+      const updateModel = new UpdateSeriesModel({
+        id: '1',
+        name: 'Updated Current Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        singleVolume: false,
+        seriesTags: [],
+      });
+
+      getSeriesByIdUseCase.execute.mockResolvedValueOnce(
+        new SeriesModel({
+          id: '1',
+          name: 'Updated Current Series',
+          mediaType: SeriesMediaType.BOOK,
+          completed: false,
+          highestVolumeNumber: 0,
+          seriesTags: [],
+          abbreviation: 'UCS',
+          singleVolume: false,
+        }),
+      );
+
+      await firstValueFrom(store.dispatch(new Series.Update(updateModel)));
+
+      const stateAfter = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateAfter.currentSeries?.name).toBe('Updated Current Series');
+      expect(stateAfter.currentSeries?.id).toBe('1');
+    });
+
+    it('should not update currentSeries when updating a different series', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      const stateBefore = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateBefore.currentSeries?.id).toBe('1');
+
+      const updateModel = new UpdateSeriesModel({
+        id: '2',
+        name: 'Updated Other Series',
+        mediaType: SeriesMediaType.GAME,
+        completed: false,
+        singleVolume: false,
+        seriesTags: [],
+      });
+
+      await firstValueFrom(store.dispatch(new Series.Update(updateModel)));
+
+      const stateAfter = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateAfter.currentSeries?.id).toBe('1');
+      expect(stateAfter.currentSeries?.name).toBe('Test Series 1');
+    });
   });
 
   describe('addVolumeToSeries', () => {
@@ -789,6 +913,179 @@ describe('SeriesState', () => {
       expect(state.series[0].highestVolumeNumber).toBe(5);
       expect(state.incompleteSeries).toHaveLength(1);
       expect(state.incompleteSeries[0].highestVolumeNumber).toBe(5);
+      expect(state.orphanedSeries).toEqual([]);
+    });
+
+    it('should not decrease highestVolumeNumber when adding a lower volume number', async () => {
+      const seriesWithVolume = new SeriesModel({
+        id: '1',
+        name: 'Test Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 10,
+        seriesTags: [],
+        abbreviation: 'TS',
+        singleVolume: false,
+      });
+
+      getAllSeriesUseCase.execute.mockResolvedValueOnce([seriesWithVolume]);
+      getIncompleteSeriesUseCase.execute.mockResolvedValueOnce([seriesWithVolume]);
+
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetIncomplete()));
+
+      await firstValueFrom(
+        store.dispatch(
+          new Series.AddVolumeToSeries(
+            seriesWithVolume,
+            new CreateVolumeModel({
+              series: seriesWithVolume,
+              sequenceNumber: 3,
+              shoppingLink: null,
+              releaseDate: null,
+              inDelivery: false,
+              purchaseDate: null,
+              volumeTags: [],
+            }),
+          ),
+        ),
+      );
+
+      const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.series[0].highestVolumeNumber).toBe(10);
+      expect(state.incompleteSeries[0].highestVolumeNumber).toBe(10);
+    });
+
+    it('should update currentSeries highestVolumeNumber when adding a volume to the current series', async () => {
+      const seriesWithVolume = new SeriesModel({
+        id: '1',
+        name: 'Test Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 0,
+        seriesTags: [],
+        abbreviation: 'TS',
+        singleVolume: false,
+      });
+
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+      getSeriesByIdUseCase.execute.mockResolvedValueOnce(seriesWithVolume);
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      let state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.currentSeries?.highestVolumeNumber).toBe(0);
+
+      await firstValueFrom(
+        store.dispatch(
+          new Series.AddVolumeToSeries(
+            seriesWithVolume,
+            new CreateVolumeModel({
+              series: seriesWithVolume,
+              sequenceNumber: 7,
+              shoppingLink: null,
+              releaseDate: null,
+              inDelivery: false,
+              purchaseDate: null,
+              volumeTags: [],
+            }),
+          ),
+        ),
+      );
+
+      state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.currentSeries?.highestVolumeNumber).toBe(7);
+    });
+
+    it('should not update currentSeries when adding a volume to a different series', async () => {
+      const series1 = new SeriesModel({
+        id: '1',
+        name: 'Test Series 1',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 0,
+        seriesTags: [],
+        abbreviation: 'TS1',
+        singleVolume: false,
+      });
+
+      const series2 = new SeriesModel({
+        id: '2',
+        name: 'Test Series 2',
+        mediaType: SeriesMediaType.GAME,
+        completed: true,
+        highestVolumeNumber: 10,
+        seriesTags: [],
+        abbreviation: 'TS2',
+        singleVolume: false,
+      });
+
+      getSeriesByIdUseCase.execute.mockResolvedValueOnce(series1);
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      await firstValueFrom(
+        store.dispatch(
+          new Series.AddVolumeToSeries(
+            series2,
+            new CreateVolumeModel({
+              series: series2,
+              sequenceNumber: 15,
+              shoppingLink: null,
+              releaseDate: null,
+              inDelivery: false,
+              purchaseDate: null,
+              volumeTags: [],
+            }),
+          ),
+        ),
+      );
+
+      const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.currentSeries?.highestVolumeNumber).toBe(0);
+    });
+
+    it('should preserve backgroundColorHex and textColorHex when updating highestVolumeNumber', async () => {
+      const seriesWithColors = new SeriesModel({
+        id: '1',
+        name: 'Colored Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 0,
+        seriesTags: [],
+        abbreviation: 'CS',
+        singleVolume: false,
+      });
+      seriesWithColors.setColors({ backgroundColorHex: '#FF0000', textColorHex: '#FFFFFF' });
+
+      getAllSeriesUseCase.execute.mockResolvedValueOnce([seriesWithColors]);
+      getIncompleteSeriesUseCase.execute.mockResolvedValueOnce([seriesWithColors]);
+      getOrphanedSeriesUseCase.execute.mockResolvedValueOnce([seriesWithColors]);
+
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetIncomplete()));
+      await firstValueFrom(store.dispatch(new Series.GetOrphaned()));
+
+      await firstValueFrom(
+        store.dispatch(
+          new Series.AddVolumeToSeries(
+            seriesWithColors,
+            new CreateVolumeModel({
+              series: seriesWithColors,
+              sequenceNumber: 5,
+              shoppingLink: null,
+              releaseDate: null,
+              inDelivery: false,
+              purchaseDate: null,
+              volumeTags: [],
+            }),
+          ),
+        ),
+      );
+
+      const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(state.series[0].backgroundColorHex).toBe('#FF0000');
+      expect(state.series[0].textColorHex).toBe('#FFFFFF');
+      expect(state.incompleteSeries[0].backgroundColorHex).toBe('#FF0000');
+      expect(state.incompleteSeries[0].textColorHex).toBe('#FFFFFF');
       expect(state.orphanedSeries).toEqual([]);
     });
   });
@@ -878,6 +1175,33 @@ describe('SeriesState', () => {
 
       const state = store.selectSnapshot(SeriesStateSelectors.stateModel);
       expect(state.orphanedSeries).toEqual([]);
+    });
+
+    it('should set currentSeries to null when deleting the current series', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      const stateBefore = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateBefore.currentSeries?.id).toBe('1');
+
+      await firstValueFrom(store.dispatch(new Series.Delete('1')));
+
+      const stateAfter = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateAfter.currentSeries).toBeNull();
+    });
+
+    it('should not affect currentSeries when deleting a different series', async () => {
+      await firstValueFrom(store.dispatch(new Series.GetAll()));
+      await firstValueFrom(store.dispatch(new Series.GetById('1')));
+
+      const stateBefore = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateBefore.currentSeries?.id).toBe('1');
+
+      await firstValueFrom(store.dispatch(new Series.Delete('2')));
+
+      const stateAfter = store.selectSnapshot(SeriesStateSelectors.stateModel);
+      expect(stateAfter.currentSeries?.id).toBe('1');
+      expect(stateAfter.currentSeries?.name).toBe('Test Series 1');
     });
   });
 });

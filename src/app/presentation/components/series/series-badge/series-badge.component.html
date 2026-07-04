@@ -7,13 +7,14 @@
     ></app-series-card>
   </div>
   <span
-    class="badge cursor-default"
+    class="badge cursor-pointer"
     [ngStyle]="{
       'background-color': series().backgroundColorHex,
       'border-color': series().backgroundColorHex,
       color: series().textColorHex,
       height: 'unset',
     }"
+    (click)="viewDetails.emit()"
     >{{ series().name }}</span
   >
 </div>

@@ -2,6 +2,7 @@ import { SeriesModel } from '../../series/model/series.model';
 import { VolumeModel } from '../model/volume.model';
 
 export interface VolumesStateModel {
+  currentVolumesContext: { seriesId: string | null; volumes: VolumeModel[] };
   missingVolumes: VolumeModel[];
   collectedVolumes: Map<SeriesModel, VolumeModel[]>;
   inDeliveryVolumes: VolumeModel[];
@@ -10,6 +11,7 @@ export interface VolumesStateModel {
 }
 
 export const defaultVolumesState: VolumesStateModel = {
+  currentVolumesContext: { seriesId: null, volumes: [] },
   missingVolumes: [],
   collectedVolumes: new Map<SeriesModel, VolumeModel[]>(),
   inDeliveryVolumes: [],

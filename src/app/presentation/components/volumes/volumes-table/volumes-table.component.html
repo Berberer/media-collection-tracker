@@ -2,7 +2,9 @@
   <table class="table table-zebra" style="width: 100%">
     <thead>
       <tr>
-        @if (viewMode() !== VolumeViewMode.COLLECTED) {
+        @if (
+          viewMode() === VolumeViewMode.IN_DELIVERY || viewMode() === VolumeViewMode.NOT_BOUGHT
+        ) {
           <th class="col-series-name">
             <div class="flex flex-row items-center justify-center gap-2">
               {{ 'components.volumes.volumes-table.header.series-name' | translate }}
@@ -61,7 +63,7 @@
             ></app-sort-button>
           </div>
         </th>
-        @if (viewMode() === VolumeViewMode.COLLECTED || viewMode() === VolumeViewMode.IN_DELIVERY) {
+        @if (viewMode() !== VolumeViewMode.NOT_BOUGHT) {
           <th class="col-purchase-date">
             <div class="flex flex-row items-center justify-center gap-2">
               {{ 'components.volumes.volumes-table.header.purchase-date' | translate }}
@@ -140,11 +142,14 @@
     <tbody>
       @for (volume of filteredAndSortedVolumes(); track volume.id) {
         <tr>
-          @if (viewMode() !== VolumeViewMode.COLLECTED) {
+          @if (
+            viewMode() === VolumeViewMode.IN_DELIVERY || viewMode() === VolumeViewMode.NOT_BOUGHT
+          ) {
             <td style="text-align: left">
               <app-series-badge
                 [series]="volume.series"
                 [tooltipPlacement]="'tooltip-right'"
+                (viewDetails)="seriesViewDetails.emit(volume.series)"
               ></app-series-badge>
             </td>
           }
@@ -165,9 +170,7 @@
 
           <td style="text-align: center">{{ volume.releaseDate | date }}</td>
 
-          @if (
-            viewMode() === VolumeViewMode.COLLECTED || viewMode() === VolumeViewMode.IN_DELIVERY
-          ) {
+          @if (viewMode() !== VolumeViewMode.NOT_BOUGHT) {
             <td style="text-align: center">{{ volume.purchaseDate | date }}</td>
           }
 

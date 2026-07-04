@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroCheckSolid,
+  heroMagnifyingGlassSolid,
   heroPencilSolid,
   heroPlusSolid,
   heroTrashSolid,
@@ -25,7 +26,15 @@ export enum SeriesViewMode {
   styleUrl: './series-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgStyle, TranslatePipe, NgIcon, MediaTypeBadgeComponent, TagBadgeComponent],
-  providers: [provideIcons({ heroCheckSolid, heroPencilSolid, heroPlusSolid, heroTrashSolid })],
+  providers: [
+    provideIcons({
+      heroCheckSolid,
+      heroMagnifyingGlassSolid,
+      heroPencilSolid,
+      heroPlusSolid,
+      heroTrashSolid,
+    }),
+  ],
 })
 export class SeriesCardComponent {
   readonly series = input.required<SeriesModel>();
@@ -37,6 +46,7 @@ export class SeriesCardComponent {
   readonly editSeries = output();
   readonly markCompleted = output();
   readonly deleteSeries = output();
+  readonly viewDetails = output<void>();
 
   protected readonly SeriesViewMode = SeriesViewMode;
 }

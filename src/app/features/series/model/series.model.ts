@@ -40,10 +40,20 @@ export class SeriesModel extends HashedTextColors<SeriesModel> {
   }
 
   clone(): SeriesModel {
-    return new SeriesModel({
-      ...this,
-      seriesTags: this.seriesTags.map((t) => t.clone()),
+    return SeriesModel.copyWith(this, {});
+  }
+
+  static copyWith(
+    original: SeriesModel,
+    overrides: Partial<RemoveMethods<SeriesModel>>,
+  ): SeriesModel {
+    const model = new SeriesModel({
+      ...original,
+      ...overrides,
+      seriesTags: overrides.seriesTags ?? original.seriesTags.map((t) => t.clone()),
     });
+    model.setColors(original);
+    return model;
   }
 
   static fromMediaSeriesRecord(record: MediaSeriesRecord, tags: SeriesTagModel[]): SeriesModel {

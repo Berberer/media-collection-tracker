@@ -22,12 +22,14 @@ import { CreateSeriesVolumeModel } from '../../series/model/create.series-volume
 import { Series } from '../../series/state/series.state.actions';
 import { CreateVolumeModel } from '../model/create.volume.model';
 import { UpdateVolumeModel } from '../model/update.volume.model';
+import { GetBySeriesVolumeUseCase } from '../use-cases/get-by-series.volume.use-case';
 import { Volumes } from './volumes.state.actions';
 import { VolumesStateSelectors } from './volumes.state.selectors';
 
 describe('VolumesState', () => {
   let store: Store;
   let getMissingVolumesUseCase: jest.Mocked<GetMissingVolumeUseCase>;
+  let getBySeriesVolumeUseCase: jest.Mocked<GetBySeriesVolumeUseCase>;
   let getInDeliveryVolumesUseCase: jest.Mocked<GetInDeliveryVolumeUseCase>;
   let getReleasedVolumesUseCase: jest.Mocked<GetReleasedVolumeUseCase>;
   let getUpcomingVolumesUseCase: jest.Mocked<GetUpcomingVolumeUseCase>;
@@ -64,6 +66,10 @@ describe('VolumesState', () => {
     const mockGetMissingVolumesUseCase = {
       execute: jest.fn().mockResolvedValue(mockVolumes),
     } as unknown as GetMissingVolumeUseCase;
+
+    const mockGetBySeriesVolumeUseCase = {
+      execute: jest.fn().mockResolvedValue(mockVolumes),
+    } as unknown as GetBySeriesVolumeUseCase;
 
     const mockGetInDeliveryVolumesUseCase = {
       execute: jest.fn().mockResolvedValue([]),
@@ -123,6 +129,7 @@ describe('VolumesState', () => {
       imports: [NgxsModule.forRoot([VolumesState])],
       providers: [
         { provide: GetMissingVolumeUseCase, useValue: mockGetMissingVolumesUseCase },
+        { provide: GetBySeriesVolumeUseCase, useValue: mockGetBySeriesVolumeUseCase },
         { provide: GetInDeliveryVolumeUseCase, useValue: mockGetInDeliveryVolumesUseCase },
         { provide: GetReleasedVolumeUseCase, useValue: mockGetReleasedVolumesUseCase },
         { provide: GetUpcomingVolumeUseCase, useValue: mockGetUpcomingVolumesUseCase },
@@ -138,6 +145,9 @@ describe('VolumesState', () => {
     getMissingVolumesUseCase = TestBed.inject(
       GetMissingVolumeUseCase,
     ) as jest.Mocked<GetMissingVolumeUseCase>;
+    getBySeriesVolumeUseCase = TestBed.inject(
+      GetBySeriesVolumeUseCase,
+    ) as jest.Mocked<GetBySeriesVolumeUseCase>;
     getInDeliveryVolumesUseCase = TestBed.inject(
       GetInDeliveryVolumeUseCase,
     ) as jest.Mocked<GetInDeliveryVolumeUseCase>;
@@ -158,6 +168,50 @@ describe('VolumesState', () => {
   it('should have initial state', () => {
     const state = store.selectSnapshot(VolumesStateSelectors.stateModel);
     expect(state).toEqual(defaultVolumesState);
+  });
+
+  describe('getVolumesOfSeries', () => {
+    it('should execute GetVolumesOfSeries use-case and update currentVolumesContext in state', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      expect(getBySeriesVolumeUseCase.execute).toHaveBeenCalledTimes(1);
+      expect(getBySeriesVolumeUseCase.execute).toHaveBeenCalledWith('1');
+
+      const state = store.selectSnapshot(VolumesStateSelectors.stateModel);
+      expect(state.currentVolumesContext).toEqual({ seriesId: '1', volumes: mockVolumes });
+    });
+
+    it('should handle empty volumes array', async () => {
+      getBySeriesVolumeUseCase.execute.mockResolvedValueOnce([]);
+
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const state = store.selectSnapshot(VolumesStateSelectors.stateModel);
+      expect(state.currentVolumesContext).toEqual({ seriesId: '1', volumes: [] });
+    });
+
+    it('should update currentVolumes selector after GetVolumesOfSeries action', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toEqual(mockVolumes);
+    });
+
+    it('should not affect other volume lists when getting volumes of series', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
+      const inDeliveryVolumes = store.selectSnapshot(VolumesStateSelectors.inDeliveryVolumes);
+      const releasedVolumes = store.selectSnapshot(VolumesStateSelectors.releasedVolumes);
+      const upcomingVolumes = store.selectSnapshot(VolumesStateSelectors.upcomingVolumes);
+      const collectedVolumes = store.selectSnapshot(VolumesStateSelectors.collectedVolumes);
+
+      expect(missingVolumes).toEqual([]);
+      expect(inDeliveryVolumes).toEqual([]);
+      expect(releasedVolumes).toEqual([]);
+      expect(upcomingVolumes).toEqual([]);
+      expect(collectedVolumes).toEqual(new Map());
+    });
   });
 
   describe('getMissingVolumes', () => {
@@ -195,11 +249,13 @@ describe('VolumesState', () => {
     it('should not affect other volume lists when getting missing volumes', async () => {
       await firstValueFrom(store.dispatch(new Volumes.GetMissing()));
 
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
       const inDeliveryVolumes = store.selectSnapshot(VolumesStateSelectors.inDeliveryVolumes);
       const releasedVolumes = store.selectSnapshot(VolumesStateSelectors.releasedVolumes);
       const upcomingVolumes = store.selectSnapshot(VolumesStateSelectors.upcomingVolumes);
       const collectedVolumes = store.selectSnapshot(VolumesStateSelectors.collectedVolumes);
 
+      expect(currentVolumes).toEqual([]);
       expect(inDeliveryVolumes).toEqual([]);
       expect(releasedVolumes).toEqual([]);
       expect(upcomingVolumes).toEqual([]);
@@ -263,11 +319,13 @@ describe('VolumesState', () => {
 
       await firstValueFrom(store.dispatch(new Volumes.GetInDelivery()));
 
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       const releasedVolumes = store.selectSnapshot(VolumesStateSelectors.releasedVolumes);
       const upcomingVolumes = store.selectSnapshot(VolumesStateSelectors.upcomingVolumes);
       const collectedVolumes = store.selectSnapshot(VolumesStateSelectors.collectedVolumes);
 
+      expect(currentVolumes).toEqual([]);
       expect(missingVolumes).toEqual([]);
       expect(releasedVolumes).toEqual([]);
       expect(upcomingVolumes).toEqual([]);
@@ -337,11 +395,13 @@ describe('VolumesState', () => {
 
       await firstValueFrom(store.dispatch(new Volumes.GetReleased()));
 
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       const inDeliveryVolumes = store.selectSnapshot(VolumesStateSelectors.inDeliveryVolumes);
       const upcomingVolumes = store.selectSnapshot(VolumesStateSelectors.upcomingVolumes);
       const collectedVolumes = store.selectSnapshot(VolumesStateSelectors.collectedVolumes);
 
+      expect(currentVolumes).toEqual([]);
       expect(missingVolumes).toEqual([]);
       expect(inDeliveryVolumes).toEqual([]);
       expect(upcomingVolumes).toEqual([]);
@@ -411,11 +471,13 @@ describe('VolumesState', () => {
 
       await firstValueFrom(store.dispatch(new Volumes.GetUpcoming()));
 
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       const inDeliveryVolumes = store.selectSnapshot(VolumesStateSelectors.inDeliveryVolumes);
       const releasedVolumes = store.selectSnapshot(VolumesStateSelectors.releasedVolumes);
       const collectedVolumes = store.selectSnapshot(VolumesStateSelectors.collectedVolumes);
 
+      expect(currentVolumes).toEqual([]);
       expect(missingVolumes).toEqual([]);
       expect(inDeliveryVolumes).toEqual([]);
       expect(releasedVolumes).toEqual([]);
@@ -486,11 +548,13 @@ describe('VolumesState', () => {
 
       await firstValueFrom(store.dispatch(new Volumes.GetCollected()));
 
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       const inDeliveryVolumes = store.selectSnapshot(VolumesStateSelectors.inDeliveryVolumes);
       const releasedVolumes = store.selectSnapshot(VolumesStateSelectors.releasedVolumes);
       const upcomingVolumes = store.selectSnapshot(VolumesStateSelectors.upcomingVolumes);
 
+      expect(currentVolumes).toEqual([]);
       expect(missingVolumes).toEqual([]);
       expect(inDeliveryVolumes).toEqual([]);
       expect(releasedVolumes).toEqual([]);
@@ -618,6 +682,97 @@ describe('VolumesState', () => {
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       expect(missingVolumes).toHaveLength(1);
       expect(missingVolumes[0].id).toBe('new-volume-id');
+    });
+
+    it('should add volume to currentVolumes when the series matches the current context', async () => {
+      const createModel = new CreateVolumeModel({
+        series: mockSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        ...createModel,
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const currentVolumesBefore = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumesBefore).toHaveLength(1);
+
+      await firstValueFrom(store.dispatch(new Volumes.Create(createModel)));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(2);
+      expect(currentVolumes[1].id).toBe('new-volume-id');
+    });
+
+    it('should not add volume to currentVolumes when the series does not match the current context', async () => {
+      const otherSeries = new SeriesModel({
+        id: '2',
+        name: 'Other Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 3,
+        seriesTags: [],
+        abbreviation: 'OS',
+        singleVolume: false,
+      });
+
+      const createModel = new CreateVolumeModel({
+        series: otherSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        ...createModel,
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const currentVolumesBefore = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumesBefore).toHaveLength(1);
+
+      await firstValueFrom(store.dispatch(new Volumes.Create(createModel)));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(1);
+    });
+
+    it('should not add volume to currentVolumes when currentVolumesContext is null', async () => {
+      const createModel = new CreateVolumeModel({
+        series: mockSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        ...createModel,
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      await firstValueFrom(store.dispatch(new Volumes.Create(createModel)));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toEqual([]);
     });
   });
 
@@ -839,6 +994,114 @@ describe('VolumesState', () => {
       expect(missingVolumes[0].id).toBe('new-volume-id');
     });
 
+    it('should add volume to currentVolumes when the series matches the current context', async () => {
+      const createSeriesVolumeModel = new CreateSeriesVolumeModel({
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        series: mockSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      // Set up currentVolumesContext for the matching series
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      await firstValueFrom(
+        store.dispatch(new Series.AddVolumeToSeries(mockSeries, createSeriesVolumeModel)),
+      );
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(2);
+      expect(currentVolumes[1].id).toBe('new-volume-id');
+    });
+
+    it('should not add volume to currentVolumes when the series does not match the current context', async () => {
+      const otherSeries = new SeriesModel({
+        id: '2',
+        name: 'Other Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 3,
+        seriesTags: [],
+        abbreviation: 'OS',
+        singleVolume: false,
+      });
+
+      const createSeriesVolumeModel = new CreateSeriesVolumeModel({
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        series: otherSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      // Set up currentVolumesContext for a different series
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      await firstValueFrom(
+        store.dispatch(new Series.AddVolumeToSeries(otherSeries, createSeriesVolumeModel)),
+      );
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(1);
+    });
+
+    it('should not add volume to currentVolumes when currentVolumesContext is null', async () => {
+      const createSeriesVolumeModel = new CreateSeriesVolumeModel({
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const createdVolume = new VolumeModel({
+        id: 'new-volume-id',
+        series: mockSeries,
+        sequenceNumber: 2,
+        shoppingLink: null,
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+      createVolumeUseCase.execute.mockResolvedValueOnce(createdVolume);
+
+      await firstValueFrom(
+        store.dispatch(new Series.AddVolumeToSeries(mockSeries, createSeriesVolumeModel)),
+      );
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toEqual([]);
+    });
+
     it('should update inDeliveryVolumes selector after AddVolumeToSeries action for in delivery volume', async () => {
       const createSeriesVolumeModel = new CreateSeriesVolumeModel({
         sequenceNumber: 2,
@@ -961,10 +1224,86 @@ describe('VolumesState', () => {
       const missingVolumes = store.selectSnapshot(VolumesStateSelectors.missingVolumes);
       expect(missingVolumes).toEqual([updatedVolume]);
     });
+
+    it('should update currentVolumes when the updated volume has the same series as the current context', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const updateModel = new UpdateVolumeModel({
+        id: '1',
+        series: mockSeries,
+        sequenceNumber: 3,
+        shoppingLink: 'https://updated.example.com',
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const updatedVolume = new VolumeModel({
+        ...updateModel,
+      });
+      updateVolumeUseCase.execute.mockResolvedValueOnce(updatedVolume);
+
+      getMissingVolumesUseCase.execute.mockResolvedValueOnce([updatedVolume]);
+      getCollectedVolumesUseCase.execute.mockResolvedValueOnce(new Map());
+      getInDeliveryVolumesUseCase.execute.mockResolvedValueOnce([]);
+      getReleasedVolumesUseCase.execute.mockResolvedValueOnce([]);
+      getUpcomingVolumesUseCase.execute.mockResolvedValueOnce([]);
+
+      await firstValueFrom(store.dispatch(new Volumes.Update(updateModel)));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(1);
+      expect(currentVolumes[0].sequenceNumber).toBe(3);
+    });
+
+    it('should not update currentVolumes when the updated volume belongs to a different series', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
+
+      const otherSeries = new SeriesModel({
+        id: '2',
+        name: 'Other Series',
+        mediaType: SeriesMediaType.BOOK,
+        completed: false,
+        highestVolumeNumber: 3,
+        seriesTags: [],
+        abbreviation: 'OS',
+        singleVolume: false,
+      });
+
+      const updateModel = new UpdateVolumeModel({
+        id: '1',
+        series: otherSeries,
+        sequenceNumber: 3,
+        shoppingLink: 'https://updated.example.com',
+        releaseDate: null,
+        inDelivery: false,
+        purchaseDate: null,
+        volumeTags: [],
+      });
+
+      const updatedVolume = new VolumeModel({
+        ...updateModel,
+      });
+      updateVolumeUseCase.execute.mockResolvedValueOnce(updatedVolume);
+
+      getMissingVolumesUseCase.execute.mockResolvedValueOnce([updatedVolume]);
+      getCollectedVolumesUseCase.execute.mockResolvedValueOnce(new Map());
+      getInDeliveryVolumesUseCase.execute.mockResolvedValueOnce([]);
+      getReleasedVolumesUseCase.execute.mockResolvedValueOnce([]);
+      getUpcomingVolumesUseCase.execute.mockResolvedValueOnce([]);
+
+      await firstValueFrom(store.dispatch(new Volumes.Update(updateModel)));
+
+      const currentVolumes = store.selectSnapshot(VolumesStateSelectors.currentVolumes);
+      expect(currentVolumes).toHaveLength(1);
+      expect(currentVolumes[0].sequenceNumber).toBe(1);
+    });
   });
 
   describe('deleteVolume', () => {
     it('should execute Delete use-case and remove volume from all lists', async () => {
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
       await firstValueFrom(store.dispatch(new Volumes.GetMissing()));
       await firstValueFrom(store.dispatch(new Volumes.GetInDelivery()));
       await firstValueFrom(store.dispatch(new Volumes.GetReleased()));
@@ -979,6 +1318,7 @@ describe('VolumesState', () => {
       getCollectedVolumesUseCase.execute.mockResolvedValueOnce(new Map());
 
       const state = store.selectSnapshot(VolumesStateSelectors.stateModel);
+      expect(state.currentVolumesContext.volumes).toHaveLength(0);
       expect(state.missingVolumes).toHaveLength(0);
       expect(state.inDeliveryVolumes).toHaveLength(0);
       expect(state.releasedVolumes).toHaveLength(0);
@@ -1007,7 +1347,11 @@ describe('VolumesState', () => {
       expect(missingVolumes).toHaveLength(0);
     });
 
-    it('should remove volume from all lists when deleted', async () => {
+    it('should not remove volume from lists when id does not match', async () => {
+      const currentVolume = new VolumeModel({
+        ...mockVolume,
+        id: 'current-1',
+      });
       const inDeliveryVolume = new VolumeModel({
         ...mockVolume,
         id: 'in-delivery-1',
@@ -1029,11 +1373,13 @@ describe('VolumesState', () => {
       });
 
       getMissingVolumesUseCase.execute.mockResolvedValueOnce([mockVolume]);
+      getBySeriesVolumeUseCase.execute.mockResolvedValueOnce([currentVolume]);
       getInDeliveryVolumesUseCase.execute.mockResolvedValueOnce([inDeliveryVolume]);
       getReleasedVolumesUseCase.execute.mockResolvedValueOnce([releasedVolume]);
       getUpcomingVolumesUseCase.execute.mockResolvedValueOnce([upcomingVolume]);
       getCollectedVolumesUseCase.execute.mockResolvedValueOnce(new Map());
 
+      await firstValueFrom(store.dispatch(new Volumes.GetVolumesOfSeries('1')));
       await firstValueFrom(store.dispatch(new Volumes.GetMissing()));
       await firstValueFrom(store.dispatch(new Volumes.GetInDelivery()));
       await firstValueFrom(store.dispatch(new Volumes.GetReleased()));
@@ -1046,6 +1392,10 @@ describe('VolumesState', () => {
 
       const state = store.selectSnapshot(VolumesStateSelectors.stateModel);
       expect(state.missingVolumes).toEqual([]);
+      expect(state.currentVolumesContext).toEqual({
+        seriesId: '1',
+        volumes: [currentVolume],
+      });
       expect(state.inDeliveryVolumes).toEqual([inDeliveryVolume]);
       expect(state.releasedVolumes).toEqual([releasedVolume]);
       expect(state.upcomingVolumes).toEqual([upcomingVolume]);

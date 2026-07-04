@@ -12,6 +12,18 @@ export abstract class VolumesStateSelectors {
   }
 
   @Selector([VolumesState])
+  static currentVolumesContext({
+    currentVolumesContext,
+  }: VolumesStateModel): VolumesStateModel['currentVolumesContext'] {
+    return currentVolumesContext;
+  }
+
+  @Selector([VolumesState])
+  static currentVolumes({ currentVolumesContext }: VolumesStateModel): readonly VolumeModel[] {
+    return currentVolumesContext?.volumes ?? [];
+  }
+
+  @Selector([VolumesState])
   static missingVolumes({ missingVolumes }: VolumesStateModel): readonly VolumeModel[] {
     return missingVolumes;
   }

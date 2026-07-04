@@ -8,6 +8,7 @@ import { SeriesModel } from '../model/series.model';
 import { CreateSeriesUseCase } from '../use-cases/create.series.use-case';
 import { DeleteSeriesUseCase } from '../use-cases/delete.series.use-case';
 import { GetAllSeriesUseCase } from '../use-cases/get-all.series.use-case';
+import { GetSeriesByIdUseCase } from '../use-cases/get-by-id.series.use-case';
 import { GetCompletedSeriesUseCase } from '../use-cases/get-completed.series.use-case';
 import { GetIncompleteSeriesUseCase } from '../use-cases/get-incomplete.series.use-case';
 import { GetOrphanedSeriesUseCase } from '../use-cases/get-orphaned.series.use-case';
@@ -21,6 +22,7 @@ import { defaultSeriesStateModel, SeriesStateModel } from './series.state.model'
 })
 @Injectable({ providedIn: 'root' })
 export class SeriesState {
+  private readonly getSeriesByIdUseCase = inject(GetSeriesByIdUseCase);
   private readonly getAllSeriesUseCase = inject(GetAllSeriesUseCase);
   private readonly getIncompleteSeriesUseCase = inject(GetIncompleteSeriesUseCase);
   private readonly getOrphanedSeriesUseCase = inject(GetOrphanedSeriesUseCase);
@@ -28,6 +30,15 @@ export class SeriesState {
   private readonly createSeriesUseCase = inject(CreateSeriesUseCase);
   private readonly updateSeriesUseCase = inject(UpdateSeriesUseCase);
   private readonly deleteSeriesUseCase = inject(DeleteSeriesUseCase);
+
+  @Action(Series.GetById)
+  async getSeriesById(ctx: StateContext<SeriesStateModel>, { id }: Series.GetById): Promise<void> {
+    ctx.patchState({ currentSeries: null });
+
+    const series = await this.getSeriesByIdUseCase.execute(id);
+
+    ctx.patchState({ currentSeries: series });
+  }
 
   @Action(Series.GetAll)
   async getAllSeries(ctx: StateContext<SeriesStateModel>): Promise<void> {
@@ -102,6 +113,11 @@ export class SeriesState {
     const updatedSeries = await this.updateSeriesUseCase.execute(updateModel);
 
     if (updatedSeries) {
+      let currentSeries = ctx.getState().currentSeries;
+      if (currentSeries?.id === updatedSeries.id) {
+        currentSeries = updatedSeries;
+      }
+
       if (updatedSeries.completed) {
         const completedSeries = await this.getCompletedSeriesUseCase.execute();
 
@@ -111,6 +127,7 @@ export class SeriesState {
             incompleteSeries: removeItem((item) => item.id === updatedSeries.id),
             orphanedSeries: removeItem((item) => item.id === updatedSeries.id),
             completedSeries: [...completedSeries],
+            currentSeries,
           }),
         );
       } else {
@@ -123,6 +140,7 @@ export class SeriesState {
             completedSeries: removeItem((item) => item.id === updatedSeries.id),
             incompleteSeries: [...incompleteSeries],
             orphanedSeries: [...orphanedSeries],
+            currentSeries,
           }),
         );
       }
@@ -134,20 +152,25 @@ export class SeriesState {
     ctx: StateContext<SeriesStateModel>,
     { series, createVolumeModel }: Series.AddVolumeToSeries,
   ): void {
-    const sequenceNumberUpdater: StateOperator<SeriesModel[]> = updateItem(
+    const sequenceNumber = createVolumeModel.sequenceNumber;
+
+    const updateHighestNumber: StateOperator<SeriesModel[]> = updateItem(
       (item) => item.id === series.id,
       (seriesModel) =>
-        new SeriesModel({
-          ...seriesModel,
-          highestVolumeNumber: createVolumeModel.sequenceNumber,
-        }),
+        sequenceNumber > (seriesModel.highestVolumeNumber ?? 0)
+          ? SeriesModel.copyWith(seriesModel, { highestVolumeNumber: sequenceNumber })
+          : seriesModel,
     );
 
     ctx.setState(
       patch({
-        series: sequenceNumberUpdater,
-        incompleteSeries: sequenceNumberUpdater,
+        series: updateHighestNumber,
+        incompleteSeries: updateHighestNumber,
         orphanedSeries: removeItem((item) => item.id === series.id),
+        currentSeries: (current: SeriesModel | null) =>
+          current?.id === series.id && sequenceNumber > (current.highestVolumeNumber ?? 0)
+            ? SeriesModel.copyWith(current, { highestVolumeNumber: sequenceNumber })
+            : current,
       }),
     );
   }
@@ -163,6 +186,8 @@ export class SeriesState {
           incompleteSeries: removeItem((item) => item.id === id),
           orphanedSeries: removeItem((item) => item.id === id),
           completedSeries: removeItem((item) => item.id === id),
+          currentSeries:
+            ctx.getState().currentSeries?.id === id ? null : ctx.getState().currentSeries,
         }),
       );
     }

@@ -88,6 +88,15 @@
               <ng-icon name="heroTrashSolid"></ng-icon>
             </button>
           </div>
+
+          <div class="tooltip tooltip-bottom">
+            <div class="tooltip-content">
+              {{ 'components.series.series-card.buttons.view-details' | translate }}
+            </div>
+            <button class="btn btn-md btn-neutral text-xl" (click)="viewDetails.emit()">
+              <ng-icon name="heroMagnifyingGlassSolid"></ng-icon>
+            </button>
+          </div>
         }
       </div>
     }

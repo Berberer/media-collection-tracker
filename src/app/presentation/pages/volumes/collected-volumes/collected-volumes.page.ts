@@ -9,6 +9,9 @@ import {
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroMagnifyingGlassSolid } from '@ng-icons/heroicons/solid';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
   Actions,
@@ -19,6 +22,7 @@ import {
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { AppRoutes } from '../../../../app.routes';
 import { TitleService } from '../../../../core/services/title.service';
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
@@ -54,10 +58,13 @@ import {
     ConfirmationPromptComponent,
     ModalDialogComponent,
     VolumeFormComponent,
+    NgIcon,
   ],
+  providers: [provideIcons({ heroMagnifyingGlassSolid })],
 })
 export class CollectedVolumesPage implements OnInit, OnDestroy {
   private readonly title = inject(TitleService);
+  private readonly router = inject(Router);
 
   private readonly store = inject(Store);
   private readonly actions$ = inject(Actions);
@@ -219,5 +226,9 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
     this.showVolumeFormDialog.set(false);
     this.volumeToUpdate.set(null);
     this.allSeriesForAddingVolume.set(null);
+  }
+
+  async onViewSeriesDetails(series: SeriesModel): Promise<void> {
+    await this.router.navigate([AppRoutes.Series, series.id]);
   }
 }

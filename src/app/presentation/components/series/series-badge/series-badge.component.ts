@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 import { SeriesModel } from '../../../../features/series/model/series.model';
 import { SeriesCardComponent, SeriesViewMode } from '../series-card/series-card.component';
@@ -17,6 +17,8 @@ export class SeriesBadgeComponent {
     'tooltip-top' | 'tooltip-bottom' | 'tooltip-left' | 'tooltip-right'
   >('tooltip-bottom');
   readonly viewMode = input<SeriesViewMode>();
+
+  readonly viewDetails = output<void>();
 
   protected readonly resolvedViewMode = computed(() => {
     const providedMode = this.viewMode();

@@ -11,6 +11,11 @@ export abstract class SeriesStateSelectors {
   }
 
   @Selector([SeriesState])
+  static currentSeries({ currentSeries }: SeriesStateModel): SeriesModel | null {
+    return currentSeries;
+  }
+
+  @Selector([SeriesState])
   static series({ series }: SeriesStateModel): readonly SeriesModel[] {
     return series;
   }

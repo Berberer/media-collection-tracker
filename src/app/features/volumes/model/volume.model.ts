@@ -6,11 +6,12 @@ import {
   SeriesVolumesRecord,
   UpcomingSeriesVolumesRecord,
 } from '../../../../pocketbase-types';
+import { Clonable } from '../../../core/clonable';
 import { RemoveMethods } from '../../../core/typing-utilities/remove-methods';
 import { SeriesModel } from '../../series/model/series.model';
 import { VolumeTagModel } from '../../tags/model/volume-tag.model';
 
-export class VolumeModel {
+export class VolumeModel implements Clonable<VolumeModel> {
   readonly id: string;
   readonly series: SeriesModel;
   readonly sequenceNumber: number;
@@ -29,6 +30,13 @@ export class VolumeModel {
     this.inDelivery = model.inDelivery;
     this.purchaseDate = model.purchaseDate;
     this.volumeTags = model.volumeTags;
+  }
+
+  clone(): VolumeModel {
+    return new VolumeModel({
+      ...this,
+      volumeTags: this.volumeTags.map((t) => t.clone()),
+    });
   }
 
   static fromSeriesVolumeRecord(

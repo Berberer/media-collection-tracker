@@ -4,6 +4,11 @@ import { UpdateVolumeModel } from '../model/update.volume.model';
 const ACTION_SCOPE = '[Volumes]';
 
 export namespace Volumes {
+  export class GetVolumesOfSeries {
+    static readonly type = `${ACTION_SCOPE} Get Volumes Of Series`;
+    constructor(readonly seriesId: string) {}
+  }
+
   export class GetMissing {
     static readonly type = `${ACTION_SCOPE} Get Missing`;
   }

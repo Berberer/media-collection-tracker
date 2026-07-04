@@ -40,7 +40,8 @@
         },
         "buttons": {
           "add-volume": "Add volume",
-          "mark-completed": "Mark completed"
+          "mark-completed": "Mark completed",
+          "view-details": "View details"
         }
       },
       "series-cards-gallery": {
@@ -152,6 +153,22 @@
         "no-series-message": "No completed series",
         "no-series-for-filter-message": "No completed series for the selected media type",
         "delete-series-prompt": "Are you sure you want to delete this series?"
+      },
+      "details": {
+        "series-not-found": "Series not found",
+        "no-volumes-message": "No volumes for this series",
+        "properties": {
+          "orphaned": "Orphaned",
+          "completed": "Completed",
+          "single-volume": "Single volume"
+        },
+        "buttons": {
+          "add-volume": "Add volume",
+          "mark-completed": "Mark completed"
+        },
+        "mark-completed-prompt": "Are you sure you want to mark this series as completed?",
+        "delete-series-prompt": "Are you sure you want to delete this series?",
+        "delete-volume-prompt": "Are you sure you want to delete this volume?"
       }
     },
     "tags": {
@@ -191,7 +208,8 @@
       },
       "collected": {
         "no-volumes-message": "No collected volumes",
-        "delete-volume-prompt": "Are you sure you want to delete this volume?"
+        "delete-volume-prompt": "Are you sure you want to delete this volume?",
+        "view-details-button-tooltip": "View details"
       }
     }
   },
@@ -204,14 +222,16 @@
       "yes": "Yes",
       "no": "No",
       "cancel": "Cancel",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "back": "Back"
     }
   },
   "titles": {
     "series": {
       "incomplete": "{{applicationName}} – Incomplete Series",
       "orphans": "{{applicationName}} – Orphaned Series",
-      "completed": "{{applicationName}} – Completed Series"
+      "completed": "{{applicationName}} – Completed Series",
+      "details": "{{applicationName}} – Series Details"
     },
     "tags": {
       "series": "{{applicationName}} – Series Tags",

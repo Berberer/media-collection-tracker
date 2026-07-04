@@ -9,6 +9,7 @@
     [seriesViewMode]="seriesViewMode"
     (editSeries)="onEditSeries($event)"
     (deleteSeries)="onDeleteSeries($event)"
+    (viewDetails)="onViewSeriesDetails($event)"
     [loading]="loadingSeries()"
     [noSeriesMessage]="'pages.series.completed.no-series-message' | translate"
     [noSeriesForFilterTypeMessage]="
