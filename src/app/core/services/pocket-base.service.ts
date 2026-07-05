@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import PocketBase, { RecordService } from 'pocketbase';
 
 import { environment } from '../../../environments/environment';
 import { Collections, TypedPocketBase } from '../../../pocketbase-types';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class PocketBaseService {
   private readonly pocketbase: TypedPocketBase | null;
 

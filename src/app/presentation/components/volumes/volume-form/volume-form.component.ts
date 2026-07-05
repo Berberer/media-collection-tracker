@@ -74,8 +74,10 @@ export class VolumeFormComponent {
     min(schemaPath.sequenceNumber, 1);
     validate(schemaPath.shoppingLink, VolumeFormComponent.validateShoppingLinkUrl);
 
-    disabled(schemaPath.series, () => this.lastValidVolume()?.series !== undefined);
-    disabled(schemaPath.sequenceNumber, () => this.lastValidVolume() instanceof UpdateVolumeModel);
+    disabled(schemaPath.series, { when: () => this.lastValidVolume()?.series !== undefined });
+    disabled(schemaPath.sequenceNumber, {
+      when: () => this.lastValidVolume() instanceof UpdateVolumeModel,
+    });
   });
 
   constructor() {

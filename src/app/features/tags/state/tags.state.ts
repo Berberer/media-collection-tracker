@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem } from '@ngxs/store/operators';
 
@@ -15,7 +15,7 @@ import { defaultTagStateModel, TagsStateModel } from './tags.state.model';
   name: 'volumeTags',
   defaults: defaultTagStateModel,
 })
-@Injectable({ providedIn: 'root' })
+@Service()
 export class TagsState {
   private readonly getAllSeriesTagUseCase = inject(GetAllSeriesTagUseCase);
   private readonly getAllVolumeTagUseCase = inject(GetAllVolumeTagUseCase);

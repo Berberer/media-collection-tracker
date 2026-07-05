@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 
@@ -18,7 +18,7 @@ import { Volumes } from './volumes.state.actions';
 import { defaultVolumesState, VolumesStateModel } from './volumes.state.model';
 
 @State<VolumesStateModel>({ name: 'volumes', defaults: defaultVolumesState })
-@Injectable({ providedIn: 'root' })
+@Service()
 export class VolumesState {
   private readonly getBySeriesVolumeUseCase = inject(GetBySeriesVolumeUseCase);
   private readonly getMissingVolumesUseCase = inject(GetMissingVolumeUseCase);

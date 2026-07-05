@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { SeriesTagsRecord } from '../../../../pocketbase-types';
 import { ColorService } from '../../../core/services/color.service';
@@ -9,9 +9,7 @@ import { SeriesMediaTypes } from '../model/media-type.model';
 import { SeriesModel } from '../model/series.model';
 import { UpdateSeriesModel } from '../model/update.series.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SeriesRepository {
   private readonly dataSource = inject(SeriesDataSource);
   private readonly colorService = inject(ColorService);

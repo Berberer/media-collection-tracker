@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { UseCase } from '../../../core/use-case';
 import { VolumeModel } from '../../volumes/model/volume.model';
@@ -11,9 +11,7 @@ import { SeriesModel } from '../model/series.model';
 import { UpdateSeriesModel } from '../model/update.series.model';
 import { SeriesRepository } from '../repository/series.repository';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class UpdateSeriesUseCase implements UseCase<UpdateSeriesModel, SeriesModel> {
   private readonly seriesRepository = inject(SeriesRepository);
   private readonly volumeRepository = inject(VolumesRepository);

@@ -4,7 +4,7 @@ This guide helps AI agents work effectively in the Media Collection Tracker code
 
 ## 🚀 Project Overview
 
-A comprehensive Angular 21 application for tracking media collections (books, games, movies, shows) with PocketBase backend. Uses NGXS for state management, Tailwind CSS for styling, and follows a clean architecture pattern.
+A comprehensive Angular 22 application for tracking media collections (books, games, movies, shows) with PocketBase backend. Uses NGXS for state management, Tailwind CSS for styling, and follows a clean architecture pattern.
 
 ## 📁 Project Structure
 
@@ -119,7 +119,7 @@ UI Components → State Actions → NGXS Store → Use-Cases → Repositories �
 - **Indentation**: 2 spaces
 - **Quotes**: Single quotes for strings
 - **Imports**: Grouped by source (Angular, third-party, local)
-- **Decorators**: `@Injectable`, `@Component`, `@State` used extensively
+- **Decorators**: `@Service`, `@Component`, `@State` used extensively
 - **Readonly**: Use `readonly` for class properties and inputs where possible
 - **Dependency Injection**: Prefer `inject()` over constructor injection
 

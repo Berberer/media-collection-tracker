@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import ColorHash from 'color-hash';
 import { ContrastRatioChecker } from 'contrast-ratio-checker';
 
@@ -7,7 +7,7 @@ import { HashedTextColors } from '../hashed-text-colors';
 const HEX_WHITE = '#FFFFFF';
 const HEX_BLACK = '#000000';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ColorService {
   private readonly colorHasher = new ColorHash();
   private readonly contrastRatioChecker = new ContrastRatioChecker();

@@ -122,7 +122,7 @@ new SeriesCompletedWithMissingVolumesError('series-123', 3);
 ```typescript
 import { SeriesSingleVolumeWithMultipleVolumesError } from '../errors';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class UpdateSeriesUseCase implements UseCase<UpdateSeriesParams, SeriesModel> {
   async execute(params: UpdateSeriesParams): Promise<SeriesModel> {
     const volumes = await this.volumesRepository.getVolumesBySeries(params.id);
@@ -141,7 +141,7 @@ export class UpdateSeriesUseCase implements UseCase<UpdateSeriesParams, SeriesMo
 ```typescript
 import { SeriesRecordNotFoundError } from '../../../core/errors';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SeriesRepository {
   async getById(id: string): Promise<SeriesModel | null> {
     try {
@@ -183,7 +183,7 @@ export class BackendSeriesDataSource implements SeriesDataSource {
 ```typescript
 import { getTranslationKey, getTranslationParams } from '../../../core/errors/error.utils';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SeriesService {
   constructor(private translate: TranslateService) {}
 

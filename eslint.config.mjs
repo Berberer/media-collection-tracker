@@ -1,10 +1,13 @@
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const angular = require('angular-eslint');
-const rxjs = require('@rxlint/eslint-plugin');
-const rxjsAngular = require('@rxlint/eslint-plugin-angular');
-const eslintConfigPrettier = require('eslint-config-prettier');
-const simpleImportSort = require('eslint-plugin-simple-import-sort');
+// @ts-check
+
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import angular from 'angular-eslint';
+import { defineConfig } from 'eslint/config';
+import rxjs from 'eslint-plugin-rxjs-x';
+import rxjsAngular from 'eslint-plugin-rxjs-angular-x';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 const codeStyle = {
   quotes: [2, 'single', { avoidEscape: true }],
@@ -21,21 +24,21 @@ const codeStyle = {
   'no-template-curly-in-string': 'error',
   '@typescript-eslint/no-namespace': 'off',
   '@typescript-eslint/explicit-function-return-type': 'error',
-  '@rxlint/no-unsafe-takeuntil': 'error',
+  'eslint-plugin-rxjs-x/no-unsafe-takeuntil': 'error',
   'simple-import-sort/imports': 'error',
   'simple-import-sort/exports': 'error',
 };
 
 const commonExtends = [
-  eslint.configs.recommended,
+  js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   ...angular.configs.tsRecommended,
-  rxjs.configs.recommendedTypeChecked,
+  rxjs.configs.recommended,
   eslintConfigPrettier,
 ];
 
-module.exports = tseslint.config(
+export default defineConfig(
   {
     ignores: ['.angular/**', '.nx/**', 'coverage/**', 'dist/**', 'src/pocketbase-types.ts'],
   },
@@ -49,7 +52,8 @@ module.exports = tseslint.config(
     },
     processor: angular.processInlineTemplates,
     plugins: {
-      '@rxlint-angular': rxjsAngular,
+      'eslint-plugin-rxjs-angular-x': rxjsAngular,
+      'eslint-plugin-rxjs-x': rxjs,
       'simple-import-sort': simpleImportSort,
     },
     rules: {
@@ -75,7 +79,7 @@ module.exports = tseslint.config(
           suffixes: ['Page', 'Component'],
         },
       ],
-      '@rxlint-angular/prefer-takeuntil': 'error',
+      'eslint-plugin-rxjs-angular-x/prefer-takeuntil': 'error',
       '@angular-eslint/prefer-on-push-component-change-detection': 'error',
       '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
       ...codeStyle,

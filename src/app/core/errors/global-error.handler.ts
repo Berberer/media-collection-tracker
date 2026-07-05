@@ -1,10 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { NgxsUnhandledErrorHandler } from '@ngxs/store';
 
 import { NotificationService } from '../services/notification.service';
 import { isHandled, logError } from './error.utils';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class GlobalNgxsErrorHandler extends NgxsUnhandledErrorHandler {
   private readonly notificationService = inject(NotificationService);
 

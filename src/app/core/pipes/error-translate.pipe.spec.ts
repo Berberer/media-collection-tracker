@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { BaseError, FeatureDomain, FeatureError } from '../errors';
 import { ErrorTranslatePipe } from './error-translate.pipe';
@@ -28,7 +28,6 @@ describe('ErrorTranslatePipe', () => {
     } as unknown as jest.Mocked<TranslateService>;
 
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
       providers: [{ provide: TranslateService, useValue: translateService }, ErrorTranslatePipe],
     });
 

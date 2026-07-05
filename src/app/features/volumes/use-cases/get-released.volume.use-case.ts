@@ -1,12 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { UseCase } from '../../../core/use-case';
 import { VolumeModel } from '../model/volume.model';
 import { VolumesRepository } from '../repository/volumes.repository';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class GetReleasedVolumeUseCase implements UseCase<void, VolumeModel[]> {
   private readonly repository = inject(VolumesRepository);
 

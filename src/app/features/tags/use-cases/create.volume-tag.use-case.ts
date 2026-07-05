@@ -1,14 +1,12 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { UseCase } from '../../../core/use-case';
-import { TagAlreadyExistsError } from '../errors/tags.errors';
+import { TagAlreadyExistsError } from '../errors';
 import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
 import { VolumeTagModel } from '../model/volume-tag.model';
 import { TagsRepository } from '../repository/tags.repository';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class CreateVolumeTagUseCase implements UseCase<CreateVolumeTagModel, VolumeTagModel> {
   private readonly repository = inject(TagsRepository);
 

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Action, State, StateContext, StateOperator } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 
@@ -20,7 +20,7 @@ import { defaultSeriesStateModel, SeriesStateModel } from './series.state.model'
   name: 'series',
   defaults: defaultSeriesStateModel,
 })
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SeriesState {
   private readonly getSeriesByIdUseCase = inject(GetSeriesByIdUseCase);
   private readonly getAllSeriesUseCase = inject(GetAllSeriesUseCase);

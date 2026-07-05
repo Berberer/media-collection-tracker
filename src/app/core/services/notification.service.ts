@@ -1,9 +1,9 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { OnDestroy, Service, signal } from '@angular/core';
 
 /**
  * Service for managing global notifications/errors.
  */
-@Injectable({ providedIn: 'root' })
+@Service()
 export class NotificationService implements OnDestroy {
   private readonly errorsSignal = signal<unknown[]>([]);
   private readonly timers = new Map<unknown, ReturnType<typeof setTimeout>>();

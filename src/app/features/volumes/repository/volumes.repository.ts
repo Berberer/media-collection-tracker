@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import {
   MediaSeriesRecord,
@@ -14,9 +14,7 @@ import { CreateVolumeModel } from '../model/create.volume.model';
 import { UpdateVolumeModel } from '../model/update.volume.model';
 import { VolumeModel } from '../model/volume.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class VolumesRepository {
   private readonly dataSource = inject(VolumesDataSource);
   private readonly colorService = inject(ColorService);

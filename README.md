@@ -40,7 +40,7 @@ It allows you to organize items into series, track missing volumes, and tag item
 
 ## 🛠 Technologies
 
-- **Frontend**: [Angular 21](https://angular.dev/)
+- **Frontend**: [Angular 22](https://angular.dev/)
 - **State Management**: [NGXS](https://www.ngxs.io/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) & [daisyUI 5](https://daisyui.com/)
 - **Backend/Database**: [PocketBase](https://pocketbase.io/)

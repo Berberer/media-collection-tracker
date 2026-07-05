@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { SeriesTagsRecord, VolumeTagsRecord } from '../../../../pocketbase-types';
 import { ColorService } from '../../../core/services/color.service';
@@ -8,9 +8,7 @@ import { CreateVolumeTagModel } from '../model/create.volume-tag.model';
 import { SeriesTagModel } from '../model/series-tag.model';
 import { VolumeTagModel } from '../model/volume-tag.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class TagsRepository {
   private readonly dataSource = inject(TagsDataSource);
   private readonly colorService = inject(ColorService);

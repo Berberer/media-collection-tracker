@@ -1,11 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import { UseCase } from '../../../core/use-case';
 import { VolumesRepository } from '../repository/volumes.repository';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class DeleteVolumeUseCase implements UseCase<string, boolean> {
   private readonly repository = inject(VolumesRepository);
 

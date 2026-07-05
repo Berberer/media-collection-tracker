@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Service, signal } from '@angular/core';
 
 import { VolumeTagModel } from '../../../../../features/tags/model/volume-tag.model';
 import { VolumeModel } from '../../../../../features/volumes/model/volume.model';
@@ -11,9 +11,7 @@ export enum SortableColumn {
   PURCHASE_DATE = 'PURCHASE_DATE',
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class VolumesTableDataService {
   readonly volumes = signal<readonly VolumeModel[]>([]);
   readonly volumeTags = signal<readonly VolumeTagModel[]>([]);
