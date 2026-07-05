@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/Berberer/media-collection-tracker/compare/v0.1.10...v0.2.0) (2026-07-05)
+
+### Features
+
+- add dedicated scripts for creating different release types ([98d33bd](https://github.com/Berberer/media-collection-tracker/commit/98d33bd388b21f74213e875cf60238c803785cbb))
+- add series details page ([bda3931](https://github.com/Berberer/media-collection-tracker/commit/bda3931a416e16b1b036024fcf342d5eefffc83b))
+- Angular v22 and TypeScript v6 updates ([a429367](https://github.com/Berberer/media-collection-tracker/commit/a429367cf6a326b46fa05161740879540947a0b0))
+- create title service for updating browser and nav bar titles centrally ([e5a385c](https://github.com/Berberer/media-collection-tracker/commit/e5a385c225563572efc31f303f4c81c8d36042d7))
+- show series properties and tags in collapse header of collected volume page ([80d021b](https://github.com/Berberer/media-collection-tracker/commit/80d021bbce6d782c2b28ca4be6a97316e2d20157))
+
+### Bug Fixes
+
+- only show incomplete series for selection in volume creation form ([d681515](https://github.com/Berberer/media-collection-tracker/commit/d6815157c31d1d2022b291704b1400addf14c76e))
+- prevent user from adding a second volume to a single-volume series ([587436d](https://github.com/Berberer/media-collection-tracker/commit/587436da1a5522ad894de9fad995e41e88faf7a9))
+
 ### [0.1.10](https://github.com/Berberer/media-collection-tracker/compare/v0.1.9...v0.1.10) (2026-06-04)
 
 ### Features
