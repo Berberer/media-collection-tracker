@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private readonly ngUnsubscribe = new Subject<void>();
 
-  readonly series$ = this.store.select(SeriesStateSelectors.series);
+  readonly series$ = this.store.select(SeriesStateSelectors.incompleteSeries);
   readonly seriesTags$ = this.store.select(TagsStateSelectors.seriesTags);
   readonly volumeTags$ = this.store.select(TagsStateSelectors.volumeTags);
 
@@ -98,11 +98,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private setUpGetSeriesActionHandlers(): void {
     this.actions$
-      .pipe(ofActionDispatched(Series.GetAll), takeUntil(this.ngUnsubscribe))
+      .pipe(ofActionDispatched(Series.GetIncomplete), takeUntil(this.ngUnsubscribe))
       .subscribe(() => this.loadingSeries.set(true));
 
     this.actions$
-      .pipe(ofActionCompleted(Series.GetAll), takeUntil(this.ngUnsubscribe))
+      .pipe(ofActionCompleted(Series.GetIncomplete), takeUntil(this.ngUnsubscribe))
       .subscribe(() => this.loadingSeries.set(false));
   }
 
@@ -216,7 +216,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onCreateVolume(): void {
     this.store.dispatch(new VolumeTags.GetAll(true));
-    this.store.dispatch(Series.GetAll);
+    this.store.dispatch(Series.GetIncomplete);
 
     this.volumeCreationData.set({});
     this.showVolumeCreationForm.set(true);
