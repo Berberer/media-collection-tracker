@@ -33,11 +33,6 @@
     },
     "series": {
       "series-card": {
-        "properties": {
-          "orphaned": "Orphaned",
-          "completed": "Completed",
-          "single-volume": "Single volume"
-        },
         "buttons": {
           "add-volume": "Add volume",
           "mark-completed": "Mark completed",
@@ -157,11 +152,6 @@
       "details": {
         "series-not-found": "Series not found",
         "no-volumes-message": "No volumes for this series",
-        "properties": {
-          "orphaned": "Orphaned",
-          "completed": "Completed",
-          "single-volume": "Single volume"
-        },
         "buttons": {
           "add-volume": "Add volume",
           "mark-completed": "Mark completed"
@@ -224,6 +214,11 @@
       "cancel": "Cancel",
       "confirm": "Confirm",
       "back": "Back"
+    },
+    "series-properties": {
+      "orphaned": "Orphaned",
+      "completed": "Completed",
+      "single-volume": "Single volume"
     }
   },
   "titles": {

@@ -33,11 +33,6 @@
     },
     "series": {
       "series-card": {
-        "properties": {
-          "orphaned": "Verwaist",
-          "completed": "Vervollständigt",
-          "single-volume": "Einzelne Ausgabe"
-        },
         "buttons": {
           "add-volume": "Ausgabe hinzufügen",
           "mark-completed": "Markieren als vervollständigt",
@@ -157,11 +152,6 @@
       "details": {
         "series-not-found": "Serie nicht gefunden",
         "no-volumes-message": "Serie hat keine Ausgaben",
-        "properties": {
-          "orphaned": "Verwaist",
-          "completed": "Vervollständigt",
-          "single-volume": "Einzelne Ausgabe"
-        },
         "buttons": {
           "add-volume": "Ausgabe hinzufügen",
           "mark-completed": "Markieren als vervollständigt"
@@ -224,6 +214,11 @@
       "cancel": "Abbrechen",
       "confirm": "Bestätigen",
       "back": "Zurück"
+    },
+    "series-properties": {
+      "orphaned": "Verwaist",
+      "completed": "Vervollständigt",
+      "single-volume": "Einzelne Ausgabe"
     }
   },
   "titles": {

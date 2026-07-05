@@ -44,17 +44,17 @@
           <div class="flex flex-row justify-start items-center gap-x-4 pl-4">
             @if (series.singleVolume) {
               <div class="badge bg-indigo-400">
-                {{ 'pages.series.details.properties.single-volume' | translate }}
+                {{ 'common.series-properties.single-volume' | translate }}
               </div>
             }
             @if (isOrphanedSeries$ | async) {
               <div class="badge bg-gray-500">
-                {{ 'pages.series.details.properties.orphaned' | translate }}
+                {{ 'common.series-properties.orphaned' | translate }}
               </div>
             }
             @if (series.completed) {
               <div class="badge bg-blue-300">
-                {{ 'pages.series.details.properties.completed' | translate }}
+                {{ 'common.series-properties.completed' | translate }}
               </div>
             }
 

@@ -22,19 +22,19 @@
     <div class="flex flex-row gap-2 pl-4">
       @if (series().singleVolume) {
         <div class="badge bg-indigo-400">
-          {{ 'components.series.series-card.properties.single-volume' | translate }}
+          {{ 'common.series-properties.single-volume' | translate }}
         </div>
       }
 
       @switch (viewMode()) {
         @case (SeriesViewMode.ORPHANED) {
           <div class="badge bg-gray-500">
-            {{ 'components.series.series-card.properties.orphaned' | translate }}
+            {{ 'common.series-properties.orphaned' | translate }}
           </div>
         }
         @case (SeriesViewMode.COMPLETED) {
           <div class="badge bg-blue-300">
-            {{ 'components.series.series-card.properties.completed' | translate }}
+            {{ 'common.series-properties.completed' | translate }}
           </div>
         }
       }

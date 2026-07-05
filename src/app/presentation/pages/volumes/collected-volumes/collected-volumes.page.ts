@@ -6,6 +6,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -25,6 +26,8 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { AppRoutes } from '../../../../app.routes';
 import { TitleService } from '../../../../core/services/title.service';
 import { SeriesModel } from '../../../../features/series/model/series.model';
+import { Series } from '../../../../features/series/state/series.state.actions';
+import { SeriesStateSelectors } from '../../../../features/series/state/series.state.selectors';
 import { VolumeTagModel } from '../../../../features/tags/model/volume-tag.model';
 import { VolumeTags } from '../../../../features/tags/state/tags.state.actions';
 import { TagsStateSelectors } from '../../../../features/tags/state/tags.state.selectors';
@@ -37,6 +40,7 @@ import { ConfirmationPromptComponent } from '../../../components/core/confirmati
 import { MediaTypeBadgeComponent } from '../../../components/core/media-type-badge/media-type-badge.component';
 import { ModalDialogComponent } from '../../../components/core/modal-dialog/modal-dialog.component';
 import { SortDirection } from '../../../components/core/sort-button/sort-button.component';
+import { TagBadgeComponent } from '../../../components/tags/tag-badge/tag-badge.component';
 import { VolumeFormComponent } from '../../../components/volumes/volume-form/volume-form.component';
 import { SortableColumn } from '../../../components/volumes/volumes-table/services/volumes-table-data.service';
 import {
@@ -59,6 +63,7 @@ import {
     ModalDialogComponent,
     VolumeFormComponent,
     NgIcon,
+    TagBadgeComponent,
   ],
   providers: [provideIcons({ heroMagnifyingGlassSolid })],
 })
@@ -75,6 +80,9 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
   readonly collectedVolumes = toSignal(this.collectedVolumes$, {
     initialValue: new Map<SeriesModel, VolumeModel[]>(),
   });
+
+  readonly orphanedSeries$ = this.store.select(SeriesStateSelectors.orphanedSeries);
+  readonly orphanedSeriesIds: Signal<Set<string>>;
 
   readonly volumeTags$ = this.store.select(TagsStateSelectors.volumeTags);
 
@@ -101,6 +109,11 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
 
   constructor() {
     this.title.setTitleByTranslation('titles.volumes.collected');
+
+    const orphanedSeries = toSignal(this.orphanedSeries$, {
+      initialValue: [] as readonly SeriesModel[],
+    });
+    this.orphanedSeriesIds = computed(() => new Set(orphanedSeries().map((s) => s.id)));
   }
 
   ngOnInit(): void {
@@ -109,7 +122,7 @@ export class CollectedVolumesPage implements OnInit, OnDestroy {
     this.setUpDeleteVolumeActionHandlers();
     this.setUpUpdateVolumeActionHandlers();
 
-    this.store.dispatch([Volumes.GetCollected, VolumeTags.GetAll]);
+    this.store.dispatch([Volumes.GetCollected, VolumeTags.GetAll, Series.GetOrphaned]);
   }
 
   ngOnDestroy(): void {

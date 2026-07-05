@@ -7,9 +7,11 @@
 <div class="flex flex-col h-full gap-4">
   @if (!loadingVolumeTags() && !loadingCollectedVolumes()) {
     @for (series of sortedSeries(); track series.id) {
+      @let volumes = collectedVolumes().get(series);
+
       <div class="collapse collapse-arrow bg-base-100 border border-base-300 overflow-visible">
         <input type="checkbox" />
-        <div class="collapse-title font-semibold text-lg flex flex-row items-center gap-4">
+        <div class="collapse-title flex flex-row items-center gap-4">
           <div class="avatar avatar-placeholder">
             <div
               class="w-12 h-12 rounded-full"
@@ -18,12 +20,33 @@
                 color: series.textColorHex,
               }"
             >
-              <span class="text-lg">{{ series.abbreviation }}</span>
+              <span class="text-xl">{{ series.abbreviation }}</span>
             </div>
           </div>
 
-          <div class="grow">
+          <div class="font-semibold text-lg">
             {{ series.name }}
+          </div>
+
+          <div class="grow flex flex-row justify-start items-center gap-4">
+            @if (series.singleVolume) {
+              <div class="badge bg-indigo-400">
+                {{ 'common.series-properties.single-volume' | translate }}
+              </div>
+            }
+            @if (series.completed) {
+              <div class="badge bg-blue-300">
+                {{ 'common.series-properties.completed' | translate }}
+              </div>
+            } @else if (orphanedSeriesIds().has(series.id)) {
+              <div class="badge bg-orange-300">
+                {{ 'common.series-properties.orphaned' | translate }}
+              </div>
+            }
+
+            @for (seriesTag of series.seriesTags; track seriesTag.id) {
+              <app-tag-badge [tag]="seriesTag"></app-tag-badge>
+            }
           </div>
 
           <app-media-type-badge [mediaType]="series.mediaType"></app-media-type-badge>
@@ -40,7 +63,7 @@
         <div class="collapse-content">
           <div class="pb-4">
             <app-volumes-table
-              [volumes]="collectedVolumes().get(series) ?? []"
+              [volumes]="volumes ?? []"
               [volumeTags]="(volumeTags$ | async) ?? []"
               [defaultSortColumn]="SortableColumn.SEQUENCE_NUMBER"
               [defaultSortDirection]="SortDirection.ASC"
