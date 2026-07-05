@@ -257,6 +257,13 @@
       "use-case": {
         "already-exists": "A tag with the name {{identifier}} already exists."
       }
+    },
+    "volumes": {
+      "use-case": {
+        "precondition-failed": {
+          "adding-second-volume-to-single-volume-series": "Series is marked as single-volume and already has a volume."
+        }
+      }
     }
   }
 }

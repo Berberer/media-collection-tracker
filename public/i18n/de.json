@@ -258,5 +258,12 @@
         "already-exists": "Ein Tag mit dem Namen {{identifier}} existiert bereits."
       }
     }
+  },
+  "volumes": {
+    "use-case": {
+      "precondition-failed": {
+        "adding-second-volume-to-single-volume-series": "Serie ist als Einzelausgabe markiert und hat bereits eine Ausgabe."
+      }
+    }
   }
 }

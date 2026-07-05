@@ -42,7 +42,9 @@
 <app-modal-dialog
   [open]="showVolumeCreationForm() && volumeCreationData() !== null"
   [loading]="loadingSeries() || loadingVolumeTags() || savingVolume()"
+  [errors]="errors()"
   (closed)="onCancelCreateVolume()"
+  (errorDismissed)="onDismissError($event)"
 >
   @if (volumeCreationData() !== null) {
     <app-volume-form

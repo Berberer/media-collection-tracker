@@ -14,12 +14,14 @@ import {
   Actions,
   ofActionCompleted,
   ofActionDispatched,
+  ofActionErrored,
   ofActionSuccessful,
   Store,
 } from '@ngxs/store';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { environment } from '../environments/environment';
+import { BaseError, markAsHandled } from './core/errors';
 import { CreateSeriesModel } from './features/series/model/create.series.model';
 import { SeriesMediaTypes } from './features/series/model/media-type.model';
 import { UpdateSeriesModel } from './features/series/model/update.series.model';
@@ -75,6 +77,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   readonly seriesCreationData = signal<CreateSeriesModel | null>(null);
   readonly volumeCreationData = signal<Partial<CreateVolumeModel> | null>(null);
+
+  readonly errors = signal<BaseError[]>([]);
 
   get appTitle(): string {
     return environment.appTitle;
@@ -150,7 +154,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private setUpCreateVolumeActionHandlers(): void {
     this.actions$
       .pipe(ofActionDispatched(Volumes.Create), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.savingVolume.set(true));
+      .subscribe(() => {
+        this.savingVolume.set(true);
+        this.errors.set([]);
+      });
 
     this.actions$
       .pipe(ofActionCompleted(Volumes.Create), takeUntil(this.ngUnsubscribe))
@@ -161,6 +168,16 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.showVolumeCreationForm.set(false);
         this.volumeCreationData.set(null);
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(Volumes.Create), takeUntil(this.ngUnsubscribe))
+      .subscribe(({ result }) => {
+        this.savingVolume.set(false);
+        if (result.error && result.error instanceof BaseError) {
+          markAsHandled(result.error);
+          this.errors.set([result.error]);
+        }
       });
   }
 
@@ -208,6 +225,11 @@ export class AppComponent implements OnInit, OnDestroy {
   onCancelCreateVolume(): void {
     this.showVolumeCreationForm.set(false);
     this.volumeCreationData.set(null);
+    this.errors.set([]);
+  }
+
+  onDismissError(error: BaseError): void {
+    this.errors.update((currentErrors) => currentErrors.filter((e) => e !== error));
   }
 
   onSaveVolume(volumeData: CreateVolumeModel | UpdateVolumeModel): void {

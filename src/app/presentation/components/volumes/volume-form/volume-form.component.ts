@@ -76,7 +76,9 @@ export class VolumeFormComponent {
 
     disabled(schemaPath.series, { when: () => this.lastValidVolume()?.series !== undefined });
     disabled(schemaPath.sequenceNumber, {
-      when: () => this.lastValidVolume() instanceof UpdateVolumeModel,
+      when: (context) =>
+        this.lastValidVolume() instanceof UpdateVolumeModel ||
+        !!context.valueOf(schemaPath.series)?.singleVolume,
     });
   });
 
@@ -88,7 +90,7 @@ export class VolumeFormComponent {
         this.lastValidVolume.set(v);
         this.volumeFormData.set({
           series: v.series?.clone() ?? null,
-          sequenceNumber: v.sequenceNumber ?? 1,
+          sequenceNumber: v?.series?.singleVolume ? 1 : (v?.sequenceNumber ?? 1),
           shoppingLink: v.shoppingLink ?? '',
           releaseDate: v.releaseDate ?? null,
           inDelivery: v.inDelivery ?? false,
@@ -100,7 +102,7 @@ export class VolumeFormComponent {
   }
 
   onSeriesSelected(series: SeriesModel | null): void {
-    if (series !== null && series.highestVolumeNumber !== null) {
+    if (series?.highestVolumeNumber && !series?.singleVolume) {
       this.volumeForm.sequenceNumber().value.set(series.highestVolumeNumber + 1);
     } else {
       this.volumeForm.sequenceNumber().value.set(1);

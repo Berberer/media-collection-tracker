@@ -39,7 +39,9 @@
 <app-modal-dialog
   [open]="showVolumeFormModal() && volumeModel() !== null"
   [loading]="loadingVolumeTags() || savingVolume()"
+  [errors]="errors()"
   (closed)="onCloseVolumeModal()"
+  (errorDismissed)="onDismissError($event)"
 >
   @if (volumeModel() !== null) {
     <app-volume-form

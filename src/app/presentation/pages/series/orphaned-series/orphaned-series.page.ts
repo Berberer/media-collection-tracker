@@ -180,7 +180,10 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
   private setUpAddVolumeToOrphanedSeriesActionHandlers(): void {
     this.actions$
       .pipe(ofActionDispatched(Series.AddVolumeToSeries), takeUntil(this.ngUnsubscribe))
-      .subscribe(() => this.savingVolume.set(true));
+      .subscribe(() => {
+        this.savingVolume.set(true);
+        this.errors.set([]);
+      });
 
     this.actions$
       .pipe(ofActionCompleted(Series.AddVolumeToSeries), takeUntil(this.ngUnsubscribe))
@@ -192,6 +195,16 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
         this.showVolumeFormModal.set(false);
         this.volumeModel.set(null);
         this.allSeriesForAddingVolume.set(null);
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(Series.AddVolumeToSeries), takeUntil(this.ngUnsubscribe))
+      .subscribe(({ result }) => {
+        this.savingVolume.set(false);
+        if (result.error && result.error instanceof BaseError) {
+          markAsHandled(result.error);
+          this.errors.set([result.error]);
+        }
       });
   }
 
@@ -236,6 +249,7 @@ export class OrphanedSeriesPage implements OnInit, OnDestroy {
 
   onCloseVolumeModal(): void {
     this.showVolumeFormModal.set(false);
+    this.errors.set([]);
   }
 
   onAddVolume(series: SeriesModel): void {
